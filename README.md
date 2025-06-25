@@ -31,7 +31,7 @@ When uploading or editing files, always include a clear commit message and date.
 ### ✅ Format:
 
 - **Commit message (title)**: What you did
-- **Description (optional)**: Include the date and extra details
+- **Description (MANDATORY)**: Include the date and extra details
 
 ### ✍️ Examples:
 
