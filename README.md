@@ -13,18 +13,14 @@ This repository contains the full codebase for **MyRideLink**, a multi-platform 
 
 The `/Website` folder includes all the frontend files for the responsive website. Users can access account info, view transportation options, and more.
 
-➡️ [Website README](./Website/README.md) _(optional if you create one)_
-
 ## 📱 Android App
 
 The `/AndroidApp` folder contains the Android app code, built in Kotlin. This version supports Firebase Auth and integrates ride booking functionality.
 
-➡️ [Android README](./AndroidApp/README.md) _(optional if you create one)_
-
 ## 🚀 Tech Stack
 
 - Website: HTML, CSS, JavaScript, Firebase
-- Android App: Kotlin, Firebase, Volley
+- Android App: Kotlin, Firebase
 
 ## 🛠 Setup Instructions
 
