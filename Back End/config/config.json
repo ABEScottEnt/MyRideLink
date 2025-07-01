@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "MyRideDB",
+    "password": "ridelink",
+    "database": "my_ride_db",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  },
+  "test": {
+    "username": "MyRideDB",
+    "password": "ridelink",
+    "database": "my_ride_db_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  },
+  "production": {
+    "username": "MyRideDB",
+    "password": "ridelink",
+    "database": "my_ride_db_prod",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  }
+}
