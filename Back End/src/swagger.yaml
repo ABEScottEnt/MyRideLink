@@ -1,0 +1,112 @@
+components:
+  schemas:
+    VehicleType:
+      type: string
+      enum: [STANDARD, SUV, LUXURY]
+      description: Type of vehicle for the ride
+      example: STANDARD
+
+    Currency:
+      type: string
+      enum: [USD, EUR, GBP, INR]
+      description: Currency for fare calculation
+      example: USD
+
+    FareEstimate:
+      type: object
+      properties:
+        baseFare:
+          type: number
+          format: float
+          description: Base fare before surge pricing
+        distance:
+          type: number
+          format: float
+          description: Estimated distance in kilometers
+        duration:
+          type: number
+          format: float
+          description: Estimated duration in minutes
+        surgeMultiplier:
+          type: number
+          format: float
+          description: Current surge pricing multiplier
+        finalFare:
+          type: number
+          format: float
+          description: Final fare after all calculations
+        currency:
+          $ref: '#/components/schemas/Currency'
+        breakdown:
+          type: object
+          properties:
+            baseCharge:
+              type: number
+              format: float
+              description: Base charge for the vehicle type
+            distanceCharge:
+              type: number
+              format: float
+              description: Charge based on distance
+            timeCharge:
+              type: number
+              format: float
+              description: Charge based on duration
+            surgeCharge:
+              type: number
+              format: float
+              description: Additional charge due to surge pricing
+
+paths:
+  /api/v1/fare/estimate:
+    post:
+      summary: Calculate fare estimate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - origin
+                - destination
+              properties:
+                origin:
+                  type: object
+                  required:
+                    - latitude
+                    - longitude
+                  properties:
+                    latitude:
+                      type: number
+                      format: float
+                    longitude:
+                      type: number
+                      format: float
+                destination:
+                  type: object
+                  required:
+                    - latitude
+                    - longitude
+                  properties:
+                    latitude:
+                      type: number
+                      format: float
+                    longitude:
+                      type: number
+                      format: float
+                vehicleType:
+                  $ref: '#/components/schemas/VehicleType'
+                currency:
+                  $ref: '#/components/schemas/Currency'
+      responses:
+        '200':
+          description: Successful fare calculation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FareEstimate'
+        '400':
+          description: Invalid input parameters
+        '500':
+          description: Server error 
