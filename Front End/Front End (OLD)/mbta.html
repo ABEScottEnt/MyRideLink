@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MBTA Transit - My Ride Link</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🚇 Boston MBTA Transit</h1>
+    <p>Select your line to view next departures</p>
+  </header>
+
+  <main>
+    <section class="filter-section">
+      <label for="lineFilter">Filter by Line:</label>
+      <select id="lineFilter">
+        <option value="all">All</option>
+        <option value="Red">Red Line</option>
+        <option value="Green">Green Line</option>
+        <option value="Orange">Orange Line</option>
+        <option value="Blue">Blue Line</option>
+      </select>
+    </section>
+
+    <section id="transitList" class="transit-list">
+      <!-- JS will inject rides here -->
+    </section>
+  </main>
+
+  <footer>
+    <p>Data provided by MBTA API (Add key in JS later)</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width-device-width, initial-scale=1.0"/>
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <title>Marta Rides</title>
+        <link rel="stylesheet" href="marta.css" />
+        <script src="menu.js"></script>
+        <script src="https://unpkg.com/lucide@latest"></script>
+    </head>
+    <body>
+        <div id="menu-container"></div>
+        <header>
+            <h1>MARTA Tracker</h1>
+            <p>Live train & bus info</p>
+        </header>
+
+        <main>
+            <div class="tabs">
+                <button class="tab-button active" data-tab="trains" onclick="switchTab('trains')">
+                    <i data-lucide="train"></i> Trains
+                </button>
+                <button class="tab-button" data-tab="buses" onclick="switchTab('buses')">
+                    <i data-lucide=bus></i> Buses
+                </button>
+            </div>
+            <div class="train-filter">
+                <label for="line-filter"><strong>Filter by line:</strong></label>
+                <select id="line-filter" onchange="filterTrainLine()">
+                    <option value="ALL">All Lines</option>
+                    <option value="RED">Red Line</option>
+                    <option value="GOLD">Gold Line</option>
+                    <option value="BLUE">Blue Line</option>
+                    <option value="GREEN">Green Line</option>
+                </select>
+            </div>
+                <div id="train-pages" class="train_pages">
+                    <button id="prev-page" onclick="changeTrainPage(-1)">Previous</button>
+                    <span id="train-page-info">Page 1</span>
+                    <button id="next-page" onclick="changeTrainPage(1)">Next</button>
+                </div>
+                    <div id="countdown-timer" style="text-align: center; font-size: 0.9em; margin-top: 10px;">
+                        Refreshing in <span id="refresh-seconds">30</span>s
+                    </div>
+                    <div id="last-updated" style="text-align: center; font-size: 0.8em; color: gray;">
+                        Last updated: —
+                    </div>
+            <section id="data-container">
+                <div class="direction-filter">
+                    <button class="dir-btn active" data-dir="ALL" onclick="filterDirection(this)">All</button>
+                    <button class="dir-btn active" data-dir="N" onclick="filterDirection(this)">Northbound</button>
+                    <button class="dir-btn active" data-dir="S" onclick="filterDirection(this)">Southbound</button>
+                </div>
+                <div id="results-trains" class="results active">
+                    <!-- Train cards will go here -->
+                     <div class="card train-card">
+                        <h3 class="station-name"></h3>
+                        <p><strong>Next Arrival:</strong> <span class="next-arrival"></span></p>
+                        <p><strong>Waiting Time:</strong> <span class="waiting-time"></span></p>
+                        <p><strong>Destination:</strong> <span class="Destination"></span></p>
+                        <p><strong>Train ID:</strong> <span class="train-id"></span></p>
+                     </div>
+                    </div>
+                    <div id="countdown-timer" style="text-align: center; font-size: 0.9em; margin-top: 10px;">
+                        Refreshing in <span id="refresh-seconds2">30</span>s
+                    </div>
+                    <div id="last-updated" style="text-align: center; font-size: 0.8em; color: gray;">
+                        Last updated: —
+                    </div>
+                <div id="train-pages" class="train_pages">
+                    <button id="prev-page" onclick="changeTrainPage(-1)">Previous</button>
+                    <span id="train-page-info2">Page 1</span>
+                    <button id="next-page" onclick="changeTrainPage(1)">Next</button>
+                </div>
+
+                <div id="results-buses" class="results">
+                    <!-- Bus cards will go here -->
+                     <div class="card bus-card">
+                        <h3 class="route-name"></h3>
+                        <p><strong>Next Arrival:</strong> <span class="next-arrival"></span></p>
+                        <p><strong>Waiting Time:</strong> <span class="waiting-time"></span></p>
+                        <p><strong>Destination:</strong> <span class="Destination"></span></p>
+                        <p><strong>Bus ID:</strong> <span class="bus-id"></span></p>
+                     </div>
+                </div>
+            </section>
+        </main>
+        <script src="marta.js"></script>
+    </body>
+</html>

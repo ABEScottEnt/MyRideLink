@@ -1,0 +1,105 @@
+/* top of backgrounds */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #74ebd5, #9face6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+/* end of backgrounds */
+
+/* top of login box */
+.login-container {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 15px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+}
+
+.login-container h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #2ab7ca;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #3799bd;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #0056b3;
+}
+/* end of login box */
+
+/* icons */
+.input-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-group .icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+}
+
+.input-group input {
+  width: calc(100% - 60px);
+  padding: 10px 10px 10px 40px; /* extra left padding for icon */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+/* end of icons */
+
+/* top of footer */
+.footer {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9em;
+  color: #555;
+}
+
+.footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+/* end of footer */
