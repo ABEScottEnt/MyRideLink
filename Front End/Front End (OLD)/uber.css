@@ -1,0 +1,129 @@
+/* Reset & Font */
+body, h1, p, a, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  body {
+    background-color: #f5f7fa;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Header */
+  header {
+    background-color: #000;
+    color: #fff;
+    padding: 1.2rem 2rem;
+    text-align: center;
+  }
+  
+  header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+  
+  .service-name {
+    font-weight: 400;
+    color: #ccc;
+  }
+  
+  nav {
+    margin-top: 0.5rem;
+  }
+  
+  nav a {
+    color: #ccc;
+    margin: 0 1rem;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  
+  nav a:hover {
+    color: #fff;
+  }
+  
+  /* Input Section */
+  .input-box {
+    max-width: 500px;
+    margin: 2rem auto;
+    text-align: center;
+  }
+  
+  input {
+    padding: 0.75rem;
+    margin: 0.5rem;
+    width: 40%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  
+  button {
+    padding: 0.75rem 1.5rem;
+    background-color: #1a73e8;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #155ec0;
+  }
+  
+  /* Ride List */
+  .ride-list {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .ride-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+  }
+  
+  .ride-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .ride-card h2 {
+    font-size: 1.25rem;
+    color: #333;
+  }
+  
+  .ride-card p {
+    margin: 0.4rem 0;
+    color: #555;
+  }
+  
+  .ride-card a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  .ride-card a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Footer */
+  footer {
+    background-color: #222;
+    color: #ccc;
+    text-align: center;
+    padding: 1rem;
+    margin-top: auto;
+    font-size: 0.85rem;
+  }
+  

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Uber Rides | My Ride Link</title>
+  <link rel="stylesheet" href="uber.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>My Ride Link <span class="service-name">| Uber</span></h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Profile</a>
+      <a href="#">All Services</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="input-box">
+      <input type="text" id="pickup" placeholder="Pickup Location" />
+      <input type="text" id="dropoff" placeholder="Dropoff Location" />
+      <button onclick="fetchUberData()">Check Rides</button>
+    </div>
+
+    <section id="rides" class="ride-list"></section>
+  </main>
+
+  <footer>
+    <p>© 2025 My Ride Link. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,164 @@
+body {
+  background: linear-gradient(to right, #3ea984, #0d99cc);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: white; /* Default text color */
+}
+
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px;
+}
+
+.profile-card {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 35px 45px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  max-width: 750px;
+  width: 100%;
+  text-align: center;
+  color: white;
+}
+
+.profile-card h1 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  text-align: center;
+  color: white;
+}
+
+.profile-card .tagline {
+  font-size: 1em;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 35px;
+}
+
+.info-block {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+  color: white;
+}
+
+.info-block i {
+  color: white;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 8px;
+}
+
+.info-block span,
+.info-block p {
+  color: white;
+}
+
+.payment-section,
+.ride-history,
+.saved-locations,
+.ride-preferences,
+.referral-section,
+.security-info {
+  margin-bottom: 30px;
+}
+
+.payment-section h2,
+.ride-history h2,
+.saved-locations h2,
+.ride-preferences h2,
+.referral-section h2,
+.security-info h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3em;
+  margin-bottom: 10px;
+  color: white;
+  gap: 8px;
+  text-align: center;
+}
+
+.payment-section p,
+.referral-section p,
+.saved-locations li,
+.ride-preferences li,
+.security-info li {
+  color: white;
+}
+
+.ride-history table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.95em;
+  color: white;
+}
+
+.ride-history th {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.ride-history td {
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.saved-locations ul,
+.ride-preferences ul,
+.security-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.referral-section .btn {
+  margin-top: 10px;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.btn.logout {
+  background-color: #dc3545;
+}
+
+.btn.logout:hover {
+  background-color: #a71d2a;
+}
