@@ -1,10 +1,27 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const { Ride, Payment, User, Driver } = require('../models');
+const { Ride, Payment, User } = require('../models');
 const { logger } = require('../config/logger');
+
+// Initialize Stripe with error handling
+let stripe;
+try {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    logger.warn('Stripe secret key not configured. Payment features will be disabled.');
+    stripe = null;
+  } else {
+    stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  }
+} catch (error) {
+  logger.error('Error initializing Stripe:', error);
+  stripe = null;
+}
 
 // Create a payment intent for a ride
 const createPaymentIntent = async (rideId, amount, currency = 'usd') => {
   try {
+    if (!stripe) {
+      throw new Error('Payment service not configured');
+    }
+
     const ride = await Ride.findByPk(rideId, {
       include: [
         {
@@ -123,11 +140,9 @@ const getPaymentDetails = async (paymentId) => {
               attributes: ['id', 'firstName', 'lastName', 'email'],
             },
             {
-              model: Driver,
-              include: [{
-                model: User,
-                attributes: ['id', 'firstName', 'lastName', 'email'],
-              }],
+              model: User,
+              as: 'driver',
+              attributes: ['id', 'firstName', 'lastName', 'email'],
             },
           ],
         },
@@ -148,6 +163,10 @@ const getPaymentDetails = async (paymentId) => {
 // Refund payment
 const refundPayment = async (paymentId, amount = null) => {
   try {
+    if (!stripe) {
+      throw new Error('Payment service not configured');
+    }
+
     const payment = await Payment.findByPk(paymentId);
     if (!payment) {
       throw new Error('Payment not found');

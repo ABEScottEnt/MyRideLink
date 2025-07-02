@@ -65,4 +65,6 @@ const createLogger = () => {
 };
 
 // Use the test logger during tests, otherwise use the real logger
-module.exports = process.env.NODE_ENV === 'test' ? createTestLogger() : createLogger(); 
+const logger = process.env.NODE_ENV === 'test' ? createTestLogger() : createLogger();
+
+module.exports = logger; 

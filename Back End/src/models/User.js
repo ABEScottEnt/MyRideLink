@@ -110,7 +110,7 @@ module.exports = (sequelize, DataTypes) => {
     // User's email address (must be unique)
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true, // Nullable for phone auth
       unique: true,
       validate: {
         isEmail: true
@@ -120,26 +120,46 @@ module.exports = (sequelize, DataTypes) => {
     // User's password (stored securely using bcrypt)
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true // Nullable for Google/phone auth
     },
 
     // User's first name
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true // Nullable for phone auth
     },
 
     // User's last name
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true // Nullable for phone auth
     },
 
     // User's phone number (must be unique)
     phoneNumber: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true, // Nullable for Google auth
       unique: true
+    },
+
+    // Authentication provider (email, google, phone)
+    authProvider: {
+      type: DataTypes.ENUM('email', 'google', 'phone'),
+      defaultValue: 'email',
+      allowNull: false
+    },
+
+    // Google OAuth ID for users who signed up with Google
+    googleId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true
+    },
+
+    // URL to user profile picture
+    profilePicture: {
+      type: DataTypes.STRING,
+      allowNull: true
     },
 
     // What type of user they are (rider, driver, or admin)

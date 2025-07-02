@@ -1,11 +1,17 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { User } = require('../models');
 const { ValidationError, AuthenticationError } = require('../middleware/errorHandler');
 const { logger } = require('../config/logger');
 const { sendEmail } = require('../utils/emailUtils');
 const { generateAccessToken, generateRefreshToken } = require('../utils/tokenUtils');
 const { NotFoundError } = require('../utils/errors');
+const { authenticateWithGoogle } = require('../services/googleAuthService');
+const { 
+  sendVerificationCode, 
+  authenticateWithPhone, 
+  isPhoneVerified 
+} = require('../services/phoneAuthService');
 
 // Register new user
 exports.register = async (req, res, next) => {
@@ -200,6 +206,144 @@ exports.resetPassword = async (req, res, next) => {
     res.json({
       status: 'success',
       message: 'Password reset successful'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Google authentication
+exports.googleAuth = async (req, res, next) => {
+  try {
+    const { idToken } = req.body;
+
+    if (!idToken) {
+      throw new ValidationError('Google ID token is required');
+    }
+
+    const result = await authenticateWithGoogle(idToken);
+
+    // Set HTTP-only cookies
+    res.cookie('accessToken', result.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 30 * 60 * 1000 // 30 minutes
+    });
+
+    res.cookie('refreshToken', result.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.json({
+      status: 'success',
+      data: {
+        user: result.user,
+        message: 'Google authentication successful'
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Send phone verification code
+exports.sendPhoneCode = async (req, res, next) => {
+  try {
+    const { phoneNumber } = req.body;
+
+    if (!phoneNumber) {
+      throw new ValidationError('Phone number is required');
+    }
+
+    // Check if phone number is already verified
+    const verified = await isPhoneVerified(phoneNumber);
+    if (verified) {
+      return res.json({
+        status: 'success',
+        message: 'Phone number already verified',
+        data: { isVerified: true }
+      });
+    }
+
+    await sendVerificationCode(phoneNumber);
+
+    res.json({
+      status: 'success',
+      message: 'Verification code sent successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Phone authentication
+exports.phoneAuth = async (req, res, next) => {
+  try {
+    const { phoneNumber, code } = req.body;
+
+    if (!phoneNumber || !code) {
+      throw new ValidationError('Phone number and verification code are required');
+    }
+
+    const result = await authenticateWithPhone(phoneNumber, code);
+
+    // Set HTTP-only cookies
+    res.cookie('accessToken', result.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 30 * 60 * 1000 // 30 minutes
+    });
+
+    res.cookie('refreshToken', result.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.json({
+      status: 'success',
+      data: {
+        user: result.user,
+        message: 'Phone authentication successful'
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get current user
+exports.getCurrentUser = async (req, res, next) => {
+  try {
+    // User is already attached to req by auth middleware
+    const user = req.user;
+    
+    if (!user) {
+      throw new AuthenticationError('User not found');
+    }
+
+    res.json({
+      status: 'success',
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phoneNumber: user.phoneNumber,
+          role: user.role,
+          isEmailVerified: user.isEmailVerified,
+          isPhoneVerified: user.isPhoneVerified,
+          authProvider: user.authProvider,
+          profilePicture: user.profilePicture
+        }
+      }
     });
   } catch (error) {
     next(error);

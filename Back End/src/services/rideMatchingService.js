@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Ride, User, Driver } = require('../models');
+const { Ride, User } = require('../models');
 const { calculateDistance } = require('../utils/fareCalculator');
 const { calculateFare } = require('../utils/fareCalculator');
 const { logger } = require('../config/logger');
@@ -10,19 +10,20 @@ const MAX_ACTIVE_RIDES = 3; // Maximum number of active rides per driver
 // Find available drivers within radius
 const findAvailableDrivers = async (location, maxDistance = MAX_DISTANCE_KM) => {
   try {
-    const drivers = await Driver.findAll({
+    const drivers = await User.findAll({
       where: {
-        isAvailable: true,
-        isActive: true,
+        role: 'driver',
+        status: 'active',
+        isAvailable: true
       },
-      include: [{
-        model: User,
-        attributes: ['id', 'firstName', 'lastName', 'phoneNumber'],
-      }],
+      attributes: ['id', 'firstName', 'lastName', 'phoneNumber', 'currentLatitude', 'currentLongitude', 'vehicleMake', 'vehicleModel', 'vehicleColor', 'licensePlate']
     });
 
     // Filter drivers by distance
     const nearbyDrivers = drivers.filter(driver => {
+      if (!driver.currentLatitude || !driver.currentLongitude) {
+        return false; // Skip drivers without location
+      }
       const distance = calculateDistance(
         { latitude: driver.currentLatitude, longitude: driver.currentLongitude },
         location
@@ -124,9 +125,9 @@ const matchRiderWithDriver = async (riderId, origin, destination) => {
       ride,
       driver: {
         id: matchedDriver.id,
-        firstName: matchedDriver.User.firstName,
-        lastName: matchedDriver.User.lastName,
-        phoneNumber: matchedDriver.User.phoneNumber,
+        firstName: matchedDriver.firstName,
+        lastName: matchedDriver.lastName,
+        phoneNumber: matchedDriver.phoneNumber,
         vehicleDetails: {
           make: matchedDriver.vehicleMake,
           model: matchedDriver.vehicleModel,
@@ -145,9 +146,13 @@ const matchRiderWithDriver = async (riderId, origin, destination) => {
 // Update driver location
 const updateDriverLocation = async (driverId, latitude, longitude) => {
   try {
-    const driver = await Driver.findByPk(driverId);
+    const driver = await User.findByPk(driverId);
     if (!driver) {
       throw new Error('Driver not found');
+    }
+
+    if (driver.role !== 'driver') {
+      throw new Error('User is not a driver');
     }
 
     driver.currentLatitude = latitude;
