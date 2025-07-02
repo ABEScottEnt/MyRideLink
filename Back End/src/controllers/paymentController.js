@@ -1,9 +1,22 @@
 const { Payment, Ride, User } = require('../models');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { createNotification } = require('../utils/notificationUtils');
 const { sendEmail } = require('../utils/emailUtils');
 const winston = require('winston');
 const { sendPaymentConfirmation } = require('../services/notificationService');
+
+// Initialize Stripe with error handling
+let stripe;
+try {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    winston.warn('Stripe secret key not configured. Payment features will be disabled.');
+    stripe = null;
+  } else {
+    stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  }
+} catch (error) {
+  winston.error('Error initializing Stripe:', error);
+  stripe = null;
+}
 
 // Add placeholder handlers for missing payment routes
 const defaultNotImplemented = (name) => async (req, res) => {
@@ -13,6 +26,13 @@ const defaultNotImplemented = (name) => async (req, res) => {
 const paymentController = {
   createCheckoutSession: async (req, res) => {
     try {
+      if (!stripe) {
+        return res.status(503).json({
+          success: false,
+          message: 'Payment service not configured'
+        });
+      }
+
       const { rideId } = req.params;
       const userId = req.user.id;
 
@@ -88,6 +108,13 @@ const paymentController = {
 
   // Handle Stripe webhook
   handleWebhook: async (req, res) => {
+    if (!stripe) {
+      return res.status(503).json({
+        success: false,
+        message: 'Payment service not configured'
+      });
+    }
+
     const sig = req.headers['stripe-signature'];
     let event;
 

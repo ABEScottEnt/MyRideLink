@@ -45,14 +45,14 @@ exports.initialize = (server) => {
     socket.join(`user:${socket.user.id}`);
 
     // Join ride room if user is part of an active ride
-    if (socket.user.role === 'DRIVER') {
+    if (socket.user.role === 'driver') {
       socket.join(`driver:${socket.user.id}`);
     }
 
     // Handle driver location updates
     socket.on('updateLocation', async (data) => {
       try {
-        if (socket.user.role !== 'DRIVER') {
+        if (socket.user.role !== 'driver') {
           throw new Error('Only drivers can update location');
         }
 
@@ -60,10 +60,8 @@ exports.initialize = (server) => {
 
         // Update driver's last location
         await socket.user.update({
-          lastLocation: {
-            type: 'Point',
-            coordinates: [longitude, latitude]
-          }
+          currentLatitude: latitude,
+          currentLongitude: longitude
         });
 
         // If this is part of an active ride, broadcast to rider
@@ -102,7 +100,7 @@ exports.initialize = (server) => {
         }
 
         // Verify user is authorized to update status
-        if (socket.user.role !== 'ADMIN' && 
+        if (socket.user.role !== 'admin' && 
             socket.user.id !== ride.driverId && 
             socket.user.id !== ride.riderId) {
           throw new Error('Not authorized to update ride status');

@@ -159,4 +159,102 @@ router.post('/forgot-password', authController.forgotPassword);
  */
 router.post('/reset-password', authController.resetPassword);
 
+/**
+ * @swagger
+ * /api/v1/auth/google:
+ *   post:
+ *     summary: Authenticate with Google
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - idToken
+ *             properties:
+ *               idToken:
+ *                 type: string
+ *                 description: Google ID token from client
+ *     responses:
+ *       200:
+ *         description: Google authentication successful
+ *       400:
+ *         description: Invalid token
+ */
+router.post('/google', authController.googleAuth);
+
+/**
+ * @swagger
+ * /api/v1/auth/phone/send-code:
+ *   post:
+ *     summary: Send phone verification code
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phoneNumber
+ *             properties:
+ *               phoneNumber:
+ *                 type: string
+ *                 description: Phone number to send code to
+ *     responses:
+ *       200:
+ *         description: Verification code sent successfully
+ *       400:
+ *         description: Invalid phone number
+ */
+router.post('/phone/send-code', authController.sendPhoneCode);
+
+/**
+ * @swagger
+ * /api/v1/auth/phone/verify:
+ *   post:
+ *     summary: Verify phone number with code
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phoneNumber
+ *               - code
+ *             properties:
+ *               phoneNumber:
+ *                 type: string
+ *                 description: Phone number
+ *               code:
+ *                 type: string
+ *                 description: 6-digit verification code
+ *     responses:
+ *       200:
+ *         description: Phone verification successful
+ *       400:
+ *         description: Invalid code
+ */
+router.post('/phone/verify', authController.phoneAuth);
+
+/**
+ * @swagger
+ * /api/v1/auth/me:
+ *   get:
+ *     summary: Get current user information
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user information
+ *       401:
+ *         description: Not authenticated
+ */
+router.get('/me', authController.getCurrentUser);
+
 module.exports = router; 

@@ -4,14 +4,20 @@ const logger = require('./logger');
 // Initialize Firebase Admin
 let firebaseApp;
 try {
-  firebaseApp = admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
-    })
-  });
-  logger.info('Firebase Admin initialized successfully');
+  // Check if required environment variables are present
+  if (!process.env.FIREBASE_PROJECT_ID || !process.env.FIREBASE_CLIENT_EMAIL || !process.env.FIREBASE_PRIVATE_KEY) {
+    logger.warn('Firebase environment variables not configured. Firebase features will be disabled.');
+    firebaseApp = null;
+  } else {
+    firebaseApp = admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+      })
+    });
+    logger.info('Firebase Admin initialized successfully');
+  }
 } catch (error) {
   logger.error('Error initializing Firebase Admin:', error);
   firebaseApp = null;
@@ -26,8 +32,8 @@ try {
  */
 const sendPushNotification = async (token, notification, data = {}) => {
   if (!firebaseApp) {
-    logger.error('Firebase Admin not initialized');
-    throw new Error('Firebase Admin not initialized');
+    logger.warn('Firebase Admin not initialized - skipping push notification');
+    return { success: false, message: 'Firebase not configured' };
   }
 
   try {
@@ -78,8 +84,8 @@ const sendPushNotification = async (token, notification, data = {}) => {
  */
 const sendMulticastPushNotification = async (tokens, notification, data = {}) => {
   if (!firebaseApp) {
-    logger.error('Firebase Admin not initialized');
-    throw new Error('Firebase Admin not initialized');
+    logger.warn('Firebase Admin not initialized - skipping multicast push notification');
+    return { success: false, message: 'Firebase not configured' };
   }
 
   try {
