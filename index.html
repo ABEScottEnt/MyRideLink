@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MARTA Transit Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+ <link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+</head>
+<body>
+  <header>
+    <h1>🚇 MARTA Transit Dashboard</h1>
+    <p>Select your rail line and fetch real-time arrival data</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <label for="lineFilter">Choose Line:</label>
+      <select id="lineFilter">
+        <option value="all">All</option>
+        <option value="Red">Red Line</option>
+        <option value="Green">Green Line</option>
+        <option value="Gold">Gold Line</option>
+        <option value="Blue">Blue Line</option>
+      </select>
+      <button id="fetchButton">Get Train Info</button>
+    </section>
+
+    <section id="lastUpdated" class="timestamp"></section>
+
+    <section id="transitList" class="transit-list"></section>
+
+    <div id="map" class="map-container"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 MARTA Data via API</p>
+  </footer>
+
+  <script src="Script.js"></script>
+</body>
+</html>
