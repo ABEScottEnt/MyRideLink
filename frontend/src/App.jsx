@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/home.jsx";
-import Login from "./pages/Auth.jsx";
+import Auth from "./pages/Auth.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 
@@ -43,7 +43,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/auth" element={<Auth />} />
         <Route path="/rides" element={<Rides />} />
         <Route path="/rentals" element={<Rentals />} />
         <Route path="/public-transport" element={<PublicTransport />} />
