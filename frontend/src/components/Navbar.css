@@ -14,7 +14,7 @@
 }
 
 .navbar-logo {
-  height: 44px;
+  height: 64px;
   margin-right: 16px;
 }
 
@@ -54,38 +54,6 @@
   gap: 12px;
 }
 
-.navbar-btn {
-  padding: 6px 18px;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.18s, color 0.18s, border 0.18s;
-  box-shadow: none;
-  outline: none;
-  border: 1.5px solid #6366f1;
-  background: #fff;
-  color: #6366f1;
-}
-
-.navbar-btn:hover {
-  background: #f1f5ff;
-  color: #3730a3;
-  border-color: #3730a3;
-}
-
-.navbar-btn:last-child {
-  background: #6366f1;
-  color: #fff;
-  border: 1.5px solid #6366f1;
-  margin-left: 4px;
-}
-
-.navbar-btn:last-child:hover {
-  background: #3730a3;
-  border-color: #3730a3;
-}
-
 @media (max-width: 900px) {
   .navbar-header {
     max-width: 98vw;
@@ -108,4 +76,21 @@
   .navbar-auth-buttons {
     margin-left: 0;
   }
+}
+
+.app-title {
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: #3b3b3b;
+  transition: none;
+}
+
+/* Prevent active/focus/hover effect on .app-title inside a Link */
+.navbar-header a:active .app-title,
+.navbar-header a:focus .app-title,
+.navbar-header a:hover .app-title {
+  color: #3b3b3b;
+  text-decoration: none;
+  background: none;
 }

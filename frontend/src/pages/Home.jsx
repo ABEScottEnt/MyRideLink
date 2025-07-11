@@ -11,9 +11,8 @@ import Footer from "../components/Footer.jsx";
 function Home() {
   return (
     <div className="home-container">
-      <Navbar />
-      <main className="home-main">
-        <h1 className="home-heading">
+      <main className="app-main-container">
+        <h1 className="main-heading">
           Where car services click with convenience!
         </h1>
         <div className="home-cards-row">
@@ -26,7 +25,6 @@ function Home() {
           <ServiceCard title="Product Delivery" img={productDeliveryImg} />
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
