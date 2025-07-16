@@ -1,1 +1,1 @@
-React Native + Expo Setup
+React Native + Expo
