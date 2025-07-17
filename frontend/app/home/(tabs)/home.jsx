@@ -1,16 +1,26 @@
-import { View, Text, StyleSheet } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import SectionTitle from '../../../components/common/SectionTitle'
+import { ScrollView, View, StyleSheet, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import QuickSearch from '../../../components/home/QuickSearch';
+import QuickAccessCard from '../../../components/home/QuickAccessCard';
+import RecentActivity from '../../../components/home/RecentActivity';
 
 export default function Home() {
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.container}>
-        <SectionTitle title="Welcome to MyRideLink" />
-        <Text style={styles.subtitle}>Compare rides, rentals, and transit easily.</Text>
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <QuickSearch />
+        
+        <View style={styles.accessGrid}>
+          <QuickAccessCard label="Rideshare" sublabel="Uber, Lyft & more" iconName="car-outline" />
+          <QuickAccessCard label="Transit" sublabel="Bus, train & metro" iconName="train-outline" />
+          <QuickAccessCard label="Car Rental" sublabel="Turo, Zipcar & more" iconName="business-outline" />
+          <QuickAccessCard label="Account" sublabel="Profile & settings" iconName="person-outline" />
+        </View>
+
+        <RecentActivity />
+      </ScrollView>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -18,16 +28,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  container: {
-    flex: 1,
-    justifyContent: 'center',     // ⬅️ Center vertically (optional)
-    alignItems: 'center',         // ⬅️ Center everything horizontally
+  scrollContainer: {
+    paddingBottom: 40,
+  },
+  accessGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
+    paddingTop: 10,
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginTop: 8,
-    textAlign: 'center',          // ⬅️ Center the text inside Text
-  },
-})
+});
