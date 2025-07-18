@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="24c87614-0b07-46a7-9808-1b50b7ce9b4e" name="Changes" comment="" />
+    <list default="true" id="24c87614-0b07-46a7-9808-1b50b7ce9b4e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,7 +35,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "feature/pages/sainath",
+    "git-widget-placeholder": "main",
     "ignore_missing_gitignore": "true",
     "last_opened_file_path": "/Users/sai/Documents/Fourth_Sem/MyRideLink/MARTA_Android/assets/images",
     "node.js.detected.package.eslint": "true",
@@ -74,7 +76,7 @@
       <workItem from="1752001620044" duration="43301000" />
       <workItem from="1752499766493" duration="5326000" />
       <workItem from="1752681094169" duration="6193000" />
-      <workItem from="1752692926655" duration="7130000" />
+      <workItem from="1752692926655" duration="8054000" />
     </task>
     <servers />
   </component>
