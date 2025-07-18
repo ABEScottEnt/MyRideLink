@@ -68,12 +68,10 @@ export default function Rides() {
                   style={styles.webview}
               />
             </View>
-            </ScrollView>
-      </SafeAreaView>
+          </ScrollView>
+        </SafeAreaView>
   )
 }
-
-    
         const Routedata = [
            { 
               id: 1, 
