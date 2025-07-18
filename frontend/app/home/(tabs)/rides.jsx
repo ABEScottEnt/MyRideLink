@@ -20,7 +20,6 @@ export default function Rides() {
             Available Rides
           </Text>
         </View>
-
         <RideComparisonList title="Uber" eta="2-5 min" rides={uberData} />
         <RideComparisonList title="Lyft" eta="3-6 min" rides={lyftData} />
       </ScrollView>
