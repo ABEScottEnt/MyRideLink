@@ -8,45 +8,39 @@ import {
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React from "react";
+import React, { useState } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import TransitMap from "../../../components/transit/TransitMap";
-import TransitComparisonList from "../../../components/transit/TransitComparisonList";
+import TransitMap from "@/components/transit/TransitMap";
+import TransitComparisonList from "@/components/transit/TransitComparisonList";
+import LocationSearch from "@/components/common/LocationSearch";
+import SectionTitle from "@/components/common/SectionTitle";
 
 export default function Rides() {
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const handleSubmit = () => {
+    // Replace with your search logic
+    Alert.alert("Search Tapped!", `From: ${from}, To: ${to}`);
+  };
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView>
-        <View style={styles.container}>
-          <View>
-            <Text style={styles.title}>Public Transit</Text>
-            <Text style={styles.subtitle}>
-              Find the best routes and schedules
-            </Text>
-          </View>
-
-          <View style={styles.outerLocationContainer}>
-            <View style={styles.innerLocationContainer}>
-              <MaterialIcons name="location-on" size={20} color="black" />
-              <TextInput
-                style={styles.location}
-                placeholder="Current Location"
-              />
-            </View>
-            <View style={styles.innerLocationContainer}>
-              <MaterialIcons name="location-on" size={20} color="black" />
-              <TextInput style={styles.location} placeholder="To" />
-            </View>
-            <TouchableOpacity
-              onPress={() => Alert.alert("Search Tapped!")}
-              style={styles.buttonContainer}
-            >
-              <Text style={styles.buttonText}>Find Routes</Text>
-            </TouchableOpacity>
-          </View>
-
+        <View style={styles.contentContainer}>
+          <SectionTitle
+            title="Public Transit"
+            subtitle="Find the best routes and schedules"
+          />
+          <LocationSearch
+            fromValue={from}
+            toValue={to}
+            onChangeFrom={setFrom}
+            onChangeTo={setTo}
+            onClearFrom={() => setFrom("")}
+            onClearTo={() => setTo("")}
+            onSubmit={handleSubmit}
+            submitText="Find Routes"
+          />
           <TransitMap />
-
           <TransitComparisonList />
         </View>
       </ScrollView>
@@ -63,7 +57,11 @@ const styles = StyleSheet.create({
     flex: 1,
     //justifyContent: 'center',     // ⬅️ Center vertically (optional)
     //alignItems: 'center',         // ⬅️ Center everything horizontally
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16, // Remove to let LocationSearch handle padding
+  },
+  contentContainer: {
+    width: "90%",
+    alignSelf: "center",
   },
   title: {
     fontSize: 22,

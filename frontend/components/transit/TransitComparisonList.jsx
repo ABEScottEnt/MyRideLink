@@ -1,6 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import COLORS from "@/constants/theme";
+
+const TRANSIT_BLUE = COLORS.primary;
+const TRANSIT_GREEN = COLORS.secondary;
 
 const defaultRoutedata = [
   {
@@ -71,13 +75,13 @@ const defaultRoutedata = [
 
 const showTransitStep = (step, index) => {
   const iconType = step.type === "bus" ? "bus" : "train";
-  const iconColor = step.type === "bus" ? "#4285f4" : "#34a853";
-  const backgroundColor = step.type === "bus" ? "#4285f4" : "#34a853";
+  const iconColor = step.type === "bus" ? TRANSIT_BLUE : TRANSIT_GREEN;
+  const backgroundColor = step.type === "bus" ? TRANSIT_BLUE : TRANSIT_GREEN;
 
   return (
     <View key={index} style={styles.stepContainer}>
       <View style={[styles.stepIcon, { backgroundColor }]}>
-        <Ionicons name={iconType} size={14} color="#fff" />
+        <Ionicons name={iconType} size={14} color={COLORS.white} />
       </View>
       <View style={styles.stepDetails}>
         <Text style={styles.stepLane}>{step.Lane}</Text>
@@ -108,11 +112,18 @@ const displayRoute = (route) => {
     <View key={route.id} style={styles.routeCard}>
       <View style={styles.routeHeader}>
         <Text style={styles.routeTitle}>{route.name}</Text>
-        <Text style={styles.routeLabel}>{getRouteLabel(route.type)}</Text>
+        <Text
+          style={[
+            styles.routeLabel,
+            { color: TRANSIT_BLUE, backgroundColor: "#e6f0ff" },
+          ]}
+        >
+          {getRouteLabel(route.type)}
+        </Text>
       </View>
       <View style={styles.mainRoute}>
         <View style={styles.routeTimeContainer}>
-          <Ionicons name="time-outline" size={14} color="#666" />
+          <Ionicons name="time-outline" size={14} color={COLORS.muted} />
           <Text style={styles.routeTime}>{route.time}</Text>
         </View>
         <View style={styles.routeAmountContainer}>
@@ -123,7 +134,7 @@ const displayRoute = (route) => {
         {route.steps.map((step, index) => showTransitStep(step, index))}
       </View>
       <View style={styles.nextDepartureContainer}>
-        <Ionicons name="time-outline" size={12} color="#666" />
+        <Ionicons name="time-outline" size={14} color={COLORS.muted} />
         <Text style={styles.nextDepartureText}>
           Next departure: {route.NextDeparture}
         </Text>
@@ -149,15 +160,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     marginBottom: 12,
-    color: "#222",
+    color: COLORS.gradientEnd,
   },
   routeCard: {
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.white,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#EEE",
+    borderColor: COLORS.muted,
   },
   routeHeader: {
     flexDirection: "row",
@@ -168,13 +179,12 @@ const styles = StyleSheet.create({
   routeTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#222",
+    color: COLORS.text,
   },
   routeLabel: {
     fontSize: 13,
-    color: "#4285f4",
     fontWeight: "500",
-    backgroundColor: "#E3F0FF",
+    backgroundColor: "#e6f0ff",
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
@@ -192,13 +202,13 @@ const styles = StyleSheet.create({
   routeTime: {
     marginLeft: 4,
     fontSize: 14,
-    color: "#666",
+    color: COLORS.text,
   },
   routeAmountContainer: {},
   routeAmount: {
     fontSize: 15,
     fontWeight: "700",
-    color: "#222",
+    color: COLORS.gradientEnd,
   },
   routeSteps: {
     marginBottom: 8,
@@ -220,15 +230,15 @@ const styles = StyleSheet.create({
   stepLane: {
     fontSize: 13,
     fontWeight: "500",
-    color: "#222",
+    color: COLORS.text,
   },
   stepRoute: {
     fontSize: 12,
-    color: "#666",
+    color: COLORS.muted,
   },
   stepDuration: {
     fontSize: 12,
-    color: "#999",
+    color: COLORS.muted,
   },
   nextDepartureContainer: {
     flexDirection: "row",
@@ -236,7 +246,7 @@ const styles = StyleSheet.create({
   },
   nextDepartureText: {
     fontSize: 12,
-    color: "#666",
+    color: COLORS.muted,
     marginLeft: 4,
   },
 });
