@@ -1,13 +1,14 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import SectionTitle from '../../../components/common/SectionTitle'
+import RideMap from '../../../components/rides/RideMap'
 
 export default function Rides() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
         <SectionTitle title="Rides" />
-        <Text style={styles.subtitle}>Compare rides.</Text>
+        <RideMap />
       </View>
     </SafeAreaView>
   )
