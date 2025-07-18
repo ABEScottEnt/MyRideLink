@@ -72,7 +72,7 @@ export default function Rides() {
         </SafeAreaView>
   )
 }
-  const Routedata = [
+        const Routedata = [
            { 
               id: 1, 
               name: 'Route 1', 
@@ -138,8 +138,7 @@ export default function Rides() {
             NextDeparture: '5 min',
             },
             ];
-            
-  const showTransitStep = (step, index) => {
+        const showTransitStep = (step, index) => {
           const iconType = step.type === 'bus' ? 'bus' : 'train';
           const iconColor = step.type === 'bus' ? '#4285f4' : '#34a853';
           const backgroundColor = step.type === 'bus' ? '#4285f4' : '#34a853';
@@ -157,7 +156,7 @@ export default function Rides() {
             </View>
             );
             };
-  const displayRoute = (route) => {
+        const displayRoute = (route) => {
           const getRouteLabel = (type) => {
             switch (type) {
               case 'fastest':
@@ -197,8 +196,7 @@ export default function Rides() {
             </View>
             );
             };
-            
-   return (
+        return (
             <SafeAreaView style={styles.container}>
               <StatusBar barStyle="dark-content" backgroundColor="#fff" />
               <ScrollView style={styles.routesContainer} showsVerticalScrollIndicator={false}>
