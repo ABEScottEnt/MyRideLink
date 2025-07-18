@@ -72,7 +72,7 @@ export default function Rides() {
         </SafeAreaView>
   )
 }
-        const Routedata = [
+  const Routedata = [
            { 
               id: 1, 
               name: 'Route 1', 
@@ -198,7 +198,7 @@ export default function Rides() {
             );
             };
             
-        return (
+  return (
             <SafeAreaView style={styles.container}>
               <StatusBar barStyle="dark-content" backgroundColor="#fff" />
               <ScrollView style={styles.routesContainer} showsVerticalScrollIndicator={false}>
