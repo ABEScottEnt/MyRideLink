@@ -20,13 +20,6 @@ ios/build/
 *.xcuserstate
 *.xcuserdata
 
-# === Metro, Babel, etc. ===
-.expo/
-.expo-shared/
-babel.config.js
-metro.config.js
-webpack.config.js
-
 # === React Native / Expo ===
 *.keystore
 *.p8
