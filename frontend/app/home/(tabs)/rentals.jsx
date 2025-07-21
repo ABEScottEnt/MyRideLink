@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import SectionTitle from '@/components/common/SectionTitle'
+import SectionTitle from '../../../components/common/SectionTitle'
 
 export default function Rides() {
   return (
