@@ -14,3 +14,4 @@ build/
 .idea/
 .vscode/
 *.swp
+src/generated/
