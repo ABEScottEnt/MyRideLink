@@ -57,3 +57,4 @@ test-results/
 *.lock-wscript
 package-lock.json # optional — include if you want team members to install independently
 yarn.lock         # optional — same as above
+.idea/
