@@ -1,9 +1,12 @@
-import { View, Text } from 'react-native'
+import COLORS from "@/constants/theme";
+import { Text, View } from "react-native";
+import SettingCard from "../../../components/account/SettingCard";
 
 export default function Home() {
   return (
-    <View>
-      <Text>Account screen</Text>
+    <View style={{ backgroundColor: COLORS.background }}>
+      <Text>Account</Text>
+      <SettingCard />
     </View>
-  )
+  );
 }
