@@ -111,7 +111,7 @@ const RecentActivity = () => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 16,
+    marginTop : 16,
     padding: 16,
     backgroundColor: COLORS.white,
     borderRadius: 12,

@@ -16,7 +16,6 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
       "package": "com.MyRideLink.frontend"
     },
     "web": {
