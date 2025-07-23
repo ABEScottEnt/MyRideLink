@@ -3,9 +3,10 @@ import COLORS from "../../constants/theme";
 
 export default function StatsCard() {
 
+    //Call all the Info from backend here
     let totalRides = "227"
     let moneySaved = "23.48"
-    let rating = "5"
+    let rating = "5.0"
 
     return (
         <View style={styles.container}>
@@ -14,11 +15,11 @@ export default function StatsCard() {
                 <Text style={styles.bigName}>Total Rides</Text>
             </View>
             <View style={styles.innerContainer}>
-                <Text style={styles.bigNum}>{moneySaved}</Text>
+                <Text style={styles.bigNum}>${moneySaved}</Text>
                 <Text style={styles.bigName}>Money Saved</Text>
             </View>
             <View style={styles.innerContainer}>
-                <Text style={styles.bigNum}>{rating} ⭐</Text>
+                <Text style={styles.bigNum}>{rating}{/* ⭐*/}</Text>
                 <Text style={styles.bigName}>Rating</Text>
             </View>
         </View>

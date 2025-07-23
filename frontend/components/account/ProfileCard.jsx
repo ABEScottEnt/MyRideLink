@@ -12,7 +12,7 @@ export default function ProfileCard(){
     const lastName = "Doe"
     const email = "john.doe@xyz.com"
     const subscription = true
-    const rating = "5"
+    const rating = "5.0"
 
     let profilePic;
     if(picture){
@@ -52,8 +52,8 @@ export default function ProfileCard(){
                 </View>
             </View>
             <View style={styles.buttons}>
-                <TouchableOpacity onPress={() => Alert.alert(`You have ${subscriptionTier} subscription`)} style={styles.buttonContainer}><Text style={styles.subscriptionTier}>{subscriptionTier}</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => Alert.alert(`You have ${rating} ⭐ rating`)} style={styles.buttonContainer}><Text style={styles.rating}>{rating} ⭐</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => Alert.alert(`You have ${subscriptionTier} subscription`)} style={styles.buttonContainer}><Text style={styles.subscriptionRating}>{subscriptionTier}</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => Alert.alert(`You have ${rating} ⭐ rating`)} style={styles.buttonContainer}><Text style={styles.subscriptionRating}>⭐ {rating}</Text></TouchableOpacity>
             </View>
         </View>
     )
@@ -101,12 +101,7 @@ const styles = StyleSheet.create({
         height: 60,
         //width: 70,
     },
-    subscriptionTier: {
-        color: COLORS.muted,
-        fontWeight: 'bold',
-        fontSize: 18,
-    },
-    rating: {
+    subscriptionRating: {
         color: COLORS.muted,
         fontWeight: 'bold',
         fontSize: 18,

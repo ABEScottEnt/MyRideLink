@@ -1,6 +1,6 @@
 // components/common/SectionTitle.jsx
 import { Text, View, StyleSheet } from "react-native";
-import COLORS from "@/constants/theme";
+import COLORS from "../../constants/theme";
 
 export default function SectionTitle({ title, subtitle }) {
   return (

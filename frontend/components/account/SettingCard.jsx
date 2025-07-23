@@ -1,4 +1,4 @@
-import COLORS from "@/constants/theme";
+import COLORS from "../../constants/theme";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 
@@ -29,9 +29,13 @@ export default function SettingCard() {
   return (
     <View
       style={{
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        backgroundColor: COLORS.background,
+        //paddingHorizontal: 16,
+          paddingVertical: 8,
+          marginTop: 16,
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: COLORS.muted,
+        //backgroundColor: COLORS.background,
       }}
     >
       <View
@@ -52,11 +56,11 @@ export default function SettingCard() {
             fontSize: 22,
             fontWeight: "bold",
             paddingHorizontal: 10,
-            paddingBottom: 18,
+            paddingBottom: 12,
             color: COLORS.gradientEnd,
           }}
         >
-          Account Settings
+           Settings
         </Text>
         <SettingItem icon="user" label="Personal Information" />
         <SettingItem icon="credit-card" label="Payment Method" />
