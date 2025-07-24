@@ -1,12 +1,15 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import React from "react";
+import {View,Text,StyleSheet,TouchableOpacity,FlatList,} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import COLORS from "@/constants/theme";
+import { router } from "expo-router";
 
 const data = [
   {
     id: "1",
     title: "Downtown → Airport",
-    time: "Yesterday, 3:30 PM",
+    time: "2024-07-23T15:30:00Z",
     price: "$24.50",
     rating: "4.9",
     type: "car",
@@ -14,7 +17,7 @@ const data = [
   {
     id: "2",
     title: "Metro Line 2",
-    time: "2 days ago, 8:15 AM",
+    time: "2024-07-22T08:15:00Z",
     price: "$2.75",
     duration: "25 min",
     type: "train",
@@ -22,7 +25,7 @@ const data = [
   {
     id: "3",
     title: "Downtown → Airport",
-    time: "2 days ago, 8:15 AM",
+    time: "2024-07-21T08:15:00Z",
     price: "$2.75",
     duration: "25 min",
     type: "train",
@@ -30,7 +33,7 @@ const data = [
   {
     id: "4",
     title: "Metro Line 3",
-    time: "1 days ago, 8:15 AM",
+    time: "2024-07-20T08:15:00Z",
     price: "$2.75",
     duration: "25 min",
     type: "train",
@@ -43,6 +46,17 @@ const iconMap = {
 };
 
 const RecentActivity = () => {
+  const navigation = useNavigation();
+
+  const handleNavigate = () => {
+    const sortedData = [...data].sort((a, b) => new Date(b.time) - new Date(a.time));
+    router.push({
+      pathname: "/activity-history",
+      params: { allData: JSON.stringify(sortedData) },
+    });
+  };
+  
+
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <View style={styles.left}>
@@ -54,7 +68,7 @@ const RecentActivity = () => {
         />
         <View style={styles.textBlock}>
           <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.sub}>{item.time}</Text>
+          <Text style={styles.sub}>{new Date(item.time).toLocaleString()}</Text>
         </View>
       </View>
       <View style={styles.right}>
@@ -70,48 +84,24 @@ const RecentActivity = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Ionicons
-          name="time-outline"
-          size={24}
-          color="#333"
-          style={styles.clockIcon}
-        />
+      <TouchableOpacity style={styles.headerContainer} onPress={handleNavigate}>
+        <Ionicons name="time-outline" size={24} color="#333" style={styles.clockIcon} />
         <Text style={styles.header}>Recent Activity</Text>
-      </View>
-      <View style={styles.list}>
-        {data.map((item) => (
-          <View key={item.id} style={styles.itemContainer}>
-            <View style={styles.left}>
-              <Ionicons
-                name={iconMap[item.type]}
-                size={20}
-                color={COLORS.primary}
-                style={styles.itemIcon}
-              />
-              <View style={styles.textBlock}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.sub}>{item.time}</Text>
-              </View>
-            </View>
-            <View style={styles.right}>
-              <Text style={styles.price}>{item.price}</Text>
-              {item.rating ? (
-                <Text style={styles.meta}>⭐ {item.rating}</Text>
-              ) : (
-                <Text style={styles.meta}>{item.duration}</Text>
-              )}
-            </View>
-          </View>
-        ))}
-      </View>
+        <Ionicons name="chevron-forward-outline" size={18} color="#888" style={{ marginLeft: "auto" }} />
+      </TouchableOpacity>
+      <FlatList
+        data={data.slice(0, 3)}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        scrollEnabled={false}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    margin: 16,
+    marginTop: 16,
     padding: 16,
     backgroundColor: COLORS.white,
     borderRadius: 12,
