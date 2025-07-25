@@ -6,95 +6,16 @@ import COLORS from "@/constants/theme";
 const TRANSIT_BLUE = COLORS.primary;
 const TRANSIT_GREEN = COLORS.secondary;
 
-const defaultRoutedata = [
-  {
-    id: 1,
-    name: "Route 1",
-    time: "35 min",
-    type: "fastest",
-    amount: "$3.25",
-    steps: [
-      {
-        type: "bus",
-        Lane: "Bus 42",
-        Start: "Main St",
-        Stop: "Metro Center",
-        Duration: "15 min",
-      },
-      {
-        type: "Metro",
-        Lane: "Metro Red Line",
-        Start: "Metro Center",
-        Stop: "Downtown",
-        Duration: "20 min",
-      },
-    ],
-    NextDeparture: "8 min",
-  },
-  {
-    id: 2,
-    name: "Route 2",
-    time: "48 min",
-    type: "cheapest",
-    amount: "$2.50",
-    steps: [
-      {
-        type: "bus",
-        Lane: "Bus 15",
-        Start: "Main St",
-        Stop: "Union Station",
-        Duration: "28 min",
-      },
-      {
-        type: "bus",
-        Lane: "Bus 8",
-        Start: "Union Station",
-        Stop: "Downtown",
-        Duration: "20 min",
-      },
-    ],
-    NextDeparture: "12 min",
-  },
-  {
-    id: 3,
-    name: "Route 3",
-    time: "42 min",
-    type: "Least walking",
-    amount: "$3.00",
-    steps: [
-      {
-        type: "Metro",
-        Lane: "Metro Blue Line",
-        Start: "Direct Route",
-        Duration: "42 min",
-      },
-    ],
-    NextDeparture: "5 min",
-  },
-];
-
-const showTransitStep = (step, index) => {
-  const iconType = step.type === "bus" ? "bus" : "train";
-  const iconColor = step.type === "bus" ? TRANSIT_BLUE : TRANSIT_GREEN;
-  const backgroundColor = step.type === "bus" ? TRANSIT_BLUE : TRANSIT_GREEN;
-
-  return (
-    <View key={index} style={styles.stepContainer}>
-      <View style={[styles.stepIcon, { backgroundColor }]}>
-        <Ionicons name={iconType} size={14} color={COLORS.white} />
+export default function TransitComparisonList({ routes }) {
+  // Safety check: if no routes provided, render a message or empty view
+  if (!routes || routes.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>No routes available</Text>
       </View>
-      <View style={styles.stepDetails}>
-        <Text style={styles.stepLane}>{step.Lane}</Text>
-        <Text style={styles.stepRoute}>
-          {step.Start} → {step.Stop}
-        </Text>
-        <Text style={styles.stepDuration}>{step.Duration}</Text>
-      </View>
-    </View>
-  );
-};
+    );
+  }
 
-const displayRoute = (route) => {
   const getRouteLabel = (type) => {
     switch (type) {
       case "fastest":
@@ -108,46 +29,56 @@ const displayRoute = (route) => {
     }
   };
 
-  return (
-    <View key={route.id} style={styles.routeCard}>
-      <View style={styles.routeHeader}>
-        <Text style={styles.routeTitle}>{route.name}</Text>
-        <Text
-          style={[
-            styles.routeLabel,
-            { color: TRANSIT_BLUE, backgroundColor: "#e6f0ff" },
-          ]}
-        >
-          {getRouteLabel(route.type)}
-        </Text>
-      </View>
-      <View style={styles.mainRoute}>
-        <View style={styles.routeTimeContainer}>
-          <Ionicons name="time-outline" size={14} color={COLORS.muted} />
-          <Text style={styles.routeTime}>{route.time}</Text>
-        </View>
-        <View style={styles.routeAmountContainer}>
-          <Text style={styles.routeAmount}>{route.amount}</Text>
-        </View>
-      </View>
-      <View style={styles.routeSteps}>
-        {route.steps.map((step, index) => showTransitStep(step, index))}
-      </View>
-      <View style={styles.nextDepartureContainer}>
-        <Ionicons name="time-outline" size={14} color={COLORS.muted} />
-        <Text style={styles.nextDepartureText}>
-          Next departure: {route.NextDeparture}
-        </Text>
-      </View>
-    </View>
-  );
-};
+  const showTransitStep = (step, index) => {
+    const iconType = step.type === "bus" ? "bus" : "train";
+    const backgroundColor = step.type === "bus" ? TRANSIT_BLUE : TRANSIT_GREEN;
 
-export default function TransitComparisonList({ routes = defaultRoutedata }) {
+    return (
+      <View key={index} style={styles.stepContainer}>
+        <View style={[styles.stepIcon, { backgroundColor }]}>
+          <Ionicons name={iconType} size={14} color={COLORS.white} />
+        </View>
+        <View style={styles.stepDetails}>
+          <Text style={styles.stepLane}>{step.Lane}</Text>
+          <Text style={styles.stepRoute}>
+            {step.Start} {step.Stop ? `→ ${step.Stop}` : ""}
+          </Text>
+          <Text style={styles.stepDuration}>{step.Duration}</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.recommendSection}>
       <Text style={styles.routesTitle}>Recommended Routes</Text>
-      {routes.map((route) => displayRoute(route))}
+      {routes.map((route) => (
+        <View key={route.id} style={styles.routeCard}>
+          <View style={styles.routeHeader}>
+            <Text style={styles.routeTitle}>{route.name}</Text>
+            <Text style={styles.routeLabel}>{getRouteLabel(route.type)}</Text>
+          </View>
+
+          <View style={styles.mainRoute}>
+            <View style={styles.routeTimeContainer}>
+              <Ionicons name="time-outline" size={14} color={COLORS.muted} />
+              <Text style={styles.routeTime}>{route.time}</Text>
+            </View>
+            <Text style={styles.routeAmount}>{route.amount}</Text>
+          </View>
+
+          <View style={styles.routeSteps}>
+            {route.steps.map((step, i) => showTransitStep(step, i))}
+          </View>
+
+          <View style={styles.nextDepartureContainer}>
+            <Ionicons name="time-outline" size={14} color={COLORS.muted} />
+            <Text style={styles.nextDepartureText}>
+              Next departure: {route.NextDeparture}
+            </Text>
+          </View>
+        </View>
+      ))}
     </View>
   );
 }
@@ -204,7 +135,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.text,
   },
-  routeAmountContainer: {},
   routeAmount: {
     fontSize: 15,
     fontWeight: "700",
@@ -248,5 +178,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.muted,
     marginLeft: 4,
+  },
+  emptyContainer: {
+    padding: 20,
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    color: COLORS.muted,
   },
 });

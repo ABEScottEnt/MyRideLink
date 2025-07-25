@@ -74,7 +74,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.background,  // theme background color here
   },
   logoContainer: {
     alignItems: "center",
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: 40,
+    backgroundColor: COLORS.background, // theme background color here as well
   },
   contentContainer: {
     width: "90%",

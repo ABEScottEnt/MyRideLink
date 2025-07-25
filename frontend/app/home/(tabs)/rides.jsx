@@ -1,22 +1,24 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, ScrollView, StyleSheet, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SectionTitle from "@/components/common/SectionTitle";
 import RideComparisonList from "@/components/rides/RideComparisonList";
-import { uberData, lyftData } from "@/components/rides/testRides";
+import { uberData, lyftData } from "@/data/testRides";
 import RideMap from "@/components/rides/RideMap";
 import LocationSearch from "@/components/common/LocationSearch";
+import COLORS from "@/constants/theme";
 
 export default function Rides() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+
   const handleSubmit = () => {
-    // Replace with your search logic
-    alert(`From: ${from}, To: ${to}`);
+    Alert.alert("Search Tapped!", `From: ${from}, To: ${to}`);
   };
+
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView className="flex-1 bg-gray-50">
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.contentContainer}>
           <SectionTitle
             title="Rides"
@@ -44,22 +46,14 @@ export default function Rides() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.background, // Use theme background color here
   },
-  container: {
-    flex: 1,
-    justifyContent: "center", // ⬅️ Center vertically (optional)
-    // alignItems: "center", // Remove to allow full width
-    // paddingHorizontal: 16, // Remove to let contentContainer handle padding
+  scrollContent: {
+    flexGrow: 1,
+    backgroundColor: COLORS.background, // And here for ScrollView content container
   },
   contentContainer: {
     width: "90%",
     alignSelf: "center",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#666",
-    marginTop: 8,
-    textAlign: "center", // ⬅️ Center the text inside Text
   },
 });
