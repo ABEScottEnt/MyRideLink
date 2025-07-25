@@ -7,7 +7,7 @@ import errorHandler from "./middleware/errorHandler.js";
 import notFound from "./middleware/notFound.js";
 import { PORT, NODE_ENV } from "./config/env.js";
 
-// import authRoutes from "./modules/auth/routes.js";
+import authRoutes from './modules/auth/routes.js';
 // import userRoutes from "./modules/users/routes.js";
 // import rideRoutes from "./modules/rides/routes.js";
 // import paymentRoutes from "./modules/payments/routes.js";
@@ -23,7 +23,7 @@ app.use(rateLimiter);
 app.use(loggingMiddleware);
 
 // Routes
-// app.use("/api/auth", authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use("/api/users", userRoutes);
 // app.use("/api/rides", rideRoutes);
 // app.use("/api/payments", paymentRoutes);
