@@ -1,4 +1,12 @@
-import { Router } from "express";
+import express from "express";
+import {
+  sendOTPController,
+  verifyOTPController,
+  signupController,
+  loginController,
+  logoutController,
+} from "./controllers.js";
+
 import {
   signupValidator,
   loginValidator,
@@ -6,23 +14,23 @@ import {
   verifyOTPValidator,
 } from "./validators.js";
 
-import {
-  signupController,
-  loginController,
-  logoutController,
-  sendOTPController,
-  verifyOTPController,
-} from "./controllers.js";
+import { validate } from "../../middleware/validation.js";
 
-import { validate } from "./validation.js";
-import { requireSupabaseAuth } from '../../middleware/requireSupabaseAuth.js';
+const router = express.Router();
 
-const router = Router();
+// Step 1: Send OTP to email
+router.post("/send-otp", sendOTPValidator, validate, sendOTPController);
 
-router.post("/signup", requireSupabaseAuth, signupValidator, validate, signupController);
+// Step 2: Verify OTP code (to confirm email before signup)
+router.post("/verify-otp", verifyOTPValidator, validate, verifyOTPController);
+
+// Step 3: Signup (email already verified from OTP step)
+router.post("/signup", signupValidator, validate, signupController);
+
+// Step 4: Login (email/password)
 router.post("/login", loginValidator, validate, loginController);
+
+// Step 5: Logout (no validation needed)
 router.post("/logout", logoutController);
-router.post("/sendOTP", sendOTPValidator, validate, sendOTPController);
-router.post("/verifyOTP", verifyOTPValidator, validate, verifyOTPController);
 
 export default router;
