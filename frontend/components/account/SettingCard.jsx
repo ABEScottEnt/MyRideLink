@@ -1,14 +1,18 @@
 import COLORS from "../../constants/theme";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
+import PersonalInfo from "../../app/SettingItem/PersonalInfo";
+import { useRouter } from 'expo-router';
 
-function SettingItem({
+
+function SettingItem({  
   icon,
   label,
   iconColor = COLORS.primary,
   textColor = "#000",
   onPress,
 }) {
+    
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -26,6 +30,7 @@ function SettingItem({
 }
 
 export default function SettingCard() {
+     const router = useRouter();
   return (
     <View
       style={{
@@ -62,8 +67,8 @@ export default function SettingCard() {
         >
            Settings
         </Text>
-        <SettingItem icon="user" label="Personal Information" />
-        <SettingItem icon="credit-card" label="Payment Method" />
+        <SettingItem icon="user" label="Personal Information" onPress={() => router.push("/SettingItem/PersonalInfo")}/>
+        <SettingItem icon="credit-card" label="Payment Method" onPress={() => router.push("/SettingItem/PaymentMethod")}/>
         <SettingItem icon="settings" label="Preferences" />
         <SettingItem icon="clock" label="Trip History" />
         <SettingItem icon="heart" label="Favorite Places" />
