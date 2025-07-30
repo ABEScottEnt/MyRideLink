@@ -11,7 +11,7 @@ export default function RootLayout() {
       <SafeAreaView style={styles.safeArea}>
         <StatusBar style="dark" />
         <Slot />
-        <DevButton />
+        <DevButton route="/home/(tabs)/home" />
       </SafeAreaView>
     </SafeAreaProvider>
   );

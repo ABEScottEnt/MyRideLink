@@ -58,7 +58,7 @@ const RecentActivity = () => {
       (a, b) => new Date(b.time) - new Date(a.time)
     );
     router.push({
-      pathname: "/activity-history",
+      pathname: "/activity/history",
       params: { allData: JSON.stringify(sortedData) },
     });
   };
