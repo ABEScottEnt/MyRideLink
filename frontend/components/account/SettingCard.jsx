@@ -1,18 +1,16 @@
 import COLORS from "../../constants/theme";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
-import PersonalInfo from "../../app/SettingItem/PersonalInfo";
-import { useRouter } from 'expo-router';
+import PersonalInfo from "../../app/settings/personal-info";
+import { useRouter } from "expo-router";
 
-
-function SettingItem({  
+function SettingItem({
   icon,
   label,
   iconColor = COLORS.primary,
   textColor = "#000",
   onPress,
 }) {
-    
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -30,16 +28,16 @@ function SettingItem({
 }
 
 export default function SettingCard() {
-     const router = useRouter();
+  const router = useRouter();
   return (
     <View
       style={{
         //paddingHorizontal: 16,
-          paddingVertical: 8,
-          marginTop: 16,
-          borderRadius: 12,
-          borderWidth: 1,
-          borderColor: COLORS.muted,
+        paddingVertical: 8,
+        marginTop: 16,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: COLORS.muted,
         //backgroundColor: COLORS.background,
       }}
     >
@@ -65,10 +63,18 @@ export default function SettingCard() {
             color: COLORS.gradientEnd,
           }}
         >
-           Settings
+          Settings
         </Text>
-        <SettingItem icon="user" label="Personal Information" onPress={() => router.push("/SettingItem/PersonalInfo")}/>
-        <SettingItem icon="credit-card" label="Payment Method" onPress={() => router.push("/SettingItem/PaymentMethod")}/>
+        <SettingItem
+          icon="user"
+          label="Personal Information"
+          onPress={() => router.push("/settings/personal-info")}
+        />
+        <SettingItem
+          icon="credit-card"
+          label="Payment Method"
+          onPress={() => router.push("/settings/payment-method")}
+        />
         <SettingItem icon="settings" label="Preferences" />
         <SettingItem icon="clock" label="Trip History" />
         <SettingItem icon="heart" label="Favorite Places" />

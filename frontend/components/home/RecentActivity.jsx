@@ -1,5 +1,10 @@
-import React from "react";
-import {View,Text,StyleSheet,TouchableOpacity,FlatList,} from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import COLORS from "@/constants/theme";
@@ -49,13 +54,14 @@ const RecentActivity = () => {
   const navigation = useNavigation();
 
   const handleNavigate = () => {
-    const sortedData = [...data].sort((a, b) => new Date(b.time) - new Date(a.time));
+    const sortedData = [...data].sort(
+      (a, b) => new Date(b.time) - new Date(a.time)
+    );
     router.push({
       pathname: "/activity-history",
       params: { allData: JSON.stringify(sortedData) },
     });
   };
-  
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
@@ -85,9 +91,19 @@ const RecentActivity = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.headerContainer} onPress={handleNavigate}>
-        <Ionicons name="time-outline" size={24} color="#333" style={styles.clockIcon} />
+        <Ionicons
+          name="time-outline"
+          size={24}
+          color="#333"
+          style={styles.clockIcon}
+        />
         <Text style={styles.header}>Recent Activity</Text>
-        <Ionicons name="chevron-forward-outline" size={18} color="#888" style={{ marginLeft: "auto" }} />
+        <Ionicons
+          name="chevron-forward-outline"
+          size={18}
+          color="#888"
+          style={{ marginLeft: "auto" }}
+        />
       </TouchableOpacity>
       <FlatList
         data={data.slice(0, 3)}

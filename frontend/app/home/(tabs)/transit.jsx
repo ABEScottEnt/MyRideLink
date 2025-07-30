@@ -1,7 +1,13 @@
-import React, { useState } from "react";
-import { View, ScrollView, StyleSheet, SafeAreaView, Alert } from "react-native";
-import SectionTitle from "@/components/common/SectionTitle";
-import LocationSearch from "@/components/common/LocationSearch";
+import { useState } from "react";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+} from "react-native";
+import SectionTitle from "@/components/shared/SectionTitle";
+import LocationSearch from "@/components/shared/LocationSearch";
 import TransitMap from "@/components/transit/TransitMap";
 import TransitComparisonList from "@/components/transit/TransitComparisonList";
 
@@ -46,11 +52,11 @@ export default function Transit() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: COLORS.background,  // use theme background
+    backgroundColor: COLORS.background, // use theme background
   },
   scrollContent: {
     flexGrow: 1,
-    backgroundColor: COLORS.background,  // use theme background here too
+    backgroundColor: COLORS.background, // use theme background here too
   },
   contentContainer: {
     width: "90%",

@@ -1,4 +1,4 @@
-// components/common/SectionTitle.jsx
+// components/shared/SectionTitle.jsx
 import { Text, View, StyleSheet } from "react-native";
 import COLORS from "../../constants/theme";
 

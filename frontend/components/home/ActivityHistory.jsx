@@ -1,5 +1,11 @@
-import React, { useState, useMemo } from "react";
-import {View,Text,StyleSheet,FlatList,TextInput,TouchableOpacity,
+import { useState, useMemo } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "@/constants/theme";
@@ -20,7 +26,6 @@ export default function ActivityHistory() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
-  
   const data = params.allData ? JSON.parse(params.allData) : [];
 
   const [searchText, setSearchText] = useState("");
