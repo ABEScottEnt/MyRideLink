@@ -95,12 +95,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#aaa',
-    borderRadius: 10,
-    padding: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
+    color: '#111',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 8,
+    borderRadius: 8,
+    marginTop: 4,
   },
   button: {
     backgroundColor: '#4682B4',
