@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SectionTitle from "@/components/common/SectionTitle";
+import { useState } from "react";
+import { View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
+import SectionTitle from "@/components/shared/SectionTitle";
 import RentalSearch from "@/components/rentals/RentalSearch";
 import RentalComparisonList from "@/components/rentals/RentalComparisonList";
 import rentalData from "@/data/testRentals";
@@ -43,11 +42,11 @@ export default function Rentals() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: COLORS.background,  // theme background color
+    backgroundColor: COLORS.background, // theme background color
   },
   scrollContent: {
     flexGrow: 1,
-    backgroundColor: COLORS.background,  // theme background color
+    backgroundColor: COLORS.background, // theme background color
   },
   contentContainer: {
     width: "90%",

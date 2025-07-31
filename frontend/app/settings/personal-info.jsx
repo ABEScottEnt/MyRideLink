@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { useState } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import SectionTitle from '../../components/common/SectionTitle';
+import SectionTitle from "../../components/shared/SectionTitle";
 
 export default function PersonalInfo() {
   const [userInfo, setUserInfo] = useState({
@@ -16,7 +23,7 @@ export default function PersonalInfo() {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (field, value) => {
-    setTempInfo(prev => ({ ...prev, [field]: value }));
+    setTempInfo((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSave = () => {
@@ -33,7 +40,7 @@ export default function PersonalInfo() {
             style={styles.input}
             value={tempInfo[fieldKey]}
             onChangeText={(text) => handleChange(fieldKey, text)}
-            multiline={fieldKey === 'address'}
+            multiline={fieldKey === "address"}
           />
         ) : (
           <Text style={styles.value}>{userInfo[fieldKey]}</Text>
@@ -45,7 +52,7 @@ export default function PersonalInfo() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <SectionTitle title="Personal Info" />
-      
+
       <View style={styles.avatarContainer}>
         <Ionicons name="person-circle-outline" size={100} color="#4682B4" />
       </View>
@@ -60,7 +67,9 @@ export default function PersonalInfo() {
         style={styles.button}
         onPress={isEditing ? handleSave : () => setIsEditing(true)}
       >
-        <Text style={styles.buttonText}>{isEditing ? "Save Changes" : "Edit Profile"}</Text>
+        <Text style={styles.buttonText}>
+          {isEditing ? "Save Changes" : "Edit Profile"}
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -69,49 +78,49 @@ export default function PersonalInfo() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#f4f9ff',
+    backgroundColor: "#f4f9ff",
     flexGrow: 1,
   },
   avatarContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 20,
   },
   fieldGroup: {
     marginBottom: 15,
   },
   label: {
-    fontWeight: '600',
+    fontWeight: "600",
     fontSize: 14,
-    color: '#444',
+    color: "#444",
     marginBottom: 4,
   },
   value: {
     fontSize: 16,
-    color: '#222',
-    backgroundColor: '#fff',
+    color: "#222",
+    backgroundColor: "#fff",
     padding: 12,
     borderRadius: 10,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderWidth: 1,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#aaa',
+    borderColor: "#aaa",
     borderRadius: 10,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   button: {
-    backgroundColor: '#4682B4',
+    backgroundColor: "#4682B4",
     paddingVertical: 14,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 25,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
     fontSize: 16,
   },
 });

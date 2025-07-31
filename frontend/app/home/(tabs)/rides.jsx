@@ -1,11 +1,16 @@
-import React, { useState } from "react";
-import { View, ScrollView, StyleSheet, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SectionTitle from "@/components/common/SectionTitle";
+import { useState } from "react";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  SafeAreaView,
+} from "react-native";
+import SectionTitle from "@/components/shared/SectionTitle";
 import RideComparisonList from "@/components/rides/RideComparisonList";
 import { uberData, lyftData } from "@/data/testRides";
 import RideMap from "@/components/rides/RideMap";
-import LocationSearch from "@/components/common/LocationSearch";
+import LocationSearch from "@/components/shared/LocationSearch";
 import COLORS from "@/constants/theme";
 
 export default function Rides() {

@@ -1,9 +1,8 @@
-import { ScrollView, View, StyleSheet, Text, Image, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import LocationSearch from "@/components/common/LocationSearch";
+import { ScrollView, View, StyleSheet, Text, Image, Alert, SafeAreaView } from "react-native";
+import LocationSearch from "@/components/shared/LocationSearch";
 import QuickAccessCard from "@/components/home/QuickAccessCard";
 import RecentActivity from "@/components/home/RecentActivity";
-import React, { useState } from "react";
+import { useState } from "react";
 import COLORS from "@/constants/theme";
 
 export default function Home() {
@@ -74,7 +73,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: COLORS.background,  // theme background color here
+    backgroundColor: COLORS.background, // theme background color here
   },
   logoContainer: {
     alignItems: "center",
