@@ -2,7 +2,7 @@
 import { Slot } from "expo-router";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import DevButton from "../components/shared/DevButton";
 
 export default function RootLayout() {
