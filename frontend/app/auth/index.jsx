@@ -7,14 +7,19 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
+  Image,
 } from 'react-native';
+import COLORS from '../../constants/theme';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 export default function AuthScreen() {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = () => {
@@ -26,138 +31,240 @@ export default function AuthScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.logo}>🚗 MyRideLink</Text>
-      <Text style={styles.subtitle}>Your journey, simplified</Text>
-
-      <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[styles.tab, isLogin && styles.activeTab]}
-          onPress={() => setIsLogin(true)}
-        >
-          <Text style={isLogin ? styles.activeText : styles.inactiveText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, !isLogin && styles.activeTab]}
-          onPress={() => setIsLogin(false)}
-        >
-          <Text style={!isLogin ? styles.activeText : styles.inactiveText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.form}>
-        {!isLogin && (
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your full name"
-            value={fullName}
-            onChangeText={setFullName}
-          />
-        )}
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={setEmail}
+    <SafeAreaView style={styles.safe}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Image
+          source={require('../../assets/images/logo.png')}
+          style={styles.logo}
+          resizeMode="contain"
         />
-        {!isLogin && (
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your phone number"
-            keyboardType="phone-pad"
-            value={phoneNumber}
-            onChangeText={setPhoneNumber}
-          />
-        )}
-        <TextInput
-          style={styles.input}
-          placeholder={isLogin ? 'Enter your password' : 'Create a password'}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+        <Text style={styles.tagline}>Your journey, simplified</Text>
 
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>
-            {isLogin ? 'Sign in' : 'Create account'}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.card}>
+          <View style={styles.tabRow}>
+            <TouchableOpacity
+              style={[styles.tab, isLogin && styles.tabActive]}
+              onPress={() => setIsLogin(true)}
+            >
+              <Text style={isLogin ? styles.tabTextActive : styles.tabTextInactive}>
+                Login
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, !isLogin && styles.tabActive]}
+              onPress={() => setIsLogin(false)}
+            >
+              <Text style={!isLogin ? styles.tabTextActive : styles.tabTextInactive}>
+                Sign Up
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        {isLogin && (
-          <TouchableOpacity>
-            <Text style={styles.forgot}>Forgot password?</Text>
-          </TouchableOpacity>
-        )}
+          <View style={styles.form}>
+            {isLogin ? (
+              <>
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                    name="mail-outline"
+                    size={20}
+                    color={COLORS.secondary}
+                    style={styles.inputIcon}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your email"
+                    placeholderTextColor={COLORS.secondary}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    value={email}
+                    onChangeText={setEmail}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                    name="lock-closed-outline"
+                    size={20}
+                    color={COLORS.secondary}
+                    style={styles.inputIcon}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your password"
+                    placeholderTextColor={COLORS.secondary}
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                  />
+                </View>
+              </>
+            ) : (
+              <> 
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                    name="person-outline"
+                    size={20}
+                    color={COLORS.secondary}
+                    style={styles.inputIcon}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Full Name"
+                    placeholderTextColor={COLORS.secondary}
+                    value={fullName}
+                    onChangeText={setFullName}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                    name="mail-outline"
+                    size={20}
+                    color={COLORS.secondary}
+                    style={styles.inputIcon}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Email Address"
+                    placeholderTextColor={COLORS.secondary}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    value={email}
+                    onChangeText={setEmail}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                    name="lock-closed-outline"
+                    size={20}
+                    color={COLORS.secondary}
+                    style={styles.inputIcon}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Create Password"
+                    placeholderTextColor={COLORS.secondary}
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                  />
+                </View>
+              </>
+            )}
 
-        {!isLogin && (
-          <Text style={styles.tos}>
-            By signing up, you agree to our Terms of Service and Privacy Policy.
-          </Text>
-        )}
-      </View>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSubmit}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.submitText}>
+                {isLogin ? 'Sign In' : 'Create Account'}
+              </Text>
+            </TouchableOpacity>
+
+            {isLogin && (
+              <TouchableOpacity>
+                <Text style={styles.link}>Forgot password?</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', padding: 20, alignItems: 'center' },
-  logo: { fontSize: 24, fontWeight: 'bold', marginTop: 40 },
-  subtitle: { fontSize: 14, color: '#6b7280', marginBottom: 20 },
-  tabContainer: {
+  safe: { flex: 1, backgroundColor: COLORS.white },
+  container: { padding: 20, alignItems: 'center' },
+  logo: {
+    width: 260,
+    height: 260,
+    marginBottom: 0,
+  },
+  tagline: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    color: COLORS.muted,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  card: {
+    width: '100%',
+    backgroundColor: COLORS.white,
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 2,
+    marginBottom: 24,
+  },
+  tabRow: {
     flexDirection: 'row',
-    borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: '#DDD',
+    borderRadius: 8,
     overflow: 'hidden',
     marginBottom: 20,
-    width: '100%',
   },
   tab: {
     flex: 1,
-    padding: 12,
+    paddingVertical: 12,
     alignItems: 'center',
-    backgroundColor: '#f9fafb',
+    backgroundColor: COLORS.background,
   },
-  activeTab: {
-    backgroundColor: '#fff',
+  tabActive: {
+    backgroundColor: COLORS.white,
   },
-  activeText: {
-    fontWeight: 'bold',
-    color: '#111827',
+  tabTextActive: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.muted,
   },
-  inactiveText: {
-    color: '#6b7280',
+  tabTextInactive: {
+    fontSize: 16,
+    color: COLORS.secondary,
   },
-  form: {
-    width: '100%',
+  form: { marginTop: 0 },
+  inputWrapper: {
+    position: 'relative',
+    marginBottom: 16,
+  },
+  inputIcon: {
+    position: 'absolute',
+    left: 16,
+    top: 14,
+    zIndex: 1,
   },
   input: {
-    backgroundColor: '#f3f4f6',
-    padding: 14,
-    borderRadius: 8,
-    marginBottom: 12,
+    height: 48,
+    borderColor: '#DDD',
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingLeft: 44,
+    backgroundColor: COLORS.background,
+    color: COLORS.text,
+    fontSize: 16,
   },
-  button: {
-    backgroundColor: '#ef4444',
-    padding: 15,
-    borderRadius: 8,
+  submitButton: {
+    marginTop: 12,
+    backgroundColor: COLORS.gradientEnd,
+    borderRadius: 12,
+    paddingVertical: 14,
     alignItems: 'center',
-    marginTop: 10,
   },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+  submitText: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: '700',
   },
-  forgot: {
+  link: {
     marginTop: 12,
-    color: '#ef4444',
+    fontSize: 14,
+    color: COLORS.gradientEnd,
     textAlign: 'center',
-  },
-  tos: {
-    fontSize: 12,
-    color: '#6b7280',
-    textAlign: 'center',
-    marginTop: 12,
   },
 });
