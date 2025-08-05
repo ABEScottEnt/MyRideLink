@@ -1,133 +1,193 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 import {
+  SafeAreaView,
   View,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
+  FlatList,
   ScrollView,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+} from 'react-native';
+import { Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default function PaymentMethod() {
-  const [paymentInfo, setPaymentInfo] = useState({
-    cardName: "Emmanuel Baah",
-    cardNumber: "**** **** **** 1234",
-    expiry: "12/26",
-    cvv: "***",
-    billingAddress: "123 Main St, Atlanta, GA",
-  });
+export default function PaymentMethodsScreen() {
+  const [methods, setMethods] = useState([
+    { id: '1', type: 'Visa', last4: '4243', isDefault: true },
+    { id: '2', type: 'Amex', last4: '3007', isDefault: false },
+  ]);
 
-  const [tempInfo, setTempInfo] = useState({ ...paymentInfo });
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleChange = (field, value) => {
-    setTempInfo((prev) => ({ ...prev, [field]: value }));
+  const setDefault = (id) => {
+    setMethods((prev) =>
+      prev.map((m) => ({ ...m, isDefault: m.id === id }))
+    );
   };
 
-  const handleSave = () => {
-    setPaymentInfo({ ...tempInfo });
-    setIsEditing(false);
-  };
-
-  const renderField = (label, fieldKey, isSecure = false) => (
-    <View style={styles.infoRow} key={fieldKey}>
-      <Text style={styles.rowLabel}>{label}</Text>
-      {isEditing ? (
-        <TextInput
-          value={tempInfo[fieldKey]}
-          onChangeText={(text) => handleChange(fieldKey, text)}
-          style={styles.input}
-          secureTextEntry={isSecure}
+  const renderMethod = ({ item }) => (
+    <View style={styles.methodCard}>
+      <View style={styles.methodInfo}>
+        <FontAwesome
+          name={item.type === 'Visa' ? 'cc-visa' : 'cc-amex'}
+          size={24}
+          color="#333"
+          style={{ marginRight: 12 }}
         />
+        <Text style={styles.methodText}>
+          {item.type} •••• {item.last4}
+        </Text>
+      </View>
+      {item.isDefault ? (
+        <View style={styles.defaultBadge}>
+          <Ionicons name="checkmark" size={16} color="#fff" />
+          <Text style={styles.defaultText}>Default</Text>
+        </View>
       ) : (
-        <Text style={styles.rowValue}>{paymentInfo[fieldKey]}</Text>
+        <TouchableOpacity
+          onPress={() => setDefault(item.id)}
+          style={styles.setDefaultBtn}
+        >
+          <Text style={styles.setDefaultText}>Set Default</Text>
+        </TouchableOpacity>
       )}
     </View>
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="card-outline" size={80} color="#000" />
-        <Text style={styles.headerTitle}>Payment Method</Text>
+        <TouchableOpacity>
+          <Ionicons name="arrow-back" size={28} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Payment Methods</Text>
       </View>
 
-      <View style={styles.card}>
-        {renderField("Cardholder Name", "cardName")}
-        {renderField("Card Number", "cardNumber")}
-        {renderField("Expiration Date", "expiry")}
-        {renderField("CVV", "cvv", true)}
-        {renderField("Billing Address", "billingAddress")}
-      </View>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.sectionTitle}>Saved Methods:</Text>
+        <FlatList
+          data={methods}
+          renderItem={renderMethod}
+          keyExtractor={(item) => item.id}
+          scrollEnabled={false}
+        />
 
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={isEditing ? handleSave : () => setIsEditing(true)}
-      >
-        <Text style={styles.editButtonText}>
-          {isEditing ? "Save Changes" : "Edit Payment Info"}
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={styles.addNewRow}>
+          <Text style={styles.addNewText}>
+            + Add a New Payment Method
+          </Text>
+        </TouchableOpacity>
+
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.actionBtn}>
+            <MaterialCommunityIcons
+              name="credit-card-plus-outline"
+              size={20}
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.actionText}>Add Card</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.actionBtn}>
+            <FontAwesome
+              name="apple"
+              size={20}
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.actionText}>Add Apple Pay</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.continueBtn}>
+          <Text style={styles.continueText}>Continue</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
+const PRIMARY = '#007AFF';
+
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    padding: 20,
-  },
+  container: { flex: 1, backgroundColor: '#f9f9f9' },
   header: {
-    alignItems: "center",
-    marginBottom: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ddd',
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginTop: 10,
-  },
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-  },
-  infoRow: {
-    borderBottomColor: "#E0E0E0",
-    borderBottomWidth: 1,
-    paddingVertical: 14,
-  },
-  rowLabel: {
-    color: "#888",
-    fontSize: 12,
-    marginBottom: 4,
-  },
-  rowValue: {
+  title: { fontSize: 20, fontWeight: '600', marginLeft: 12 },
+  content: { padding: 16 },
+  sectionTitle: {
     fontSize: 16,
-    color: "#111",
+    fontWeight: '500',
+    marginBottom: 8,
   },
-  input: {
-    fontSize: 16,
-    color: "#111",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 8,
+  methodCard: {
+    backgroundColor: '#fff',
     borderRadius: 8,
-    marginTop: 4,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
   },
-  editButton: {
-    backgroundColor: "#000",
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
-    marginTop: 30,
+  methodInfo: { flexDirection: 'row', alignItems: 'center' },
+  methodText: { fontSize: 16, color: '#333' },
+  defaultBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: PRIMARY,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
   },
-  editButtonText: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 16,
+  defaultText: { color: '#fff', marginLeft: 4, fontSize: 12 },
+  setDefaultBtn: { paddingHorizontal: 8, paddingVertical: 4 },
+  setDefaultText: { color: PRIMARY, fontSize: 12 },
+  addNewRow: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 12,
+    alignItems: 'center',
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
+  addNewText: { fontSize: 16, color: '#333' },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  actionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginRight: 8,
+  },
+  actionText: { fontSize: 16 },
+  footer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ddd',
+  },
+  continueBtn: {
+    backgroundColor: PRIMARY,
+    borderRadius: 8,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  continueText: { color: '#fff', fontSize: 16, fontWeight: '500' },
 });
