@@ -75,8 +75,8 @@ export default function SettingCard() {
           label="Payment Method"
           onPress={() => router.push("/settings/payment-method")}
         />
-        <SettingItem icon="settings" label="Preferences" />
-        <SettingItem icon="clock" label="Trip History" />
+        <SettingItem icon="settings" label="Preferences" onPress={() => router.push("/settings/Preferences")} />
+        <SettingItem icon="clock" label="Trip History" onPress={() => router.push("/settings/Trip-History")} />
         <SettingItem icon="heart" label="Favorite Places" />
         <SettingItem icon="help-circle" label="Help & Support" />
         <SettingItem icon="shield" label="Privacy & Security" />
