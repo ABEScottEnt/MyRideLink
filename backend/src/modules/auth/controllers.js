@@ -1,71 +1,135 @@
 import {
   sendOTPService,
   verifyOTPService,
-  signupService,
   loginService,
   logoutService,
+  refreshTokenService,
+  getUserProfileService,
 } from "./services.js";
 
-// Step 1: Send OTP to email
+// Step 1: Send OTP to email for signup
 export const sendOTPController = async (req, res) => {
   try {
     const { email } = req.body;
     const result = await sendOTPService({ email });
-    return res.status(200).json({ success: true, message: "OTP sent", ...result });
+    return res
+      .status(200)
+      .json({ success: true, message: "OTP sent", ...result });
   } catch (err) {
-    return res.status(err.statusCode || 400).json({ success: false, message: err.message });
+    return res
+      .status(err.statusCode || 400)
+      .json({ success: false, message: err.message });
   }
 };
 
-// Step 2: Verify OTP and return Supabase session
+// Step 2: Verify OTP and create user
 export const verifyOTPController = async (req, res) => {
   try {
     const { email, otp } = req.body;
-    const { token, user } = await verifyOTPService({ email, otp });
-    return res.status(200).json({ 
-      success: true, 
-      message: "OTP verified", 
-      token,             // access token
-      userId: user.id,   // Supabase UUID user ID
-      email: user.email, // optionally email to confirm
+    const { token, refreshToken, user } = await verifyOTPService({
+      email,
+      otp,
+    });
+    return res.status(200).json({
+      success: true,
+      message: "User created successfully",
+      token,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        emailVerified: user.email_confirmed_at ? true : false,
+      },
     });
   } catch (err) {
-    return res.status(err.statusCode || 400).json({ success: false, message: err.message });
+    return res
+      .status(err.statusCode || 400)
+      .json({ success: false, message: err.message });
   }
 };
 
-
-// Step 3: Signup with email, password, name (email is already verified from step 2)
-export const signupController = async (req, res) => {
-  try {
-    const { userId, email, firstName, lastName } = req.body;  // <-- expect userId here now
-    const user = await signupService({ userId, email, firstName, lastName });
-    return res.status(201).json({ success: true, message: "User signed up", user });
-  } catch (err) {
-    return res.status(err.statusCode || 400).json({ success: false, message: err.message });
-  }
-};
-
-
-// Step 4: Login with email and password (for returning users)
+// Step 3: Login with email and password
 export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const session = await loginService({ email, password });
-    return res.status(200).json({ success: true, message: "Login successful", session });
+    const { token, refreshToken, user } = await loginService({
+      email,
+      password,
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        emailVerified: user.email_confirmed_at ? true : false,
+      },
+    });
   } catch (err) {
-    return res.status(err.statusCode || 400).json({ success: false, message: err.message });
+    return res
+      .status(err.statusCode || 400)
+      .json({ success: false, message: err.message });
   }
 };
 
-// Logout
+// Step 4: Refresh token
+export const refreshTokenController = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    const {
+      token,
+      refreshToken: newRefreshToken,
+      user,
+    } = await refreshTokenService({ refreshToken });
+    return res.status(200).json({
+      success: true,
+      message: "Token refreshed",
+      token,
+      refreshToken: newRefreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        emailVerified: user.email_confirmed_at ? true : false,
+      },
+    });
+  } catch (err) {
+    return res
+      .status(err.statusCode || 400)
+      .json({ success: false, message: err.message });
+  }
+};
+
+// Step 5: Logout
 export const logoutController = async (req, res) => {
   try {
     const token = req.headers.authorization?.split("Bearer ")[1];
     if (!token) throw new Error("Missing token");
-    await logoutService(token);
+    await logoutService({ token });
     return res.status(200).json({ success: true, message: "Logged out" });
   } catch (err) {
     return res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+// Step 6: Get user profile
+export const getUserProfileController = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split("Bearer ")[1];
+    if (!token) throw new Error("Missing token");
+    const { user } = await getUserProfileService({ token });
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        emailVerified: user.email_confirmed_at ? true : false,
+      },
+    });
+  } catch (err) {
+    return res
+      .status(err.statusCode || 400)
+      .json({ success: false, message: err.message });
   }
 };

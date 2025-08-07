@@ -2,13 +2,13 @@ import express from "express";
 import {
   sendOTPController,
   verifyOTPController,
-  signupController,
   loginController,
   logoutController,
+  refreshTokenController,
+  getUserProfileController,
 } from "./controllers.js";
 
 import {
-  signupValidator,
   loginValidator,
   sendOTPValidator,
   verifyOTPValidator,
@@ -18,19 +18,22 @@ import { validate } from "../../middleware/validation.js";
 
 const router = express.Router();
 
-// Step 1: Send OTP to email
+// Step 1: Send OTP to email for signup
 router.post("/send-otp", sendOTPValidator, validate, sendOTPController);
 
-// Step 2: Verify OTP code (to confirm email before signup)
+// Step 2: Verify OTP and create user
 router.post("/verify-otp", verifyOTPValidator, validate, verifyOTPController);
 
-// Step 3: Signup (email already verified from OTP step)
-router.post("/signup", signupValidator, validate, signupController);
-
-// Step 4: Login (email/password)
+// Step 3: Login with email and password
 router.post("/login", loginValidator, validate, loginController);
 
-// Step 5: Logout (no validation needed)
+// Step 4: Refresh token
+router.post("/refresh-token", refreshTokenController);
+
+// Step 5: Logout
 router.post("/logout", logoutController);
+
+// Step 6: Get user profile
+router.get("/profile", getUserProfileController);
 
 export default router;
