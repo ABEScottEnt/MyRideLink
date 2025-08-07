@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Switch, TouchableOpacity, ScrollView } from 're
 import { Ionicons } from '@expo/vector-icons';
 
 import { router } from 'expo-router';
+import COLORS from '../../constants/theme';
 
 export default function Preferences() {
   return (
@@ -67,11 +68,11 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 10,
-    color: '#333',
     textAlign: 'center',
+        fontWeight: '700',
+        fontSize: 20,
+        marginLeft: 10,
+         color: COLORS.primary,
   },
   sectionHeader: {
     marginTop: 25,
