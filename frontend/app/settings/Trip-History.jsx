@@ -1,94 +1,76 @@
-import { ScrollView, View, Text, StyleSheet, Switch, TouchableOpacity, FlatList} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import COLORS from '../../constants/theme';
 
 const tripsData = [
-  {
-    id: '1',
-    date: 'July 15, 2024',
-    fare: '$15',
-    route: '123 Main St to 456 Oak Ave.',
-  },
-  {
-    id: '2',
-    date: 'July 10, 2024',
-    fare: '$12',
-    route: '789 Pine St to 123 Cedar Ln.',
-  },
-  {
-    id: '3',
-    date: 'July 5, 2024',
-    fare: '$18',
-    route: 'Airport to Hotel Avenue.',
-  },
+  { id: '1', date: 'July 15, 2024', fare: '$15', route: '123 Main St to 456 Oak Ave' },
+  { id: '2', date: 'July 10, 2024', fare: '$12', route: '789 Pine St to 123 Cedar Ln' },
+  { id: '3', date: 'July 5, 2024', fare: '$18', route: 'Airport to Hotel Avenue' },
 ];
 
 export default function TripHistory() {
-    const [favorites, setFavorites] = useState({});
+  const [favorites, setFavorites] = useState({});
 
-
-   const toggleFavorite = (id) => {
+  const toggleFavorite = (id) => {
     setFavorites((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
   };
 
-   const renderTrip = ({ item }) => (
-     <View style={styles.card}>
-           <View style={styles.car}>
-              <Ionicons name="car" size={24} color="#4682B4" />
-            </View>
-            
+  const renderTrip = ({ item }) => (
+    <TouchableOpacity activeOpacity={0.8} style={styles.card}>
+      <View style={styles.iconWrapper}>
+        <Ionicons name="car" size={20} color={COLORS.primary} />
+      </View>
 
-             <View style={styles.subinfo}>
-              <Text style={styles.heading}>{item.date}</Text>
-              <Text style={styles.subber}>Fare: {item.fare}</Text>
-              <Text style={styles.subber}>{item.route}.</Text>
-            </View>
+      <View style={styles.tripInfo}>
+        <Text style={styles.dateText}>{item.date}</Text>
+        <Text style={styles.routeText}>{item.route}</Text>
+        <Text style={styles.fareText}>Fare: {item.fare}</Text>
+      </View>
 
       <TouchableOpacity style={styles.star} onPress={() => toggleFavorite(item.id)}>
         <Ionicons
           name={favorites[item.id] ? 'star' : 'star-outline'}
-          size={24}
-          color={favorites[item.id] ? '#FFD700' : '#999'}
+          size={22}
+          color={favorites[item.id] ? '#FFD700' : '#C0C0C0'}
         />
       </TouchableOpacity>
-    </View>
-   );
+    </TouchableOpacity>
+  );
 
-    return (
+  return (
     <View style={styles.screen}>
+     
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#4682B4" />
+          <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Trips</Text>
+        <Text style={styles.headerText}>Trip History</Text>
       </View>
 
-      <View style={styles.sectionView}>
-        <Text style={styles.subHeader}>Past Rides</Text>
-
-        <FlatList
-          data={tripsData}
-          keyExtractor={(item) => item.id}
-          renderItem={renderTrip}
-          contentContainerStyle={{ paddingBottom: 100 }}
-        />
-      </View>
+     
+      <FlatList
+        data={tripsData}
+        keyExtractor={(item) => item.id}
+        renderItem={renderTrip}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
+    flex: 1,
     padding: 20,
     backgroundColor: '#fff',
   },
 
- 
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -102,67 +84,53 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
 
-  sectionView: {
-    marginTop: 10,
-  },
-
-  subHeader: {
-    marginBottom: 15,
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#000',
-  },
-
- 
   card: {
-    backgroundColor: '#F8F8F8',
-    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FAFAFA',
     padding: 15,
+    borderRadius: 14,
     marginBottom: 15,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 3,
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    
+    elevation: 2,
   },
 
-  tripRow: {
-   
-   
-  },
-
-  car: {
-    backgroundColor: 'oldlace',
-    borderRadius: 5,
+  iconWrapper: {
     width: 40,
     height: 40,
+    borderRadius: 50,
+    backgroundColor: '#E6F0FA',
     justifyContent: 'center',
-   
+    alignItems: 'center',
+    marginRight: 12,
   },
 
-  subinfo: {
-    alignSelf: 'center',
-    marginHorizontal: 10,
-   
-    
+  tripInfo: {
+    flex: 1,
   },
 
-  heading: {
-    fontWeight: 'bold',
+  dateText: {
     fontSize: 16,
-  },
-
-  subber: {
-    fontWeight: '300',
-    fontSize: 14,
+    fontWeight: '600',
     color: '#333',
   },
 
+  routeText: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 2,
+  },
+
+  fareText: {
+    fontSize: 14,
+    color: COLORS.primary,
+    fontWeight: '500',
+    marginTop: 4,
+  },
+
   star: {
-    paddingLeft: 10,
-    
+    marginLeft: 10,
   },
 });

@@ -1,111 +1,120 @@
-import React from 'react';
-import { View, Text, StyleSheet, Switch, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Switch, TouchableOpacity, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
 import { router } from 'expo-router';
 import COLORS from '../../constants/theme';
 
+const preferedSelections = [
+  { id: '1', name: 'Quiet ride', meaning: 'No conversation with your driver', icon: 'volume-mute' },
+  { id: '2', name: 'Temperature', meaning: 'Set your preferred temperature', icon: 'thermometer' },
+  { id: '3', name: 'Music', meaning: 'Choose your music preference', icon: 'musical-notes' },
+];
+
 export default function Preferences() {
+  const [toggles, setToggles] = useState({});
+
+  const toggleSwitch = (id) => {
+    setToggles((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <View style={styles.iconContainer}>
+        <Ionicons name={item.icon} size={26} color={COLORS.primary} />
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.heading}>{item.name}</Text>
+        <Text style={styles.subText}>{item.meaning}</Text>
+      </View>
+      <Switch
+        value={toggles[item.id] || false}
+        onValueChange={() => toggleSwitch(item.id)}
+        trackColor={{ false: '#ccc', true: COLORS.primary }}
+        thumbColor={toggles[item.id] ? '#fff' : '#f4f3f4'}
+      />
+    </View>
+  );
+
   return (
-    <ScrollView style={styles.screen}>
-      {/* Header */}
+    <View style={styles.screen}>
       <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#4682B4" />
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Preferences</Text>
       </View>
 
-      {/* General Settings */}
-      <Text style={styles.sectionHeader}>General Settings</Text>
-      <View style={styles.row}>
-        <Text style={styles.label}>Enable Notifications</Text>
-        <Switch value={true} />
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.label}>Dark Mode</Text>
-        <Switch value={false} />
-      </View>
-
-      {/* Privacy */}
-      <Text style={styles.sectionHeader}>Privacy</Text>
-      <View style={styles.row}>
-        <Text style={styles.label}>Location Access</Text>
-        <Switch value={true} />
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.label}>Usage Data</Text>
-        <Switch value={false} />
-      </View>
-
-      {/* Account */}
-      <Text style={styles.sectionHeader}>Account</Text>
-      <View style={styles.row}>
-        <Text style={styles.label}>Change Password</Text>
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editText}>Edit</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.label}>Manage Subscriptions</Text>
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editText}>Edit</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      <FlatList
+        data={preferedSelections}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.list}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
-    paddingHorizontal: 20,
+    backgroundColor: COLORS.background || '#f9f9f9',
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 15,
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    backgroundColor: '#fff',
+  },
+  backButton: {
+    marginRight: 10,
   },
   headerText: {
-    textAlign: 'center',
-        fontWeight: '700',
-        fontSize: 20,
-        marginLeft: 10,
-         color: COLORS.primary,
+    fontSize: 20,
+    fontWeight: '600',
+    color: COLORS.primary,
   },
-  sectionHeader: {
-    marginTop: 25,
-    marginBottom: 10,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
+  list: {
+    padding: 15,
   },
-  row: {
+  card: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 0.5,
-  },
-  label: {
-    fontSize: 15,
-    color: '#000',
-  },
-  editButton: {
     backgroundColor: '#fff',
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
+    padding: 15,
+    borderRadius: 12,
+    marginBottom: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
     elevation: 2,
   },
-  editText: {
-    color: '#333',
-    fontSize: 14,
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.primary + '20', // faded version of primary color
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 15,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  heading: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.text || '#333',
+  },
+  subText: {
+    fontSize: 13,
+    color: '#777',
+    marginTop: 2,
   },
 });
