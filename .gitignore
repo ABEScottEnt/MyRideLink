@@ -1,0 +1,13 @@
+# OTP graph/data (DO NOT COMMIT)
+docker/otp2/graphs/*
+!docker/otp2/graphs/.gitkeep
+!docker/otp2/graphs/README.txt
+
+# Common big/noise
+*.osm.pbf
+*.gtfs.zip
+*.zip
+graph.obj
+.DS_Store
+node_modules
+.env

@@ -1,0 +1,1 @@
+Place your GTFS zip(s) here, e.g. agency.gtfs.zip, before running docker-compose up. 

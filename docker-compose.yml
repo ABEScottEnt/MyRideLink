@@ -1,0 +1,76 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_DB: myridelink
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7
+    container_name: cache
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  otp2:
+    build:
+      context: ./docker/otp2
+    container_name: otp2
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./docker/otp2/graphs:/var/otp/graphs
+    entrypoint: ["java","-Xmx4G","-jar","/var/otp/otp.jar"]
+    # If graph already exists:
+    command: ["--load","/var/otp/graphs","--serve"]
+    # Or for first run (will build then serve):
+    # command: ["--build","/var/otp/graphs","--save","/var/otp/graphs","--load","/var/otp/graphs","--serve"]
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+    container_name: api
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      OTP2_URL: http://otp2:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      otp2:
+        condition: service_started
+
+volumes:
+  pgdata: 
