@@ -17,9 +17,24 @@ import COLORS from "@/constants/theme";
 export default function Transit() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [fromPlace, setFromPlace] = useState(null);
+  const [toPlace, setToPlace] = useState(null);
 
   const handleSubmit = () => {
-    Alert.alert("Search Tapped!", `From: ${from}, To: ${to}`);
+    const coords = [
+      fromPlace
+        ? `From(${fromPlace.lat?.toFixed?.(5)}, ${fromPlace.lon?.toFixed?.(5)})`
+        : null,
+      toPlace
+        ? `To(${toPlace.lat?.toFixed?.(5)}, ${toPlace.lon?.toFixed?.(5)})`
+        : null,
+    ]
+      .filter(Boolean)
+      .join(" | ");
+    Alert.alert(
+      "Search Tapped!",
+      `From: ${from}, To: ${to}${coords ? `\n${coords}` : ""}`
+    );
   };
 
   return (
@@ -39,6 +54,8 @@ export default function Transit() {
             onClearTo={() => setTo("")}
             onSubmit={handleSubmit}
             submitText="Find Routes"
+            onSelectFrom={(item) => setFromPlace(item)}
+            onSelectTo={(item) => setToPlace(item)}
           />
           <TransitMap />
           {/* Pass the imported data here */}

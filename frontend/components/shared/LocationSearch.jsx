@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   TextInput,
@@ -15,11 +16,103 @@ export default function LocationSearch({
   onChangeTo = () => {},
   onClearFrom = () => {},
   onClearTo = () => {},
+  onSelectFrom = () => {},
+  onSelectTo = () => {},
   onSubmit = () => {},
   submitText = "Search",
   style = {},
   buttons = null,
 }) {
+  const [activeField, setActiveField] = useState(null); // 'from' | 'to' | null
+  const [suggestions, setSuggestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const debounceTimer = useRef(null);
+
+  const PHOTON_API_URL = "https://photon.komoot.io/api/";
+
+  const buildLabel = (props) => {
+    const parts = [];
+    if (props.name) parts.push(props.name);
+    const streetPart = [props.housenumber, props.street]
+      .filter(Boolean)
+      .join(" ");
+    if (streetPart) parts.push(streetPart);
+    const cityPart = [props.postcode, props.city || props.town || props.village]
+      .filter(Boolean)
+      .join(" ");
+    if (cityPart) parts.push(cityPart);
+    if (props.state) parts.push(props.state);
+    if (props.country) parts.push(props.country);
+    return parts.join(", ");
+  };
+
+  const fetchSuggestions = async (query) => {
+    if (!query || query.trim().length < 2) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const url = `${PHOTON_API_URL}?q=${encodeURIComponent(
+        query
+      )}&limit=5&lang=en`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const mapped = Array.isArray(data.features)
+        ? data.features.map((f, idx) => {
+            const { coordinates = [] } = f.geometry || {};
+            const [lon, lat] = coordinates;
+            const props = f.properties || {};
+            return {
+              id: `${props.osm_id || idx}-${lon}-${lat}`,
+              label: buildLabel(props),
+              sublabel: [props.osm_value, props.country]
+                .filter(Boolean)
+                .join(" • "),
+              lat,
+              lon,
+              raw: f,
+            };
+          })
+        : [];
+      setSuggestions(mapped.filter((s) => s.label));
+    } catch (e) {
+      setSuggestions([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // Debounce lookups on controlled values based on the active field
+    const query =
+      activeField === "from" ? fromValue : activeField === "to" ? toValue : "";
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    if (!activeField) return;
+    debounceTimer.current = setTimeout(() => fetchSuggestions(query), 250);
+    return () => debounceTimer.current && clearTimeout(debounceTimer.current);
+  }, [fromValue, toValue, activeField]);
+
+  const handleSelect = (item) => {
+    if (activeField === "from") {
+      onChangeFrom(item.label);
+      onSelectFrom(item);
+    } else if (activeField === "to") {
+      onChangeTo(item.label);
+      onSelectTo(item);
+    }
+    setSuggestions([]);
+    setActiveField(null);
+  };
+
+  const handleBlur = () => {
+    // Small delay to allow onPress of a suggestion to register
+    setTimeout(() => {
+      setActiveField(null);
+      setSuggestions([]);
+    }, 150);
+  };
+
   return (
     <View style={[styles.outerContainer, style]}>
       <View style={styles.inputRow}>
@@ -34,7 +127,12 @@ export default function LocationSearch({
           placeholder="From"
           placeholderTextColor={COLORS.muted}
           value={fromValue}
-          onChangeText={onChangeFrom}
+          onFocus={() => setActiveField("from")}
+          onBlur={handleBlur}
+          onChangeText={(txt) => {
+            setActiveField("from");
+            onChangeFrom(txt);
+          }}
         />
         {!!fromValue && (
           <TouchableOpacity onPress={onClearFrom} style={styles.clearBtn}>
@@ -42,6 +140,31 @@ export default function LocationSearch({
           </TouchableOpacity>
         )}
       </View>
+      {activeField === "from" && suggestions.length > 0 && (
+        <View style={styles.suggestionList}>
+          {suggestions.map((s) => (
+            <TouchableOpacity
+              key={s.id}
+              style={styles.suggestionItem}
+              onPress={() => handleSelect(s)}
+            >
+              <Text style={styles.suggestionText} numberOfLines={1}>
+                {s.label}
+              </Text>
+              {!!s.sublabel && (
+                <Text style={styles.suggestionSubText} numberOfLines={1}>
+                  {s.sublabel}
+                </Text>
+              )}
+            </TouchableOpacity>
+          ))}
+          {isLoading && (
+            <View style={styles.suggestionItem}>
+              <Text style={styles.suggestionSubText}>Searching…</Text>
+            </View>
+          )}
+        </View>
+      )}
       <View style={styles.inputRow}>
         <MaterialIcons
           name="location-on"
@@ -54,7 +177,12 @@ export default function LocationSearch({
           placeholder="To"
           placeholderTextColor={COLORS.muted}
           value={toValue}
-          onChangeText={onChangeTo}
+          onFocus={() => setActiveField("to")}
+          onBlur={handleBlur}
+          onChangeText={(txt) => {
+            setActiveField("to");
+            onChangeTo(txt);
+          }}
         />
         {!!toValue && (
           <TouchableOpacity onPress={onClearTo} style={styles.clearBtn}>
@@ -62,6 +190,31 @@ export default function LocationSearch({
           </TouchableOpacity>
         )}
       </View>
+      {activeField === "to" && suggestions.length > 0 && (
+        <View style={styles.suggestionList}>
+          {suggestions.map((s) => (
+            <TouchableOpacity
+              key={s.id}
+              style={styles.suggestionItem}
+              onPress={() => handleSelect(s)}
+            >
+              <Text style={styles.suggestionText} numberOfLines={1}>
+                {s.label}
+              </Text>
+              {!!s.sublabel && (
+                <Text style={styles.suggestionSubText} numberOfLines={1}>
+                  {s.sublabel}
+                </Text>
+              )}
+            </TouchableOpacity>
+          ))}
+          {isLoading && (
+            <View style={styles.suggestionItem}>
+              <Text style={styles.suggestionSubText}>Searching…</Text>
+            </View>
+          )}
+        </View>
+      )}
       {Array.isArray(buttons) && buttons.length > 0 ? (
         <View style={styles.buttonRow}>
           {buttons.map((btn, idx) => (
@@ -147,5 +300,29 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 18,
     fontWeight: "bold",
+  },
+  suggestionList: {
+    borderColor: COLORS.muted,
+    borderWidth: 0.5,
+    borderRadius: 8,
+    backgroundColor: COLORS.white,
+    marginTop: -6,
+    marginBottom: 8,
+    overflow: "hidden",
+  },
+  suggestionItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderBottomColor: "#eee",
+    borderBottomWidth: 1,
+  },
+  suggestionText: {
+    color: COLORS.text,
+    fontSize: 14,
+  },
+  suggestionSubText: {
+    color: COLORS.muted,
+    fontSize: 12,
+    marginTop: 2,
   },
 });

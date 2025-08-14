@@ -1,4 +1,12 @@
-import { ScrollView, View, StyleSheet, Text, Image, Alert, SafeAreaView } from "react-native";
+import {
+  ScrollView,
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Alert,
+  SafeAreaView,
+} from "react-native";
 import LocationSearch from "@/components/shared/LocationSearch";
 import QuickAccessCard from "@/components/home/QuickAccessCard";
 import RecentActivity from "@/components/home/RecentActivity";
@@ -8,11 +16,39 @@ import COLORS from "@/constants/theme";
 export default function Home() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [fromPlace, setFromPlace] = useState(null);
+  const [toPlace, setToPlace] = useState(null);
   const handleRides = () => {
-    Alert.alert("Find Rides", `From: ${from}, To: ${to}`);
+    const coords = [
+      fromPlace
+        ? `From(${fromPlace.lat?.toFixed?.(5)}, ${fromPlace.lon?.toFixed?.(5)})`
+        : null,
+      toPlace
+        ? `To(${toPlace.lat?.toFixed?.(5)}, ${toPlace.lon?.toFixed?.(5)})`
+        : null,
+    ]
+      .filter(Boolean)
+      .join(" | ");
+    Alert.alert(
+      "Find Rides",
+      `From: ${from}, To: ${to}${coords ? `\n${coords}` : ""}`
+    );
   };
   const handleTransit = () => {
-    Alert.alert("Find Transit", `From: ${from}, To: ${to}`);
+    const coords = [
+      fromPlace
+        ? `From(${fromPlace.lat?.toFixed?.(5)}, ${fromPlace.lon?.toFixed?.(5)})`
+        : null,
+      toPlace
+        ? `To(${toPlace.lat?.toFixed?.(5)}, ${toPlace.lon?.toFixed?.(5)})`
+        : null,
+    ]
+      .filter(Boolean)
+      .join(" | ");
+    Alert.alert(
+      "Find Transit",
+      `From: ${from}, To: ${to}${coords ? `\n${coords}` : ""}`
+    );
   };
   return (
     <SafeAreaView style={styles.safe}>
@@ -32,6 +68,8 @@ export default function Home() {
             onChangeTo={setTo}
             onClearFrom={() => setFrom("")}
             onClearTo={() => setTo("")}
+            onSelectFrom={(item) => setFromPlace(item)}
+            onSelectTo={(item) => setToPlace(item)}
             buttons={[
               { label: "Rides", onPress: handleRides },
               { label: "Transit", onPress: handleTransit },
