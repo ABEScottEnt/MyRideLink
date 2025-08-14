@@ -26,11 +26,11 @@ function wait(ms) {
 async function connectPostgres(attempt = 1) {
   try {
     await pool.query('SELECT 1');
-    console.log('📦 Postgres connected');
+    console.log('Postgres connected');
     startServer();
   } catch (err) {
     if (attempt >= MAX_DB_RETRIES) {
-      console.error(`❌ Could not connect to Postgres after ${attempt} attempts:`, err.message);
+      console.error(`Could not connect to Postgres after ${attempt} attempts:`, err.message);
       process.exit(1);
     }
     console.warn(
@@ -77,12 +77,13 @@ app.post('/v1/plan-trip', async (req, res) => {
   });
 
   try {
-    const { data } = await axios.get(
-      `${process.env.OTP2_URL}/plan?${params.toString()}`
-    );
+    const url = `${process.env.OTP2_URL}/otp/routers/default/plan?${params.toString()}`;
+    console.log('Calling OTP2 URL:', url);
+    const { data } = await axios.get(url);
     res.json(data);
   } catch (e) {
-    console.error(e.message);
+    console.error('OTP2 Error:', e.message);
+    console.error('Full error:', e.response?.status, e.response?.statusText);
     res.status(502).json({ error: 'OTP2 error' });
   }
 });
