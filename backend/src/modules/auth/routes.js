@@ -1,7 +1,9 @@
+// routes.js
 import express from "express";
+import { protect } from "../../middleware/authMiddleware.js";
+
 import {
-  sendOTPController,
-  verifyOTPController,
+  signupController,
   loginController,
   logoutController,
   refreshTokenController,
@@ -9,31 +11,28 @@ import {
 } from "./controllers.js";
 
 import {
+  signupValidator,
   loginValidator,
-  sendOTPValidator,
-  verifyOTPValidator,
+  refreshTokenValidator,
 } from "./validators.js";
 
 import { validate } from "../../middleware/validation.js";
 
 const router = express.Router();
 
-// Step 1: Send OTP to email for signup
-router.post("/send-otp", sendOTPValidator, validate, sendOTPController);
+// Toggle protection via ENV variable
+const ROUTE_PROTECTION_ENABLED = process.env.ROUTE_PROTECTION_ENABLED === "true";
 
-// Step 2: Verify OTP and create user
-router.post("/verify-otp", verifyOTPValidator, validate, verifyOTPController);
+// Helper to conditionally apply middleware
+const maybeProtect = (handler) => (ROUTE_PROTECTION_ENABLED ? [protect, handler] : handler);
 
-// Step 3: Login with email and password
+// Public routes
+router.post("/signup", signupValidator, validate, signupController);
 router.post("/login", loginValidator, validate, loginController);
 
-// Step 4: Refresh token
-router.post("/refresh-token", refreshTokenController);
-
-// Step 5: Logout
-router.post("/logout", logoutController);
-
-// Step 6: Get user profile
-router.get("/profile", getUserProfileController);
+// Protected routes (conditionally)
+router.post("/refresh-token", refreshTokenValidator, validate, ...maybeProtect(refreshTokenController));
+router.post("/logout", ...maybeProtect(logoutController));
+router.get("/profile", ...maybeProtect(getUserProfileController));
 
 export default router;
