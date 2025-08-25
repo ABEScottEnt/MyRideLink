@@ -1,126 +1,189 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 import {
-  Text,
   View,
+  Text,
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Image,
   ScrollView,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import SectionTitle from "../../components/shared/SectionTitle";
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Alert,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+import COLORS from '../../constants/theme';
+import { router } from 'expo-router';
 
 export default function PersonalInfo() {
-  const [userInfo, setUserInfo] = useState({
-    name: "John Doe",
-    pronouns: "He/Him",
-    phone: "+1 555-123-4567",
-    email: "example@gmail.com",
-    address: "123 Main St, Atlanta, GA",
-  });
-
-  const [tempInfo, setTempInfo] = useState({ ...userInfo });
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleChange = (field, value) => {
-    setTempInfo((prev) => ({ ...prev, [field]: value }));
-  };
+  const [name, setName] = useState('Evans Ahenkorah');
+  const [email, setEmail] = useState('example@gmail.com');
+  const [phone, setPhone] = useState('123-456-7890');
+  const [editing, setEditing] = useState(false);
 
   const handleSave = () => {
-    setUserInfo({ ...tempInfo });
-    setIsEditing(false);
-  };
-
-  const renderField = (label, fieldKey) => {
-    return (
-      <View style={styles.fieldGroup} key={fieldKey}>
-        <Text style={styles.label}>{label}</Text>
-        {isEditing ? (
-          <TextInput
-            style={styles.input}
-            value={tempInfo[fieldKey]}
-            onChangeText={(text) => handleChange(fieldKey, text)}
-            multiline={fieldKey === "address"}
-          />
-        ) : (
-          <Text style={styles.value}>{userInfo[fieldKey]}</Text>
-        )}
-      </View>
-    );
+    setEditing(false);
+    Alert.alert('Profile Updated', 'Your changes have been saved.');
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <SectionTitle title="Personal Info" />
-
-      <View style={styles.avatarContainer}>
-        <Ionicons name="person-circle-outline" size={100} color="#4682B4" />
-      </View>
-
-      {renderField("Name", "name")}
-      {renderField("Pronouns", "pronouns")}
-      {renderField("Phone Number", "phone")}
-      {renderField("Email", "email")}
-      {renderField("Address", "address")}
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={isEditing ? handleSave : () => setIsEditing(true)}
+     <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
-        <Text style={styles.buttonText}>
-          {isEditing ? "Save Changes" : "Edit Profile"}
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView
+            contentContainerStyle={styles.scrollContainer}
+            keyboardShouldPersistTaps="handled"
+          >
+         
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
+            </TouchableOpacity>
+            <Text style={styles.headerText}>Personal Info</Text>
+            <View style={{ width: 24 }} />
+          </View>
+
+          
+          <View style={styles.profileImageWrapper}>
+            <Image
+              source={{ uri: 'https://i.pravatar.cc/150?img=12' }}
+              style={styles.pic}
+            />
+            <TouchableOpacity style={styles.editIconOverlay}>
+              <Ionicons name="camera" size={16} color="#fff" />
+            </TouchableOpacity>
+          </View>
+
+          
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Profile Details</Text>
+
+            <Text style={styles.label}>Name</Text>
+            <TextInput
+              style={styles.inputField}
+              value={name}
+              onChangeText={setName}
+              editable={editing}
+            />
+
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.inputField}
+              value={email}
+              onChangeText={setEmail}
+              editable={editing}
+              keyboardType="email-address"
+            />
+
+            <Text style={styles.label}>Phone</Text>
+            <TextInput
+              style={styles.inputField}
+              value={phone}
+              onChangeText={setPhone}
+              editable={editing}
+              keyboardType="phone-pad"
+            />
+
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => (editing ? handleSave() : setEditing(true))}
+            >
+              <Text style={styles.editButtonText}>
+                {editing ? 'Save Changes' : 'Edit Profile'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 50,
+    paddingBottom: 20,
+    backgroundColor: COLORS.white,
+    justifyContent: 'space-between',
+  },
+  headerText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: COLORS.primary,
+  },
+  profileImageWrapper: {
+    alignSelf: 'center',
+    marginTop: 20,
+    position: 'relative',
+  },
+  pic: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  editIconOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    backgroundColor: COLORS.primary,
+    borderRadius: 12,
+    padding: 5,
+  },
+  card: {
+    backgroundColor: COLORS.white,
+    margin: 20,
+    borderRadius: 12,
     padding: 20,
-    backgroundColor: "#f4f9ff",
-    flexGrow: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  avatarContainer: {
-    alignItems: "center",
-    marginVertical: 20,
-  },
-  fieldGroup: {
-    marginBottom: 15,
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: COLORS.text,
+    marginBottom: 20,
   },
   label: {
-    fontWeight: "600",
     fontSize: 14,
-    color: "#444",
-    marginBottom: 4,
+    color: COLORS.muted,
+    marginBottom: 5,
   },
-  value: {
-    fontSize: 16,
-    color: "#222",
-    backgroundColor: "#fff",
-    padding: 12,
+  inputField: {
+    backgroundColor: '#F7F8FA',
+    height: 50,
     borderRadius: 10,
-    borderColor: "#ddd",
+    paddingHorizontal: 15,
     borderWidth: 1,
+    borderColor: '#E0E0E0',
+    marginBottom: 15,
+    color: COLORS.text,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#aaa",
+  editButton: {
+    backgroundColor: COLORS.primary,
     borderRadius: 10,
-    padding: 12,
-    fontSize: 16,
-    backgroundColor: "#fff",
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginTop: 10,
   },
-  button: {
-    backgroundColor: "#4682B4",
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
-    marginTop: 25,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
+  editButtonText: {
+    color: COLORS.white,
     fontSize: 16,
+    fontWeight: 'bold',
   },
 });
