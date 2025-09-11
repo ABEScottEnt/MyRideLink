@@ -13,7 +13,7 @@ setupSocket(io);
 
 const port = Number(PORT);
 
-server.listen(port, () => {
+server.listen(port, "0.0.0.0", () => {
   logger.info(
     `Server running on port ${port} [${NODE_ENV}] (pid: ${process.pid})`
   );

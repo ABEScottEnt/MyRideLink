@@ -3,6 +3,8 @@ import { Alert, Text, TouchableOpacity, View } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import PersonalInfo from "../../app/settings/personal-info";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 function SettingItem({
   icon,
@@ -28,7 +30,36 @@ function SettingItem({
 }
 
 export default function SettingCard() {
-  const router = useRouter();
+    const router = useRouter();
+
+    const logout = async() => {
+        //console.logout("Logout")\
+
+        const token = await AsyncStorage.getItem("token");
+
+        try{
+            const response = await fetch('http://localhost:4000/api/auth/logout',{
+                method: "POST",
+                headers: {"Authorization": `Bearer ${token}`},
+            });
+            const data = await response.json();
+
+            if(response.ok){
+                router.push('/auth/index')
+                Alert.alert('Account logged out!');
+            }
+            else{
+                Alert.alert('Error', data.message || 'Logout failed.');
+            }
+        }
+        catch(error){
+            console.log(error);
+        }
+        finally {
+
+        }
+    }
+
   return (
     <View
       style={{
@@ -95,7 +126,7 @@ export default function SettingCard() {
                   text: "Sign Out",
                   style: "destuctive",
                   onPress: () => {
-                    console.log("User signed out");
+                      logout();
                   },
                 },
               ],

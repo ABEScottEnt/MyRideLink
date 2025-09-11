@@ -11,8 +11,8 @@ import {
 // Signup
 export const signupController = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const { user } = await signupService({ email, password });
+    const { fullName, email, password } = req.body;
+    const { user } = await signupService({ fullName, email, password });
     return res.status(201).json({ success: true, message: "User created", user });
   } catch (err) {
     return res

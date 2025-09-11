@@ -9,11 +9,15 @@ const supabase = createClient(
 );
 
 // 1. Signup with email & password
-export const signupService = async ({ email, password }) => {
+export const signupService = async ({ fullName, email, password }) => {
   const { data, error } = await supabase.auth.admin.createUser({
     email,
     password,
     email_confirm: true, // immediately confirm email
+    user_metadata:{
+      fullName,
+      email_verified:true,
+    }
   });
 
   if (error) throw new AppError(error.message, 400);
@@ -90,23 +94,6 @@ export const verifyOTPService = async ({ email, otp }) => {
   };
 };
 ******************************************/
-
-// 3. Login with email and password
-export const loginService = async ({ email, password }) => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    throw new AppError("Invalid credentials", 401);
-  }
-
-  return {
-    user: data.user,
-    session: data.session, // includes access_token & refresh_token
-  };
-};
 
 // 4. Refresh token
 export const refreshTokenService = async ({ refreshToken }) => {
