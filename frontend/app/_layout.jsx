@@ -2,7 +2,7 @@
 import { Slot } from "expo-router";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import DevButton from "../components/shared/DevButton";
 
 export default function RootLayout() {
@@ -11,7 +11,7 @@ export default function RootLayout() {
       <SafeAreaView style={styles.safeArea}>
         <StatusBar style="dark" />
         <Slot />
-        <DevButton route="/home/(tabs)/home" />
+          <DevButton route="/home/(tabs)/home" />
       </SafeAreaView>
     </SafeAreaProvider>
   );

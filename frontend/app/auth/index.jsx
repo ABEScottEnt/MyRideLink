@@ -9,11 +9,12 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Image,
+  Image, Alert,
 } from 'react-native';
 import COLORS from '../../constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AuthScreen() {
   const router = useRouter();
@@ -21,12 +22,74 @@ export default function AuthScreen() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  //const [loading, setLoading] = useState(true)
 
-  const handleSubmit = () => {
-    if (isLogin) {
-      // handle login
-    } else {
-      // handle signup
+  const handleSubmit = async ({fullName, email, password}) => {
+    //setLoading(true);
+    //console.log("Button pressed with:", fullName, email, password);
+    //console.log(fullName, email, password);
+    //Alert.alert("Button Pressed");
+
+    try{
+      const payload = isLogin? {email,password} : {fullName, email, password};
+      const endpoint = isLogin? '/login': '/signup';
+      //console.log(endpoint);
+      //console.log(email);
+      const response = await fetch(`http://localhost:4000/api/auth${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      //console.log(fullName, email, password);
+      const data = await response.json();
+
+      if (response.ok) {
+        if (isLogin) {
+          const token = data.session.token; // ✅ grab token
+          await AsyncStorage.setItem("token", token);
+          Alert.alert('Login successful', `Welcome back, ${data.user.email || ''}`);
+          router.push('/home/\(tabs\)/home');
+        } else {
+          /*const sendOtpResponse = await fetch(`http://localhost:4000/api/auth/send-otp`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({email}),
+          });
+          const sendOtpData = await sendOtpResponse.json();
+          if(sendOtpResponse.ok) {}*/
+          /**************************************
+            Alert.alert('New Account Verification', `OTP sent to your mail successfully, ${data.message}`);
+            router.push({
+              pathname: '/auth/otp-input',
+              params:{
+                fullName,
+                email,
+                password,
+              }
+            });
+           ********************************/
+          Alert.alert(data.message);
+          console.log("New User created successfully"+ fullName);
+          router.push({
+            pathname: '/auth/index',
+            params:{
+              fullName,
+              email,
+              password,
+            }
+          });
+        }
+      }
+      else {
+        console.log(data.message);
+        Alert.alert('Error', data.message || 'Response is not Ok');
+      }
+    } catch (error) {
+      console.log(error.message);
+      Alert.alert('Error', error.message || 'Something went wrong');
+      console.error(error);
+    } finally {
+      //setLoading(false);
     }
   };
 
@@ -155,11 +218,12 @@ export default function AuthScreen() {
 
             <TouchableOpacity
               style={styles.submitButton}
-              onPress={handleSubmit}
+              onPress={() => handleSubmit({fullName, email, password})}
               activeOpacity={0.85}
+              //disabled={loading}
             >
               <Text style={styles.submitText}>
-                {isLogin ? 'Sign In' : 'Create Account'}
+                {isLogin ? 'Log In' : 'Create Account'}
               </Text>
             </TouchableOpacity>
 

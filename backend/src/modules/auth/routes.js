@@ -1,6 +1,6 @@
 // routes.js
 import express from "express";
-import { protect } from "../../middleware/authMiddleware.js";
+import { protect } from "../../middleware/auth.js";
 
 import {
   signupController,
@@ -24,7 +24,7 @@ const router = express.Router();
 const ROUTE_PROTECTION_ENABLED = process.env.ROUTE_PROTECTION_ENABLED === "true";
 
 // Helper to conditionally apply middleware
-const maybeProtect = (handler) => (ROUTE_PROTECTION_ENABLED ? [protect, handler] : handler);
+const maybeProtect = (handler) => (ROUTE_PROTECTION_ENABLED ? [protect, handler] : [handler]);
 
 // Public routes
 router.post("/signup", signupValidator, validate, signupController);

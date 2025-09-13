@@ -1,4 +1,6 @@
 import {
+  //sendOTPService,
+    //verifyOTPService,
   signupService,
   loginService,
   refreshTokenService,
@@ -9,9 +11,25 @@ import {
 // Signup
 export const signupController = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const { user } = await signupService({ email, password });
+    const { fullName, email, password } = req.body;
+    const { user } = await signupService({ fullName, email, password });
     return res.status(201).json({ success: true, message: "User created", user });
+  } catch (err) {
+    return res
+        .status(err.statusCode || 400)
+        .json({ success: false, message: err.message });
+  }
+};
+
+// Step 1: Send OTP to email for signup
+/******************************************
+export const sendOTPController = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const result = await sendOTPService({ email });
+    return res
+      .status(200)
+      .json({ success: true, message: "OTP sent", ...result });
   } catch (err) {
     return res
       .status(err.statusCode || 400)
@@ -19,11 +37,40 @@ export const signupController = async (req, res) => {
   }
 };
 
-// Login
+// Step 2: Verify OTP and create user
+export const verifyOTPController = async (req, res) => {
+  try {
+    const { email, otp, fullName, password } = req.body;
+    const { token, refreshToken, user } = await verifyOTPService({
+      email,
+      otp,
+      fullName,
+      password,
+    });
+    return res.status(200).json({
+      success: true,
+      message: "User created successfully",
+      token,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        emailVerified: user.email_confirmed_at ? true : false,
+      },
+    });
+  } catch (err) {
+    return res
+      .status(err.statusCode || 400)
+      .json({ success: false, message: err.message });
+  }
+};
+********************************************/
+
+// Step 3: Login with email and password
 export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const { user, session } = await loginService({ email, password });
+    const { user, session } = await loginService({ email, password});
 
     return res.status(200).json({
       success: true,
@@ -43,11 +90,11 @@ export const loginController = async (req, res) => {
   }
 };
 
-// Refresh token
+// Step 4: Refresh token
 export const refreshTokenController = async (req, res) => {
   try {
     const { refreshToken } = req.body;
-    const { user, session } = await refreshTokenService({ refreshToken });
+    const { user, session} = await refreshTokenService({ refreshToken });
 
     return res.status(200).json({
       success: true,
@@ -67,12 +114,11 @@ export const refreshTokenController = async (req, res) => {
   }
 };
 
-// Logout
+// Step 5: Logout
 export const logoutController = async (req, res) => {
   try {
     const accessToken = req.headers.authorization?.split("Bearer ")[1];
     if (!accessToken) throw new Error("Missing token");
-
     await logoutService({ accessToken });
     return res.status(200).json({ success: true, message: "Logged out" });
   } catch (err) {
@@ -80,12 +126,12 @@ export const logoutController = async (req, res) => {
   }
 };
 
-// Get user profile
+// Step 6: Get user profile
 export const getUserProfileController = async (req, res) => {
   try {
     const accessToken = req.headers.authorization?.split("Bearer ")[1];
     if (!accessToken) throw new Error("Missing token");
-
+    
     const { user } = await getUserProfileService({ accessToken });
     return res.status(200).json({
       success: true,
