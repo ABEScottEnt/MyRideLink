@@ -3,6 +3,10 @@
 # dependencies
 node_modules/
 
+#hidden files
+.expo/
+.android/
+
 # Expo
 .expo/
 dist/

@@ -19,33 +19,43 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function AuthScreen() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
-  const [fullName, setFullName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [addressLine1, setAddressLine1] = useState('');
+  //const [addressLine2, setAddressLine2] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zipCode, setZipCode] = useState('');
   //const [loading, setLoading] = useState(true)
 
-  const handleSubmit = async ({fullName, email, password}) => {
+  const handleSubmit = async ({firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode}) => {
     //setLoading(true);
-    //console.log("Button pressed with:", fullName, email, password);
-    //console.log(fullName, email, password);
+    //console.log("Button pressed with:", firstName, email);
+    //console.log(firstName, email);
     //Alert.alert("Button Pressed");
 
     try{
-      const payload = isLogin? {email,password} : {fullName, email, password};
+      const payload = isLogin? {email,password} : {firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode};
       const endpoint = isLogin? '/login': '/signup';
       //console.log(endpoint);
       //console.log(email);
-      const response = await fetch(`http://localhost:4000/api/auth${endpoint}`, {
+      //Change the host address w.r.t. your backend device address
+      const response = await fetch(`http://192.168.1.251:4000/api/auth${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      //console.log(fullName, email, password);
+      //console.log(firstName, email);
       const data = await response.json();
 
       if (response.ok) {
         if (isLogin) {
-          const token = data.session.token; // ✅ grab token
+          //console.log(data)
+          const token = data.token; // ✅ grab token
+          if (!token) throw new Error("No access token returned from Supabase");
           await AsyncStorage.setItem("token", token);
           Alert.alert('Login successful', `Welcome back, ${data.user.email || ''}`);
           router.push('/home/\(tabs\)/home');
@@ -62,22 +72,23 @@ export default function AuthScreen() {
             router.push({
               pathname: '/auth/otp-input',
               params:{
-                fullName,
+                firstName,
+                lastName,
                 email,
                 password,
+                phone,
+                addressLine1,
+                addressLine2,
+                city,
+                state,
+                zipCode
               }
             });
            ********************************/
           Alert.alert(data.message);
-          console.log("New User created successfully"+ fullName);
-          router.push({
-            pathname: '/auth/index',
-            params:{
-              fullName,
-              email,
-              password,
-            }
-          });
+          console.log("New User created successfully"+ firstName);
+          //router.push("/auth")
+          setIsLogin(true);
         }
       }
       else {
@@ -174,10 +185,25 @@ export default function AuthScreen() {
                   />
                   <TextInput
                     style={styles.input}
-                    placeholder="Full Name"
+                    placeholder="First Name"
                     placeholderTextColor={COLORS.secondary}
-                    value={fullName}
-                    onChangeText={setFullName}
+                    value={firstName}
+                    onChangeText={setFirstName}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                      name="person-outline"
+                      size={20}
+                      color={COLORS.secondary}
+                      style={styles.inputIcon}
+                  />
+                  <TextInput
+                      style={styles.input}
+                      placeholder="Last Name"
+                      placeholderTextColor={COLORS.secondary}
+                      value={lastName}
+                      onChangeText={setLastName}
                   />
                 </View>
                 <View style={styles.inputWrapper}>
@@ -213,12 +239,106 @@ export default function AuthScreen() {
                     onChangeText={setPassword}
                   />
                 </View>
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                      name="call-outline"
+                      size={20}
+                      color={COLORS.secondary}
+                      style={styles.inputIcon}
+                  />
+                  <TextInput
+                      style={styles.input}
+                      placeholder="Phone Number"
+                      placeholderTextColor={COLORS.secondary}
+                      keyboardType="number-pad"
+                      value={phone}
+                      onChangeText={setPhone}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                      name="home-outline"
+                      size={20}
+                      color={COLORS.secondary}
+                      style={styles.inputIcon}
+                  />
+                  <TextInput
+                      style={styles.input}
+                      placeholder="Address Line 1"
+                      placeholderTextColor={COLORS.secondary}
+                      value={addressLine1}
+                      onChangeText={setAddressLine1}
+                  />
+                </View>
+                {/****************************************
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                      name="home-outline"
+                      size={20}
+                      color={COLORS.secondary}
+                      style={styles.inputIcon}
+                  />
+                  <TextInput
+                      style={styles.input}
+                      placeholder="Address Line 2"
+                      placeholderTextColor={COLORS.secondary}
+                      value={addressLine2}
+                      onChangeText={setAddressLine2}
+                  />
+                </View>
+                ******************************************/}
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                      name="home-outline"
+                      size={20}
+                      color={COLORS.secondary}
+                      style={styles.inputIcon}
+                  />
+                  <TextInput
+                      style={styles.input}
+                      placeholder="City"
+                      placeholderTextColor={COLORS.secondary}
+                      value={city}
+                      onChangeText={setCity}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                      name="home-outline"
+                      size={20}
+                      color={COLORS.secondary}
+                      style={styles.inputIcon}
+                  />
+                  <TextInput
+                      style={styles.input}
+                      placeholder="State"
+                      placeholderTextColor={COLORS.secondary}
+                      value={state}
+                      onChangeText={setState}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <Ionicons
+                      name="home-outline"
+                      size={20}
+                      color={COLORS.secondary}
+                      style={styles.inputIcon}
+                  />
+                  <TextInput
+                      style={styles.input}
+                      placeholder="Zip Code"
+                      placeholderTextColor={COLORS.secondary}
+                      keyboardType="number-pad"
+                      value={zipCode}
+                      onChangeText={setZipCode}
+                  />
+                </View>
               </>
             )}
 
             <TouchableOpacity
               style={styles.submitButton}
-              onPress={() => handleSubmit({fullName, email, password})}
+              onPress={() => handleSubmit({firstName, email, password})}
               activeOpacity={0.85}
               //disabled={loading}
             >

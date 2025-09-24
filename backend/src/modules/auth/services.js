@@ -9,28 +9,72 @@ const supabase = createClient(
 );
 
 // 1. Signup with email & password
-export const signupService = async ({ fullName, email, password }) => {
-  const { data, error } = await supabase.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true, // immediately confirm email
-    user_metadata:{
-      fullName,
-      email_verified:true,
-    }
-  });
+export const signupService = async ({ firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode }) => {
+  const { data, error } = await supabase
+      .auth
+      .admin
+      .createUser({
+        email,
+        password,
+        email_confirm: true, // immediately confirm email
+        user_metadata:{
+          firstName,
+          email_verified:true,
+        }
+      });
 
   if (error) throw new AppError(error.message, 400);
+  const user = data.user;
 
-  return { user: data.user };
+  /****************************************************
+  console.log("Supabase user:", user);
+  console.log("Inserting profile with:", {
+    id: user.id,
+    firstName,
+    lastName,
+    phone,
+    email: user.email,
+    addressLine1,
+    city,
+    state,
+    zipCode
+  });
+   ************************************************/
+
+  // Insert into profiles
+  const { error: profileError } = await supabase
+          .from("profiles")
+          .insert([
+            {
+              id: user.id, // FK → auth.users.id
+              firstName,
+              lastName,
+              phone,
+              email: user.email,
+              addressLine1,
+              /*addressLine2,*/
+              city,
+              state,
+              zipCode,
+            }
+          ]);
+
+  if (profileError){
+    console.error("Profile insert error:", profileError);
+    throw new AppError(profileError.message, 400);
+  }
+
+  return { user };
 };
 
 // 2. Login with email & password
 export const loginService = async ({ email, password }) => {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { data, error } = await supabase
+      .auth
+      .signInWithPassword({
+        email,
+        password,
+      });
 
   if (error) throw new AppError("Invalid credentials", 401);
 
@@ -97,9 +141,11 @@ export const verifyOTPService = async ({ email, otp }) => {
 
 // 4. Refresh token
 export const refreshTokenService = async ({ refreshToken }) => {
-  const { data, error } = await supabase.auth.refreshSession({
-    refresh_token: refreshToken,
-  });
+  const { data, error } = await supabase
+      .auth
+      .refreshSession({
+        refresh_token: refreshToken,
+      });
 
   if (error) {
     throw new AppError("Invalid refresh token", 401);
@@ -113,15 +159,39 @@ export const refreshTokenService = async ({ refreshToken }) => {
 
 // 5. Logout user
 export const logoutService = async ({ accessToken }) => {
-  const { error } = await supabase.auth.admin.signOut(accessToken);
+  const { error } = await supabase
+      .auth
+      .admin
+      .signOut(accessToken);
   if (error) throw new AppError("Logout failed: " + error.message, 400);
 };
 
 // 6. Get user profile
 export const getUserProfileService = async ({ accessToken }) => {
-  const { data: { user }, error } = await supabase.auth.getUser(accessToken);
+  const { data: authData , error: authError } = await supabase
+      .auth
+      .getUser(accessToken);
+
+  if (authError) throw new AppError("Invalid token", 401);
+
+  const userId = authData.user.id;
+
+  const { data: profileData, error: profileError} = await supabase
+      .from("profiles").select("*")
+      .eq("id", userId)
+      .single();
+
+  if (profileError) {
+    console.error("Profile fetch error:", profileError);
+    throw new AppError("Could not fetch profile", 400);
+  }
+
+  //Testing logs
+  //console.log("authData", authData);
+  //console.log("profileData", profileData);
   
-  if (error) throw new AppError("Invalid token", 401);
-  
-  return { user };
+  return {
+    user: authData.user,
+    userProfile: profileData,
+  };
 };

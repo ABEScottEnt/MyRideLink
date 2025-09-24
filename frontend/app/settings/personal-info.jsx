@@ -17,8 +17,21 @@ import { Ionicons } from '@expo/vector-icons';
 
 import COLORS from '../../constants/theme';
 import { router } from 'expo-router';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function PersonalInfo() {
+
+  /*const token = await AsyncStorage.getItem("token");
+
+  //Change the host address w.r.t. your backend device address
+  try {
+    const response = await fetch(`http://192.168.1.251:4000/api/auth/profile`,{
+      method: "GET"
+    });
+  } catch (error) {
+
+  }*/
+
   const [name, setName] = useState('Evans Ahenkorah');
   const [email, setEmail] = useState('example@gmail.com');
   const [phone, setPhone] = useState('123-456-7890');
@@ -30,78 +43,78 @@ export default function PersonalInfo() {
   };
 
   return (
-     <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{flex: 1}}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
-     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView
-            contentContainerStyle={styles.scrollContainer}
-            keyboardShouldPersistTaps="handled"
+              contentContainerStyle={styles.scrollContainer}
+              keyboardShouldPersistTaps="handled"
           >
-         
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
-            </TouchableOpacity>
-            <Text style={styles.headerText}>Personal Info</Text>
-            <View style={{ width: 24 }} />
-          </View>
 
-          
-          <View style={styles.profileImageWrapper}>
-            <Image
-              source={{ uri: 'https://i.pravatar.cc/150?img=12' }}
-              style={styles.pic}
-            />
-            <TouchableOpacity style={styles.editIconOverlay}>
-              <Ionicons name="camera" size={16} color="#fff" />
-            </TouchableOpacity>
-          </View>
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => router.back()}>
+                <Ionicons name="arrow-back" size={24} color={COLORS.primary}/>
+              </TouchableOpacity>
+              <Text style={styles.headerText}>Personal Info</Text>
+              <View style={{width: 24}}/>
+            </View>
 
-          
-          <View style={styles.card}>
-            <Text style={styles.sectionTitle}>Profile Details</Text>
 
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              style={styles.inputField}
-              value={name}
-              onChangeText={setName}
-              editable={editing}
-            />
+            <View style={styles.profileImageWrapper}>
+              <Image
+                  source={{uri: 'https://i.pravatar.cc/150?img=12'}}
+                  style={styles.pic}
+              />
+              <TouchableOpacity style={styles.editIconOverlay}>
+                <Ionicons name="camera" size={16} color="#fff"/>
+              </TouchableOpacity>
+            </View>
 
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.inputField}
-              value={email}
-              onChangeText={setEmail}
-              editable={editing}
-              keyboardType="email-address"
-            />
 
-            <Text style={styles.label}>Phone</Text>
-            <TextInput
-              style={styles.inputField}
-              value={phone}
-              onChangeText={setPhone}
-              editable={editing}
-              keyboardType="phone-pad"
-            />
+            <View style={styles.card}>
+              <Text style={styles.sectionTitle}>Profile Details</Text>
 
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => (editing ? handleSave() : setEditing(true))}
-            >
-              <Text style={styles.editButtonText}>
-                {editing ? 'Save Changes' : 'Edit Profile'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+              <Text style={styles.label}>Name</Text>
+              <TextInput
+                  style={styles.inputField}
+                  value={name}
+                  onChangeText={setName}
+                  editable={editing}
+              />
+
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                  style={styles.inputField}
+                  value={email}
+                  onChangeText={setEmail}
+                  editable={editing}
+                  keyboardType="email-address"
+              />
+
+              <Text style={styles.label}>Phone</Text>
+              <TextInput
+                  style={styles.inputField}
+                  value={phone}
+                  onChangeText={setPhone}
+                  editable={editing}
+                  keyboardType="phone-pad"
+              />
+
+              <TouchableOpacity
+                  style={styles.editButton}
+                  onPress={() => (editing ? handleSave() : setEditing(true))}
+              >
+                <Text style={styles.editButtonText}>
+                  {editing ? 'Save Changes' : 'Edit Profile'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
   );
 }
 

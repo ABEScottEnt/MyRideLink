@@ -11,8 +11,8 @@ import {
 // Signup
 export const signupController = async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
-    const { user } = await signupService({ fullName, email, password });
+    const { firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode } = req.body;
+    const { user } = await signupService({ firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode });
     return res.status(201).json({ success: true, message: "User created", user });
   } catch (err) {
     return res
@@ -132,12 +132,25 @@ export const getUserProfileController = async (req, res) => {
     const accessToken = req.headers.authorization?.split("Bearer ")[1];
     if (!accessToken) throw new Error("Missing token");
     
-    const { user } = await getUserProfileService({ accessToken });
+    const { user, userProfile } = await getUserProfileService({ accessToken });
+
+    //Testing logs
+    //console.log("user", user);
+    //console.log("userProfile", userProfile);
+
     return res.status(200).json({
       success: true,
       user: {
         id: user.id,
         email: user.email,
+        firstName: userProfile.firstName,
+        lastName: userProfile.lastName,
+        phone: userProfile.phone,
+        addressLine1: userProfile.addressLine1,
+        //addressLine2: userProfile.addressLine2,
+        city: userProfile.city,
+        state: userProfile.state,
+        zipCode: userProfile.zipCode,
         emailVerified: user.email_confirmed_at ? true : false,
       },
     });

@@ -37,17 +37,21 @@ export default function SettingCard() {
 
         const token = await AsyncStorage.getItem("token");
 
+        //Change the host address w.r.t. your backend device address
         try{
-            const response = await fetch('http://localhost:4000/api/auth/logout',{
+            const response = await fetch('http://192.168.1.251:4000/api/auth/logout',{
                 method: "POST",
                 headers: {"Authorization": `Bearer ${token}`},
             });
             const data = await response.json();
 
-            if(response.ok){
-                router.push('/auth/index')
-                Alert.alert('Account logged out!');
+            if (response.ok) {
+                await AsyncStorage.removeItem("token");
+                Alert.alert('Logged out', 'You have been logged out successfully.', [
+                    { text: 'OK', onPress: () => router.replace('/auth') }
+                ]);
             }
+
             else{
                 Alert.alert('Error', data.message || 'Logout failed.');
             }
