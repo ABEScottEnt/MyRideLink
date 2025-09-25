@@ -1,46 +1,69 @@
-import {View, Text, StyleSheet, TouchableOpacity, Alert} from "react-native";
-import {Box} from "lucide-react-native";
-import {Ionicons} from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, Alert, Image, StyleSheet} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../constants/theme";
 
-export default function ProfileCard(){
+export default function ProfileCard() {
+    const [profile, setProfile] = useState(null);
 
-    //Call all the Info from backend here
-    const picture = ""
-    const firstName = "John"
-    const middleName = ""
-    const lastName = "Doe"
-    const email = "john.doe@xyz.com"
-    const subscription = true
-    const rating = "5.0"
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const token = await AsyncStorage.getItem("token");
 
-    let profilePic;
-    if(picture){
-        profilePic = picture;
+            //Change the host address w.r.t. your backend device address
+            try {
+                const response = await fetch("http://192.168.1.251:4000/api/auth/profile", {
+                    method: "GET",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    setProfile({
+                        picture: "",
+                        firstName: data.user.firstName,
+                        lastName: data.user.lastName,
+                        email: data.user.email,
+                        subscription: true, // static for now
+                        rating: "5.0",      // static for now
+                    });
+                } else {
+                    console.log(data.message);
+                    Alert.alert("Error", data.message || "Response is not Ok");
+                }
+            } catch (error) {
+                console.log("Profile Card Error:", error);
+            }
+        };
+
+        fetchProfile();
+    }, []);
+
+    if (!profile) {
+        return (
+            <View style={styles.profileContainer}>
+                <Text>Loading...</Text>
+            </View>
+        );
     }
-    else {
-        profilePic = <Ionicons name="person-circle-outline" size={60} color="blue" style={styles.picHolder}/>
-    }
 
-    const fullName = middleName
-        ?`${firstName} ${middleName} ${lastName}`
-        :`${firstName} ${lastName}`;
+    const fullName = profile.firstName && profile.lastName
+        ? `${profile.firstName} ${profile.lastName}`
+        : profile.firstName || profile.lastName || "No name";
 
-    let emailAddress;
-    if (!email) {
-        reportError("Email address required");
-    } else {
-         emailAddress = `${email}`;
-    }
-
-    let subscriptionTier;
-    if (!subscription) {
-        subscriptionTier = "Free";
-    }
-    else {
-        subscriptionTier = "Pro";
-    }
-
+    const emailAddress = profile.email || "No email provided";
+    const subscriptionTier = profile.subscription ? "Pro" : "Free";
+    const profilePic = profile.picture ? (
+        <Image source={{ uri: profile.picture }} style={styles.picHolder} />
+    ) : (
+        <Ionicons
+            name="person-circle-outline"
+            size={60}
+            color="blue"
+            style={styles.picHolder}
+        />
+    );
 
     return (
         <View style={styles.profileContainer}>
@@ -52,12 +75,25 @@ export default function ProfileCard(){
                 </View>
             </View>
             <View style={styles.buttons}>
-                <TouchableOpacity onPress={() => Alert.alert(`You have ${subscriptionTier} subscription`)} style={styles.buttonContainer}><Text style={styles.subscriptionRating}>{subscriptionTier}</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => Alert.alert(`You have ${rating} ⭐ rating`)} style={styles.buttonContainer}><Text style={styles.subscriptionRating}>⭐ {rating}</Text></TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() =>
+                        Alert.alert(`You have ${subscriptionTier} subscription`)
+                    }
+                    style={styles.buttonContainer}
+                >
+                    <Text style={styles.subscriptionRating}>{subscriptionTier}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => Alert.alert(`You have ${profile.rating} ⭐ rating`)}
+                    style={styles.buttonContainer}
+                >
+                    <Text style={styles.subscriptionRating}>⭐ {profile.rating}</Text>
+                </TouchableOpacity>
             </View>
         </View>
-    )
+    );
 }
+
 
 const styles = StyleSheet.create({
     profileContainer: {
