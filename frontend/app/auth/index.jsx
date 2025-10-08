@@ -43,7 +43,7 @@ export default function AuthScreen() {
       //console.log(endpoint);
       //console.log(email);
       //Change the host address w.r.t. your backend device address
-      const response = await fetch(`http://192.168.1.251:4000/api/auth${endpoint}`, {
+      const response = await fetch(`http://100.110.167.198:4000/api/auth${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
