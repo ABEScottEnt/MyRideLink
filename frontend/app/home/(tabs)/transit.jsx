@@ -30,7 +30,7 @@ export default function Transit() {
 
         if (response.ok) {
           console.log("API Call Success");
-          //console.log(data);
+          console.log(data[120].DESTINATION)
         } else {
           console.log("API Call Fail");
         }
