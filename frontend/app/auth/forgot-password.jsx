@@ -25,7 +25,7 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
-  const handleReset = () => {
+  const handleReset = async() => {
     if (!validateEmail(email)) {
       setError('Please enter a valid email');
       return;
@@ -33,7 +33,23 @@ export default function ForgotPassword() {
     setError('');
     // TODO: trigger password reset email
     // navigate to verification or confirmation screen
-    router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
+    
+    try {
+      const payload = {email};
+      console.log(email);
+      //Change the host address w.r.t. your backend device address
+      const response = await fetch(`http://100.110.167.198:4000/api/auth/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      //console.log(firstName, email);
+      console.log("API call success??");
+      const data = await response.json();
+    } catch (error) {
+        console.log("API call error:", error);
+      }
+    //router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
   };
 
   return (
