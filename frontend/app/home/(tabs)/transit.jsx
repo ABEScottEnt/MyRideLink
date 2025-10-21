@@ -19,31 +19,8 @@ export default function Transit() {
   const [to, setTo] = useState("");
   const [fromPlace, setFromPlace] = useState(null);
   const [toPlace, setToPlace] = useState(null);
-
-  const getMARTA = async () => {
-      // URL: https://developerservices.itsmarta.com:18096/itsmarta/railrealtimearrivals/developerservices/traindata?apiKey=69f0de05-36c8-4516-a4a2-cd26c2c00d4a
-      try {
-        const response = await fetch("https://developerservices.itsmarta.com:18096/itsmarta/railrealtimearrivals/developerservices/traindata?apiKey=69f0de05-36c8-4516-a4a2-cd26c2c00d4a", {
-          method: "GET"
-        });
-        const data = await response.json();
-
-        if (response.ok) {
-          console.log("API Call Success");
-          console.log(data[120].DESTINATION)
-        } else {
-          console.log("API Call Fail");
-        }
-      } catch (error) {
-        console.log("API call error:", error);
-      }
-    }
   
   const handleSubmit = () => {
-
-    console.log("TEST");
-    getMARTA();
-
     const coords = [
       fromPlace
         ? `From(${fromPlace.lat?.toFixed?.(5)}, ${fromPlace.lon?.toFixed?.(5)})`
