@@ -20,25 +20,34 @@ import COLORS, { GRADIENT } from '../../constants/theme';
 // simple email validator
 const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
 
-export default function ForgotPassword() {
+export default function UpdatePassword() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleReset = async() => {
+    /*
     if (!validateEmail(email)) {
       setError('Please enter a valid email');
       return;
     }
+    */
     setError('');
     // TODO: trigger password reset email
     // navigate to verification or confirmation screen
     
+    if (password != confirmPassword) {
+        setError('Passwords do not match');
+        return;
+    }
+
     try {
-      const payload = {email};
-      console.log(email);
+      const payload = {password};
+      console.log(password);
       //Change the host address w.r.t. your backend device address
-      const response = await fetch(`http://100.110.167.198:4000/api/auth/reset-password`, {
+      const response = await fetch(`http://100.110.167.198:4000/api/auth/update-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -84,12 +93,21 @@ export default function ForgotPassword() {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Email Address"
+                placeholder="New Password"
                 placeholderTextColor={COLORS.secondary}
-                keyboardType="email-address"
+                keyboardType="password"
                 autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Confirm Password"
+                placeholderTextColor={COLORS.secondary}
+                keyboardType="password"
+                autoCapitalize="none"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
               />
             </View>
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
@@ -98,20 +116,20 @@ export default function ForgotPassword() {
               colors={GRADIENT}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={[styles.buttonWrapper, !email && styles.buttonDisabled]}
+              style={[styles.buttonWrapper, !password && styles.buttonDisabled]}
             >
               <TouchableOpacity
                 style={styles.button}
                 onPress={handleReset}
-                disabled={!email}
+                disabled={!password}
                 activeOpacity={0.85}
               >
                 <Text style={styles.buttonText}>Reset Password</Text>
               </TouchableOpacity>
             </LinearGradient>
             <TouchableOpacity
-                onPress={() => router.push("/auth/update-password")}>
-                <Text style={styles.link}>DEV: Switch to update-password page</Text>
+                onPress={() => router.push("/auth/forgot-password")}>
+                <Text style={styles.link}>DEV: Return to forgot password</Text>
               </TouchableOpacity>
           </View>
         </ScrollView>
