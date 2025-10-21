@@ -204,3 +204,10 @@ export const resetPasswordService = async (email) => {
   console.log(error);
   console.log("Reset Password service resolved");
 };
+
+export const updatePasswordService = async (password) => {
+  console.log("Update Password service called");
+  console.log("Password: " + password);
+  
+  console.log("Update Password service resolved");
+};

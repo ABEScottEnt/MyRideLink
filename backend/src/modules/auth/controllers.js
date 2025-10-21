@@ -7,6 +7,7 @@ import {
   logoutService,
   getUserProfileService,
   resetPasswordService,
+  updatePasswordService,
 } from "./services.js";
 
 // Signup
@@ -168,6 +169,17 @@ export const resetPasswordController = async (req, res) => {
     const { email } = req.body;
     //console.log("Email:" + email);
     const { test } = await resetPasswordService(email);
+  } catch (err) {
+    return res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+export const updatePasswordController = async (req, res) => {
+  console.log("Update Password controller called");
+  try {
+    const { password } = req.body;
+    //console.log("Email:" + email);
+    const { test } = await updatePasswordService(password);
   } catch (err) {
     return res.status(400).json({ success: false, message: err.message });
   }
