@@ -6,6 +6,7 @@ import {
   refreshTokenService,
   logoutService,
   getUserProfileService,
+  resetPasswordService,
 } from "./services.js";
 
 // Signup
@@ -158,5 +159,16 @@ export const getUserProfileController = async (req, res) => {
     return res
       .status(err.statusCode || 400)
       .json({ success: false, message: err.message });
+  }
+};
+
+export const resetPasswordController = async (req, res) => {
+  console.log("Reset Password controller called");
+  try {
+    const { email } = req.body;
+    //console.log("Email:" + email);
+    const { test } = await resetPasswordService(email);
+  } catch (err) {
+    return res.status(400).json({ success: false, message: err.message });
   }
 };

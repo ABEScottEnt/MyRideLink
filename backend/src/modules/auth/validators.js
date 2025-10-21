@@ -22,3 +22,10 @@ export const loginValidator = [
 export const refreshTokenValidator = [
   body("refreshToken").notEmpty().withMessage("Refresh token is required"),
 ];
+
+export const resetPasswordValidator = [
+  body("email")
+    .isEmail()
+    .withMessage("Valid email is required")
+    .normalizeEmail(),
+]

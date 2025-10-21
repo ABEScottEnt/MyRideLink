@@ -8,12 +8,14 @@ import {
   logoutController,
   refreshTokenController,
   getUserProfileController,
+  resetPasswordController,
 } from "./controllers.js";
 
 import {
   signupValidator,
   loginValidator,
   refreshTokenValidator,
+  resetPasswordValidator,
 } from "./validators.js";
 
 import { validate } from "../../middleware/validation.js";
@@ -29,6 +31,7 @@ const maybeProtect = (handler) => (ROUTE_PROTECTION_ENABLED ? [protect, handler]
 // Public routes
 router.post("/signup", signupValidator, validate, signupController);
 router.post("/login", loginValidator, validate, loginController);
+router.post("/reset-password", resetPasswordValidator, validate, resetPasswordController);
 
 // Protected routes (conditionally)
 router.post("/refresh-token", refreshTokenValidator, validate, ...maybeProtect(refreshTokenController));
