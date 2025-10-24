@@ -110,9 +110,13 @@ export default function ForgotPassword() {
               </TouchableOpacity>
             </LinearGradient>
             <TouchableOpacity
+                onPress={() => router.push("/auth")}>
+                <Text style={styles.link}>DEV: Return to login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
                 onPress={() => router.push("/auth/update-password")}>
                 <Text style={styles.link}>DEV: Switch to update-password page</Text>
-              </TouchableOpacity>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
