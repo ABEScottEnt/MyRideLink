@@ -25,6 +25,8 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
+  const [resetPassword, setResetPassword] = useState(false);
+
   const handleReset = async() => {
     if (!validateEmail(email)) {
       setError('Please enter a valid email');
@@ -44,8 +46,7 @@ export default function ForgotPassword() {
         body: JSON.stringify(payload),
       });
       //console.log(firstName, email);
-      console.log("API call success??");
-      const data = await response.json();
+      alert("Password reset request sent. Please check your email.")
     } catch (error) {
         console.log("API call error:", error);
       }

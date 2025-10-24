@@ -200,11 +200,10 @@ export const getUserProfileService = async ({ accessToken }) => {
 export const resetPasswordService = async (email) => {
   console.log("Reset Password service called");
   console.log("Email: " + email);
-  try {
-    const {data, error} = await supabase.auth.resetPasswordForEmail(email);
-  } catch (err) {
-    console.log(err);
-  }
+  const {data, error} = await supabase.auth.resetPasswordForEmail(email);
+  console.log("Data: " + data + " Error: " + error);
+  if (error) throw new AppError("Password Reset Failed: " + error.message, 400);
+
   console.log("Reset Password service resolved");
 };
 

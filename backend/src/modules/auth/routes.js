@@ -34,7 +34,7 @@ const maybeProtect = (handler) => (ROUTE_PROTECTION_ENABLED ? [protect, handler]
 router.post("/signup", signupValidator, validate, signupController);
 router.post("/login", loginValidator, validate, loginController);
 router.post("/reset-password", resetPasswordValidator, validate, resetPasswordController);
-router.post("./update-password", updatePasswordValidator, validate, updatePasswordController);
+router.post("/update-password", updatePasswordValidator, validate, updatePasswordController);
 
 // Protected routes (conditionally)
 router.post("/refresh-token", refreshTokenValidator, validate, ...maybeProtect(refreshTokenController));

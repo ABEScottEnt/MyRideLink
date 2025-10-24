@@ -54,7 +54,7 @@ export default function UpdatePassword() {
       });
       //console.log(firstName, email);
       console.log("API call success??");
-      const data = await response.json();
+      //const data = await response.json();
     } catch (error) {
         console.log("API call error:", error);
       }
@@ -97,6 +97,7 @@ export default function UpdatePassword() {
                 placeholderTextColor={COLORS.secondary}
                 keyboardType="password"
                 autoCapitalize="none"
+                secureTextEntry
                 value={password}
                 onChangeText={setPassword}
               />
@@ -106,6 +107,7 @@ export default function UpdatePassword() {
                 placeholderTextColor={COLORS.secondary}
                 keyboardType="password"
                 autoCapitalize="none"
+                secureTextEntry
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
               />
