@@ -198,18 +198,15 @@ export const getUserProfileService = async ({ accessToken }) => {
 
 
 export const resetPasswordService = async (email) => {
-  console.log("Reset Password service called");
-  console.log("Email: " + email);
   const {data, error} = await supabase.auth.resetPasswordForEmail(email);
-  console.log("Data: " + data + " Error: " + error);
   if (error) throw new AppError("Password Reset Failed: " + error.message, 400);
-
-  console.log("Reset Password service resolved");
 };
 
-export const updatePasswordService = async (password) => {
+export const updatePasswordService = async (password) => { // NOTE TO SELF: ADD FEEDBACK FOR VALIDATION
+  // CURRENTLY IF THE PASSWORD ISN'T VALID (<6 Characters), NONE OF THIS FUNCTION GETS CALLED
   console.log("Update Password service called");
   console.log("Password: " + password);
+  //console.log(supabase.auth.user)
   
   console.log("Update Password service resolved");
 };

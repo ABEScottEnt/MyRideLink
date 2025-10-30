@@ -114,7 +114,11 @@ export default function SettingCard() {
         <SettingItem icon="clock" label="Trip History" onPress={() => router.push("/settings/Trip-History")} />
         <SettingItem icon="heart" label="Favorite Places" onPress={() => router.push("/settings/FavoritePlaces")}/>
         <SettingItem icon="help-circle" label="Help & Support" />
-        <SettingItem icon="shield" label="Privacy & Security" />
+        <SettingItem 
+        icon="shield" 
+        label="Privacy & Security" 
+        onPress={() => router.push("/settings/privacy-and-security")}
+        />
         <SettingItem
           icon="log-out"
           label="Sign Out"

@@ -55,6 +55,9 @@ export default function ForgotPassword() {
 
   return (
     <SafeAreaView style={styles.safe}>
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
+      </TouchableOpacity>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
@@ -113,10 +116,6 @@ export default function ForgotPassword() {
             <TouchableOpacity
                 onPress={() => router.push("/auth")}>
                 <Text style={styles.link}>DEV: Return to login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() => router.push("/auth/update-password")}>
-                <Text style={styles.link}>DEV: Switch to update-password page</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

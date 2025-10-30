@@ -63,6 +63,9 @@ export default function UpdatePassword() {
 
   return (
     <SafeAreaView style={styles.safe}>
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
+      </TouchableOpacity>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
@@ -79,7 +82,7 @@ export default function UpdatePassword() {
           />
 
           <View style={styles.card}>
-            <Text style={styles.title}>Forgot Password</Text>
+            <Text style={styles.title}>Update Password</Text>
             <Text style={styles.subtitle}>
               Enter your email address to receive a password reset link.
             </Text>
@@ -129,10 +132,6 @@ export default function UpdatePassword() {
                 <Text style={styles.buttonText}>Reset Password</Text>
               </TouchableOpacity>
             </LinearGradient>
-            <TouchableOpacity
-                onPress={() => router.push("/auth/forgot-password")}>
-                <Text style={styles.link}>DEV: Return to forgot password</Text>
-              </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

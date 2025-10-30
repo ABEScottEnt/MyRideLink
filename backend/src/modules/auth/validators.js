@@ -28,10 +28,10 @@ export const resetPasswordValidator = [
     .isEmail()
     .withMessage("Valid email is required")
     .normalizeEmail(),
-]
+];
 
 export const updatePasswordValidator = [
   body("password")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters")
-]
+];
