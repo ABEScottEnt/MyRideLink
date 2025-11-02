@@ -17,8 +17,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import COLORS, { GRADIENT } from '../../constants/theme';
 
-// simple email validator
-const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
+// simple email validator // Temporarily keeping this for reference
+//const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
+//const validatePassword = (password) => // TODO: Make simple password validator
 
 export default function UpdatePassword() {
   const router = useRouter();
@@ -28,20 +29,19 @@ export default function UpdatePassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleReset = async() => {
-    /*
-    if (!validateEmail(email)) {
-      setError('Please enter a valid email');
-      return;
-    }
-    */
+    //const token = await AsyncStorage.getItem("token");
     setError('');
-    // TODO: trigger password reset email
-    // navigate to verification or confirmation screen
     
     if (password != confirmPassword) {
         setError('Passwords do not match');
         return;
     }
+    /*
+    if (!validatePassword(password)) {
+      setError('Please enter a valid password');
+      return;
+    }
+    */
 
     try {
       const payload = {password};
@@ -54,6 +54,7 @@ export default function UpdatePassword() {
       });
       //console.log(firstName, email);
       console.log("API call success??");
+      alert("PASSWORD CHANGED SUCCESSFULLY");
       //const data = await response.json();
     } catch (error) {
         console.log("API call error:", error);
