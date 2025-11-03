@@ -26,38 +26,44 @@ export default function ForgotPassword() {
   const [error, setError] = useState('');
 
   const [resetPassword, setResetPassword] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
   const handleReset = async() => {
     if (!validateEmail(email)) {
       setError('Please enter a valid email');
       return;
     }
+    setDisableButton(true);
     setError('');
     // TODO: trigger password reset email
     // navigate to verification or confirmation screen
-    
     try {
       const payload = {email};
-      console.log(email);
       //Change the host address w.r.t. your backend device address
       const response = await fetch(`http://100.110.167.198:4000/api/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      //console.log(firstName, email);
-      alert("Password reset request sent. Please check your email.")
+      if (!response.ok) {
+        throw new AppError("Password Reset Failed: " + error.message, 400);
+      }
+      setError("Password reset request sent. Please check your email.") // Try and find a different way to present this message.
+      //router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
     } catch (error) {
         console.log("API call error:", error);
+        setError(error);
       }
-    //router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
+    setDisableButton(false);
   };
 
   return (
     <SafeAreaView style={styles.safe}>
+
       <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
       </TouchableOpacity>
+
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
@@ -102,25 +108,33 @@ export default function ForgotPassword() {
               colors={GRADIENT}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={[styles.buttonWrapper, !email && styles.buttonDisabled]}
+              style={[styles.buttonWrapper, disableButton && styles.buttonDisabled]}
             >
               <TouchableOpacity
                 style={styles.button}
                 onPress={handleReset}
-                disabled={!email}
+                disabled={disableButton}
                 activeOpacity={0.85}
               >
                 <Text style={styles.buttonText}>Reset Password</Text>
               </TouchableOpacity>
             </LinearGradient>
+
             <TouchableOpacity
                 onPress={() => router.push("/auth")}>
                 <Text style={styles.link}>DEV: Return to login</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
                 onPress={() => router.push("/auth/update-password")}>
                 <Text style={styles.link}>DEV: Go to update password</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={() => router.push("/auth/verify-email")}>
+                <Text style={styles.link}>DEV: Go to OTP Input</Text>
+            </TouchableOpacity>
+            
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
