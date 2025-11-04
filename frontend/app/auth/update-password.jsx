@@ -29,7 +29,6 @@ export default function UpdatePassword() {
   const [disableButton, setDisableButton] = useState(false);
 
   const handleReset = async() => {
-    //const token = await AsyncStorage.getItem("token");
     setError('');
     if (password != confirmPassword) {
         setError('Passwords do not match');
@@ -45,15 +44,12 @@ export default function UpdatePassword() {
    // TODO:
     try {
       const payload = {password};
-      console.log(password);
       //Change the host address w.r.t. your backend device address
       const response = await fetch(`http://100.110.167.198:4000/api/auth/update-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      //console.log(firstName, email);
-      //console.log("API call success??");
       setError("PASSWORD CHANGED SUCCESSFULLY");
       //const data = await response.json();
     } catch (error) {
