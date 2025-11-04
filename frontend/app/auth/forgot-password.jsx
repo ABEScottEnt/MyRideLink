@@ -45,9 +45,6 @@ export default function ForgotPassword() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!response.ok) {
-        throw new AppError("Password Reset Failed: " + error.message, 400);
-      }
       setError("Password reset request sent. Please check your email.") // Try and find a different way to present this message.
       //router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
     } catch (error) {
