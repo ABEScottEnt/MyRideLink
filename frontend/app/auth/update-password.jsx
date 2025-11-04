@@ -23,15 +23,14 @@ import COLORS, { GRADIENT } from '../../constants/theme';
 
 export default function UpdatePassword() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [disableButton, setDisableButton] = useState(false);
 
   const handleReset = async() => {
     //const token = await AsyncStorage.getItem("token");
     setError('');
-    
     if (password != confirmPassword) {
         setError('Passwords do not match');
         return;
@@ -42,7 +41,8 @@ export default function UpdatePassword() {
       return;
     }
     */
-
+   setDisableButton(true);
+   // TODO:
     try {
       const payload = {password};
       console.log(password);
@@ -53,13 +53,14 @@ export default function UpdatePassword() {
         body: JSON.stringify(payload),
       });
       //console.log(firstName, email);
-      console.log("API call success??");
-      alert("PASSWORD CHANGED SUCCESSFULLY");
+      //console.log("API call success??");
+      setError("PASSWORD CHANGED SUCCESSFULLY");
       //const data = await response.json();
     } catch (error) {
         console.log("API call error:", error);
+        setError(error);
       }
-    //router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
+    setDisableButton(false);
   };
 
   return (
@@ -85,7 +86,7 @@ export default function UpdatePassword() {
           <View style={styles.card}>
             <Text style={styles.title}>Update Password</Text>
             <Text style={styles.subtitle}>
-              Enter your email address to receive a password reset link.
+              Enter your new password, then confirm it on the next line.
             </Text>
 
             <View style={styles.inputWrapper}>
@@ -122,12 +123,12 @@ export default function UpdatePassword() {
               colors={GRADIENT}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={[styles.buttonWrapper, !password && styles.buttonDisabled]}
+              style={[styles.buttonWrapper, disableButton && styles.buttonDisabled]}
             >
               <TouchableOpacity
                 style={styles.button}
                 onPress={handleReset}
-                disabled={!password}
+                disabled={disableButton}
                 activeOpacity={0.85}
               >
                 <Text style={styles.buttonText}>Reset Password</Text>

@@ -25,16 +25,15 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
-  const [resetPassword, setResetPassword] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
 
   const handleReset = async() => {
+    setError('');
     if (!validateEmail(email)) {
       setError('Please enter a valid email');
       return;
     }
     setDisableButton(true);
-    setError('');
     // TODO: trigger password reset email
     // navigate to verification or confirmation screen
     try {
