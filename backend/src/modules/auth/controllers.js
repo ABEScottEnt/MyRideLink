@@ -173,7 +173,6 @@ export const resetPasswordController = async (req, res) => {
 };
 
 export const updatePasswordController = async (req, res) => {
-  console.log("Update Password controller called");
   try {
     const { password } = req.body;
     const { test } = await updatePasswordService(password);
