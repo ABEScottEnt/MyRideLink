@@ -19,7 +19,10 @@ import COLORS, { GRADIENT } from '../../constants/theme';
 
 // simple email validator // Temporarily keeping this for reference
 //const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
-//const validatePassword = (password) => // TODO: Make simple password validator
+const validatePassword = (password) => { 
+  if (password.length >= 6) return true
+  else return false 
+}// TODO: Make simple password validator
 
 export default function UpdatePassword() {
   const router = useRouter();
@@ -34,12 +37,10 @@ export default function UpdatePassword() {
         setError('Passwords do not match');
         return;
     }
-    /*
     if (!validatePassword(password)) {
-      setError('Please enter a valid password');
+      setError('Please enter a valid password (6 or more characters)');
       return;
     }
-    */
    setDisableButton(true);
    // TODO:
     try {
