@@ -199,8 +199,8 @@ export const getUserProfileService = async ({ accessToken }) => {
 
 export const resetPasswordService = async (email) => {
   const {data, error} = await supabase.auth.resetPasswordForEmail(email);
-  console.log("data " + data);
-  console.log("error " + error);
+  //console.log("data " + data);
+  //console.log("error " + error);
   if (error) throw new AppError("Password Reset Failed: " + error.message, 400);
 };
 
@@ -209,7 +209,7 @@ export const updatePasswordService = async (password) => { // NOTE TO SELF: ADD 
   const { data, error } = await supabase.auth.updateUser({ password: password }) 
   if (error) throw new AppError("Password Reset Failed: " + error.message, 400); // Weirdly enough an error is not thrown if not logged in
   // Luckilly the database remains unchanged in this scenario.
-  console.log(await supabase.auth.getUser()) 
+  //console.log(await supabase.auth.getUser()) // Prints the logged in user for debugging purposes
   // Prints user and null error if logged in. 
   // Prints profile fetch error if error. This can happen if a user logged in, then logged out.
   // Doesn't run if a person wasn't logged in after the back end starts.
