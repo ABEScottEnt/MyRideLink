@@ -115,22 +115,6 @@ export default function ForgotPassword() {
                 <Text style={styles.buttonText}>Reset Password</Text>
               </TouchableOpacity>
             </LinearGradient>
-
-            <TouchableOpacity
-                onPress={() => router.push("/auth")}>
-                <Text style={styles.link}>DEV: Return to login</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                onPress={() => router.push("/auth/update-password")}>
-                <Text style={styles.link}>DEV: Go to update password</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                onPress={() => router.push("/auth/verify-email")}>
-                <Text style={styles.link}>DEV: Go to OTP Input</Text>
-            </TouchableOpacity>
-            
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

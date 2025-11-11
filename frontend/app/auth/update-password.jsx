@@ -42,7 +42,6 @@ export default function UpdatePassword() {
       return;
     }
    setDisableButton(true);
-   // TODO:
     try {
       const payload = {password};
       //Change the host address w.r.t. your backend device address
