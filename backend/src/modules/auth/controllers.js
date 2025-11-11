@@ -6,6 +6,7 @@ import {
   refreshTokenService,
   logoutService,
   getUserProfileService,
+    updateUserProfileService,
 } from "./services.js";
 
 // Signup
@@ -20,51 +21,6 @@ export const signupController = async (req, res) => {
         .json({ success: false, message: err.message });
   }
 };
-
-// Step 1: Send OTP to email for signup
-/******************************************
-export const sendOTPController = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const result = await sendOTPService({ email });
-    return res
-      .status(200)
-      .json({ success: true, message: "OTP sent", ...result });
-  } catch (err) {
-    return res
-      .status(err.statusCode || 400)
-      .json({ success: false, message: err.message });
-  }
-};
-
-// Step 2: Verify OTP and create user
-export const verifyOTPController = async (req, res) => {
-  try {
-    const { email, otp, fullName, password } = req.body;
-    const { token, refreshToken, user } = await verifyOTPService({
-      email,
-      otp,
-      fullName,
-      password,
-    });
-    return res.status(200).json({
-      success: true,
-      message: "User created successfully",
-      token,
-      refreshToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        emailVerified: user.email_confirmed_at ? true : false,
-      },
-    });
-  } catch (err) {
-    return res
-      .status(err.statusCode || 400)
-      .json({ success: false, message: err.message });
-  }
-};
-********************************************/
 
 // Step 3: Login with email and password
 export const loginController = async (req, res) => {
@@ -159,4 +115,21 @@ export const getUserProfileController = async (req, res) => {
       .status(err.statusCode || 400)
       .json({ success: false, message: err.message });
   }
+};
+
+//Update Profile
+export const updateUserProfileController = async (req, res) => {
+    try {
+        const { firstName, lastName, email, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode } = req.body;
+        const accessToken = req.headers.authorization?.split("Bearer ")[1];
+        if (!accessToken) throw new Error("Missing token");
+
+        const  { userProfile}  = await updateUserProfileService({ accessToken, firstName, lastName, email, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode });
+
+        return res.status(201).json({ success: true, message: "User Data Updated", userProfile });
+    } catch (err) {
+        return res
+            .status(err.statusCode || 400)
+            .json({ success: false, message: err.message });
+    }
 };

@@ -12,6 +12,7 @@ import {
   Image, Alert,
 } from 'react-native';
 import COLORS from '../../constants/theme';
+import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -36,18 +37,20 @@ export default function AuthScreen() {
     //console.log("Button pressed with:", firstName, email);
     //console.log(firstName, email);
     //Alert.alert("Button Pressed");
-
+      console.log("Payload: "+ firstName+" " + lastName+" " + email+" " + password+" " + phone+" " + addressLine1+" " + city+" " + state+" " +  zipCode);
     try{
       const payload = isLogin? {email,password} : {firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode};
       const endpoint = isLogin? '/login': '/signup';
       //console.log(endpoint);
       //console.log(email);
+      //console.log("Payload: "+ firstName+" " + lastName+" " + email+" " + password+" " + phone+" " + addressLine1+" " + city+" " + state+" " +  zipCode);
       //Change the host address w.r.t. your backend device address
-      const response = await fetch(`http://192.168.1.251:4000/api/auth${endpoint}`, {
+      const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      //console.log("Payload: "+ firstName+" " + lastName+" " + email+" " + password+" " + phone+" " + addressLine1+" " + city+" " + state+" " +  zipCode);
       //console.log(firstName, email);
       const data = await response.json();
 
@@ -338,7 +341,7 @@ export default function AuthScreen() {
 
             <TouchableOpacity
               style={styles.submitButton}
-              onPress={() => handleSubmit({firstName, email, password})}
+              onPress={() => handleSubmit({firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode})}
               activeOpacity={0.85}
               //disabled={loading}
             >

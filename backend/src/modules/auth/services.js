@@ -9,8 +9,8 @@ const supabase = createClient(
 );
 
 // 1. Signup with email & password
-export const signupService = async ({ firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode }) => {
-  const { data, error } = await supabase
+export const signupService = async ({ profilePic, firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode }) => {
+  const { data : authData, error : authError } = await supabase
       .auth
       .admin
       .createUser({
@@ -23,26 +23,11 @@ export const signupService = async ({ firstName, lastName, email, password, phon
         }
       });
 
-  if (error) throw new AppError(error.message, 400);
-  const user = data.user;
-
-  /****************************************************
-  console.log("Supabase user:", user);
-  console.log("Inserting profile with:", {
-    id: user.id,
-    firstName,
-    lastName,
-    phone,
-    email: user.email,
-    addressLine1,
-    city,
-    state,
-    zipCode
-  });
-   ************************************************/
+  if (authError) throw new AppError(authError.message, 400);
+  const user = authData.user;
 
   // Insert into profiles
-  const { error: profileError } = await supabase
+  const { data : profileData, error: profileError } = await supabase
           .from("profiles")
           .insert([
             {
@@ -64,6 +49,20 @@ export const signupService = async ({ firstName, lastName, email, password, phon
     throw new AppError(profileError.message, 400);
   }
 
+  if(profilePic){
+      const {data: profilePicData, error: profilePicError} = await supabase
+          .storage
+          .from("profilePicBucket")
+          .upload(`images/${user.id}/profilePic`, profilePic, {
+              cacheControl: '3600',
+              upsert: false,
+          })
+      if (profilePicError) {
+          console.error("Profile Pic insert error:", profileError);
+          throw new AppError(profilePicError.message, 400);
+      }
+  }
+
   return { user };
 };
 
@@ -83,61 +82,6 @@ export const loginService = async ({ email, password }) => {
     session: data.session, // includes access_token & refresh_token
   };
 };
-
-/***************************************************
-// 1. Send OTP to email for signup
-export const sendOTPService = async ({ email }) => {
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      shouldCreateUser: false, // Don't create user yet, just send OTP
-    },
-  });
-
-  if (error) throw new AppError(error.message, 400);
-
-  return { message: "OTP sent to email" };
-};
-
-// 2. Verify OTP and create user if verified
-export const verifyOTPService = async ({ email, otp }) => {
-  // First verify the OTP
-  const { data, error } = await supabase.auth.verifyOtp({
-    email,
-    token: otp,
-    type: "email",
-  });
-
-  if (error) throw new AppError(error.message, 400);
-
-  // If OTP is verified, create the user
-  const { data: signUpData, error: signUpError } = await supabase.auth.admin.createUser({
-    email,
-    fullName,
-    password,
-    email_confirm: true,
-    user_metadata: {
-      email_verified: true
-    }
-  });
-
-  if (signUpError) throw new AppError(signUpError.message, 400);
-
-  // Generate a session for the new user
-  const { data: sessionData, error: sessionError } = await supabase.auth.admin.generateLink({
-    type: 'magiclink',
-    email,
-  });
-
-  if (sessionError) throw new AppError(sessionError.message, 400);
-
-  return {
-    token: sessionData.properties.access_token,
-    refreshToken: sessionData.properties.refresh_token,
-    user: signUpData.user,
-  };
-};
-******************************************/
 
 // 4. Refresh token
 export const refreshTokenService = async ({ refreshToken }) => {
@@ -195,3 +139,61 @@ export const getUserProfileService = async ({ accessToken }) => {
     userProfile: profileData,
   };
 };
+
+// 6. Update user profile
+export const updateUserProfileService = async ({ accessToken, firstName, lastName, email, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode }) => {
+    const { data: authData , error: authError } = await supabase
+        .auth
+        .getUser(accessToken);
+
+    if (authError) throw new AppError("Invalid token", 401);
+
+    const userId = authData.user.id;
+
+    const { data: profileData, error: profileError} = await supabase
+        .from("profiles")
+        .update({firstName, lastName, email, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode})
+        .eq("id", userId)
+        .select()
+        .single();
+
+    if (profileError) {
+        console.error("Profile Update error:", profileError);
+        throw new AppError("Could not Update profile", 400);
+    }
+
+    //Testing logs
+    //console.log("authData", authData);
+    //console.log("profileData", profileData);
+
+    return {
+        userProfile: profileData,
+    };
+};
+
+//7.Upload/Update Profile picture
+export const updateProfilePicService = async({ accessToken, profilePic }) => {
+    const { data: authData , error: authError } = await supabase
+        .auth
+        .getUser(accessToken);
+
+    if (authError) throw new AppError("Invalid token", 401);
+
+    const userId = authData.user.id;
+
+    const {data: profilePicData, error: profilePicError} = await supabase
+        .storage
+        .from("profilePicBucket")
+        .upload(`images/${userId}/profilePic`, profilePic, {
+            cacheControl: '3600',
+            upsert: true,
+        })
+    if (profilePicError) {
+        console.error("Profile Pic insert error:", profilePicData);
+        throw new AppError(profilePicError.message, 400);
+    }
+
+    return{
+        data : profilePicData
+    }
+}

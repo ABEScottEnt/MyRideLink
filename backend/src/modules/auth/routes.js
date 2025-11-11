@@ -8,6 +8,7 @@ import {
   logoutController,
   refreshTokenController,
   getUserProfileController,
+    updateUserProfileController
 } from "./controllers.js";
 
 import {
@@ -34,5 +35,6 @@ router.post("/login", loginValidator, validate, loginController);
 router.post("/refresh-token", refreshTokenValidator, validate, ...maybeProtect(refreshTokenController));
 router.post("/logout", ...maybeProtect(logoutController));
 router.get("/profile", ...maybeProtect(getUserProfileController));
+router.patch("/update-profile", updateUserProfileController)
 
 export default router;
