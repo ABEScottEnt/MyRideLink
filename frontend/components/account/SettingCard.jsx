@@ -49,7 +49,7 @@ export default function SettingCard() {
             if (response.ok) {
                 await AsyncStorage.removeItem("token");
                 Alert.alert('Logged out', 'You have been logged out successfully.', [
-                    { text: 'OK', onPress: () => router.replace('/auth') }
+                    { text: 'OK', onPress: () => router.replace('/entry') }
                 ]);
             }
 

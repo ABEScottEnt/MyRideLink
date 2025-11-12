@@ -205,7 +205,7 @@ export const updateProfilePicService = async({ accessToken, profilePic }) => {
     const {data: profilePicData, error: profilePicError} = await supabase
         .storage
         .from("profilePicBucket")
-        .upload(`images/${userId}/profilePic`, profilePic, {
+        .upload(`images/${userId}`, profilePic, {
             cacheControl: '3600',
             upsert: true,
         })

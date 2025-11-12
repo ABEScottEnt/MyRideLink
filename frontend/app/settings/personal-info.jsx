@@ -14,6 +14,8 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 import COLORS from '../../constants/theme';
 import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
@@ -21,6 +23,8 @@ import { router } from 'expo-router';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function PersonalInfo() {
+
+    const [profilePic, setProfilePic] = useState(null);
 
     const [firstName, setFirstName] = useState('Sign in to view/edit your Info');
     const [lastName, setLastName] = useState('Sign in to view/edit your Info');
@@ -129,10 +133,11 @@ export default function PersonalInfo() {
 
 
             <View style={styles.profileImageWrapper}>
-              <Image
-                  source={{uri: 'https://i.pravatar.cc/150?img=12'}}
-                  style={styles.pic}
-              />
+                {profilePic ? (
+                    <Image source={{ uri: profilePic }} style={styles.pic} />
+                ) : (
+                    <Ionicons name="person-circle-outline" size={60} color="blue" style={styles.picHolder} />
+                )}
               <TouchableOpacity style={styles.editIconOverlay}>
                 <Ionicons name="camera" size={16} color="#fff"/>
               </TouchableOpacity>

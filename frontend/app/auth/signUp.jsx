@@ -121,168 +121,172 @@ export default function AuthScreen() {
                         </TouchableOpacity>
                     </View>
 
+                    <View>
+                        <TouchableOpacity onPress={() => router.push('auth/login')}>
+                            <Text style={styles.link}>Already have an account? LogIn</Text>
+                        </TouchableOpacity>
+                    </View>
+
                     <View style={styles.form}>
-                        {
-                            <>
-                                <View style={styles.inputWrapper}>
-                                    <Ionicons
-                                        name="person-outline"
-                                        size={20}
-                                        color={COLORS.secondary}
-                                        style={styles.inputIcon}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="First Name"
-                                        placeholderTextColor={COLORS.secondary}
-                                        value={firstName}
-                                        onChangeText={setFirstName}
-                                    />
-                                </View>
-                                <View style={styles.inputWrapper}>
-                                    <Ionicons
-                                        name="person-outline"
-                                        size={20}
-                                        color={COLORS.secondary}
-                                        style={styles.inputIcon}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Last Name"
-                                        placeholderTextColor={COLORS.secondary}
-                                        value={lastName}
-                                        onChangeText={setLastName}
-                                    />
-                                </View>
-                                <View style={styles.inputWrapper}>
-                                    <Ionicons
-                                        name="mail-outline"
-                                        size={20}
-                                        color={COLORS.secondary}
-                                        style={styles.inputIcon}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Email Address"
-                                        placeholderTextColor={COLORS.secondary}
-                                        keyboardType="email-address"
-                                        autoCapitalize="none"
-                                        value={email}
-                                        onChangeText={setEmail}
-                                    />
-                                </View>
-                                <View style={styles.inputWrapper}>
-                                    <Ionicons
-                                        name="lock-closed-outline"
-                                        size={20}
-                                        color={COLORS.secondary}
-                                        style={styles.inputIcon}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Create Password"
-                                        placeholderTextColor={COLORS.secondary}
-                                        secureTextEntry
-                                        value={password}
-                                        onChangeText={setPassword}
-                                    />
-                                </View>
-                                <View style={styles.inputWrapper}>
-                                    <Ionicons
-                                        name="call-outline"
-                                        size={20}
-                                        color={COLORS.secondary}
-                                        style={styles.inputIcon}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Phone Number"
-                                        placeholderTextColor={COLORS.secondary}
-                                        keyboardType="number-pad"
-                                        value={phone}
-                                        onChangeText={setPhone}
-                                    />
-                                </View>
-                                <View style={styles.inputWrapper}>
-                                    <Ionicons
-                                        name="home-outline"
-                                        size={20}
-                                        color={COLORS.secondary}
-                                        style={styles.inputIcon}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Address Line 1"
-                                        placeholderTextColor={COLORS.secondary}
-                                        value={addressLine1}
-                                        onChangeText={setAddressLine1}
-                                    />
-                                </View>
-                                {/****************************************
-                                 <View style={styles.inputWrapper}>
-                                 <Ionicons
-                                 name="home-outline"
-                                 size={20}
-                                 color={COLORS.secondary}
-                                 style={styles.inputIcon}
-                                 />
-                                 <TextInput
-                                 style={styles.input}
-                                 placeholder="Address Line 2"
-                                 placeholderTextColor={COLORS.secondary}
-                                 value={addressLine2}
-                                 onChangeText={setAddressLine2}
-                                 />
-                                 </View>
-                                 ******************************************/}
-                                <View style={styles.inputWrapper}>
-                                    <Ionicons
-                                        name="home-outline"
-                                        size={20}
-                                        color={COLORS.secondary}
-                                        style={styles.inputIcon}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="City"
-                                        placeholderTextColor={COLORS.secondary}
-                                        value={city}
-                                        onChangeText={setCity}
-                                    />
-                                </View>
-                                <View style={styles.inputWrapper}>
-                                    <Ionicons
-                                        name="home-outline"
-                                        size={20}
-                                        color={COLORS.secondary}
-                                        style={styles.inputIcon}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="State"
-                                        placeholderTextColor={COLORS.secondary}
-                                        value={state}
-                                        onChangeText={setState}
-                                    />
-                                </View>
-                                <View style={styles.inputWrapper}>
-                                    <Ionicons
-                                        name="home-outline"
-                                        size={20}
-                                        color={COLORS.secondary}
-                                        style={styles.inputIcon}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Zip Code"
-                                        placeholderTextColor={COLORS.secondary}
-                                        keyboardType="number-pad"
-                                        value={zipCode}
-                                        onChangeText={setZipCode}
-                                    />
-                                </View>
-                            </>
-                        }
+                        <>
+                            <View style={styles.inputWrapper}>
+                                <Ionicons
+                                    name="person-outline"
+                                    size={20}
+                                    color={COLORS.secondary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="First Name"
+                                    placeholderTextColor={COLORS.secondary}
+                                    value={firstName}
+                                    onChangeText={setFirstName}
+                                />
+                            </View>
+                            <View style={styles.inputWrapper}>
+                                <Ionicons
+                                    name="person-outline"
+                                    size={20}
+                                    color={COLORS.secondary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Last Name"
+                                    placeholderTextColor={COLORS.secondary}
+                                    value={lastName}
+                                    onChangeText={setLastName}
+                                />
+                            </View>
+                            <View style={styles.inputWrapper}>
+                                <Ionicons
+                                    name="mail-outline"
+                                    size={20}
+                                    color={COLORS.secondary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Email Address"
+                                    placeholderTextColor={COLORS.secondary}
+                                    keyboardType="email-address"
+                                    autoCapitalize="none"
+                                    value={email}
+                                    onChangeText={setEmail}
+                                />
+                            </View>
+                            <View style={styles.inputWrapper}>
+                                <Ionicons
+                                    name="lock-closed-outline"
+                                    size={20}
+                                    color={COLORS.secondary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Create Password"
+                                    placeholderTextColor={COLORS.secondary}
+                                    secureTextEntry
+                                    value={password}
+                                    onChangeText={setPassword}
+                                />
+                            </View>
+                            <View style={styles.inputWrapper}>
+                                <Ionicons
+                                    name="call-outline"
+                                    size={20}
+                                    color={COLORS.secondary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Phone Number"
+                                    placeholderTextColor={COLORS.secondary}
+                                    keyboardType="number-pad"
+                                    value={phone}
+                                    onChangeText={setPhone}
+                                />
+                            </View>
+                            <View style={styles.inputWrapper}>
+                                <Ionicons
+                                    name="home-outline"
+                                    size={20}
+                                    color={COLORS.secondary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Address Line 1"
+                                    placeholderTextColor={COLORS.secondary}
+                                    value={addressLine1}
+                                    onChangeText={setAddressLine1}
+                                />
+                            </View>
+                            {/****************************************
+                             <View style={styles.inputWrapper}>
+                             <Ionicons
+                             name="home-outline"
+                             size={20}
+                             color={COLORS.secondary}
+                             style={styles.inputIcon}
+                             />
+                             <TextInput
+                             style={styles.input}
+                             placeholder="Address Line 2"
+                             placeholderTextColor={COLORS.secondary}
+                             value={addressLine2}
+                             onChangeText={setAddressLine2}
+                             />
+                             </View>
+                             ******************************************/}
+                            <View style={styles.inputWrapper}>
+                                <Ionicons
+                                    name="home-outline"
+                                    size={20}
+                                    color={COLORS.secondary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="City"
+                                    placeholderTextColor={COLORS.secondary}
+                                    value={city}
+                                    onChangeText={setCity}
+                                />
+                            </View>
+                            <View style={styles.inputWrapper}>
+                                <Ionicons
+                                    name="home-outline"
+                                    size={20}
+                                    color={COLORS.secondary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="State"
+                                    placeholderTextColor={COLORS.secondary}
+                                    value={state}
+                                    onChangeText={setState}
+                                />
+                            </View>
+                            <View style={styles.inputWrapper}>
+                                <Ionicons
+                                    name="home-outline"
+                                    size={20}
+                                    color={COLORS.secondary}
+                                    style={styles.inputIcon}
+                                />
+                                <TextInput
+                                    style={styles.input}
+                                    placeholder="Zip Code"
+                                    placeholderTextColor={COLORS.secondary}
+                                    keyboardType="number-pad"
+                                    value={zipCode}
+                                    onChangeText={setZipCode}
+                                />
+                            </View>
+                        </>
 
                         <TouchableOpacity
                             style={styles.submitButton}
@@ -294,6 +298,7 @@ export default function AuthScreen() {
                                 Create Account
                             </Text>
                         </TouchableOpacity>
+
                     </View>
                 </View>
             </ScrollView>
