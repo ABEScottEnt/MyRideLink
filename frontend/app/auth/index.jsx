@@ -341,7 +341,7 @@ export default function AuthScreen() {
 
             <TouchableOpacity
               style={styles.submitButton}
-              onPress={() => handleSubmit({firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode})}
+              onPress={() => handleSubmit({firstName, email, password})}
               activeOpacity={0.85}
               //disabled={loading}
             >

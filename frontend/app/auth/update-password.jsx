@@ -17,35 +17,41 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import COLORS, { GRADIENT } from '../../constants/theme';
 
-// simple email validator
-const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
+// simple email validator // Temporarily keeping this for reference
+//const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
+const validatePassword = (password) => { 
+  if (password.length >= 6) return true
+  else return false 
+}// TODO: Make simple password validator
 
-export default function ForgotPassword() {
+export default function UpdatePassword() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [disableButton, setDisableButton] = useState(false);
 
   const handleReset = async() => {
     setError('');
-    if (!validateEmail(email)) {
-      setError('Please enter a valid email');
+    if (password != confirmPassword) {
+        setError('Passwords do not match');
+        return;
+    }
+    if (!validatePassword(password)) {
+      setError('Please enter a valid password (6 or more characters)');
       return;
     }
-    setDisableButton(true);
-    // TODO: trigger password reset email
-    // navigate to verification or confirmation screen
+   setDisableButton(true);
     try {
-      const payload = {email};
+      const payload = {password};
       //Change the host address w.r.t. your backend device address
-      const response = await fetch(`http://100.110.167.198:4000/api/auth/reset-password`, {
+      const response = await fetch(`http://100.110.167.198:4000/api/auth/update-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      setError("Password reset request sent. Please check your email.") // Try and find a different way to present this message.
-      //router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
+      setError("PASSWORD CHANGED SUCCESSFULLY");
+      //const data = await response.json();
     } catch (error) {
         console.log("API call error:", error);
         setError(error);
@@ -55,11 +61,9 @@ export default function ForgotPassword() {
 
   return (
     <SafeAreaView style={styles.safe}>
-
       <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
       </TouchableOpacity>
-
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.container}
@@ -76,9 +80,9 @@ export default function ForgotPassword() {
           />
 
           <View style={styles.card}>
-            <Text style={styles.title}>Forgot Password</Text>
+            <Text style={styles.title}>Update Password</Text>
             <Text style={styles.subtitle}>
-              Enter your email address to receive a password reset link.
+              Enter your new password, then confirm it on the next line.
             </Text>
 
             <View style={styles.inputWrapper}>
@@ -90,12 +94,23 @@ export default function ForgotPassword() {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Email Address"
+                placeholder="New Password"
                 placeholderTextColor={COLORS.secondary}
-                keyboardType="email-address"
+                keyboardType="password"
                 autoCapitalize="none"
-                value={email}
-                onChangeText={setEmail}
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Confirm Password"
+                placeholderTextColor={COLORS.secondary}
+                keyboardType="password"
+                autoCapitalize="none"
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
               />
             </View>
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
