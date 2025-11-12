@@ -19,7 +19,7 @@ export default function Transit() {
   const [to, setTo] = useState("");
   const [fromPlace, setFromPlace] = useState(null);
   const [toPlace, setToPlace] = useState(null);
-
+  
   const handleSubmit = () => {
     const coords = [
       fromPlace

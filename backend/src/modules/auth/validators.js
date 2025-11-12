@@ -22,3 +22,16 @@ export const loginValidator = [
 export const refreshTokenValidator = [
   body("refreshToken").notEmpty().withMessage("Refresh token is required"),
 ];
+
+export const resetPasswordValidator = [
+  body("email")
+    .isEmail()
+    .withMessage("Valid email is required")
+    .normalizeEmail(),
+];
+
+export const updatePasswordValidator = [
+  body("password")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters")
+];

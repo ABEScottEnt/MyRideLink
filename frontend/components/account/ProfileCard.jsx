@@ -13,7 +13,7 @@ export default function ProfileCard() {
 
             //Change the host address w.r.t. your backend device address
             try {
-                const response = await fetch("http://192.168.1.251:4000/api/auth/profile", {
+                const response = await fetch("http://100.110.167.198:4000/api/auth/profile", {
                     method: "GET",
                     headers: { Authorization: `Bearer ${token}` },
                 });

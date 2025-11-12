@@ -39,7 +39,7 @@ export default function SettingCard() {
 
         //Change the host address w.r.t. your backend device address
         try{
-            const response = await fetch('http://192.168.1.251:4000/api/auth/logout',{
+            const response = await fetch('http://100.110.167.198:4000/api/auth/logout',{
                 method: "POST",
                 headers: {"Authorization": `Bearer ${token}`},
             });
@@ -114,7 +114,11 @@ export default function SettingCard() {
         <SettingItem icon="clock" label="Trip History" onPress={() => router.push("/settings/Trip-History")} />
         <SettingItem icon="heart" label="Favorite Places" onPress={() => router.push("/settings/FavoritePlaces")}/>
         <SettingItem icon="help-circle" label="Help & Support" />
-        <SettingItem icon="shield" label="Privacy & Security" />
+        <SettingItem 
+        icon="shield" 
+        label="Privacy & Security" 
+        onPress={() => router.push("/settings/privacy-and-security")}
+        />
         <SettingItem
           icon="log-out"
           label="Sign Out"
