@@ -20,6 +20,7 @@ ios/build/
 *.xcworkspace
 *.xcuserstate
 *.xcuserdata
+frontend/ios
 
 # === React Native / Expo ===
 *.keystore

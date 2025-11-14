@@ -4,6 +4,7 @@ import Feather from "react-native-vector-icons/Feather";
 import PersonalInfo from "../../app/settings/personal-info";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
 
 
 function SettingItem({
@@ -39,7 +40,7 @@ export default function SettingCard() {
 
         //Change the host address w.r.t. your backend device address
         try{
-            const response = await fetch('http://100.110.167.198:4000/api/auth/logout',{
+            const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/logout`,{
                 method: "POST",
                 headers: {"Authorization": `Bearer ${token}`},
             });
@@ -48,7 +49,7 @@ export default function SettingCard() {
             if (response.ok) {
                 await AsyncStorage.removeItem("token");
                 Alert.alert('Logged out', 'You have been logged out successfully.', [
-                    { text: 'OK', onPress: () => router.replace('/auth') }
+                    { text: 'OK', onPress: () => router.replace('/entry') }
                 ]);
             }
 
@@ -114,9 +115,9 @@ export default function SettingCard() {
         <SettingItem icon="clock" label="Trip History" onPress={() => router.push("/settings/Trip-History")} />
         <SettingItem icon="heart" label="Favorite Places" onPress={() => router.push("/settings/FavoritePlaces")}/>
         <SettingItem icon="help-circle" label="Help & Support" />
-        <SettingItem 
-        icon="shield" 
-        label="Privacy & Security" 
+        <SettingItem
+        icon="shield"
+        label="Privacy & Security"
         onPress={() => router.push("/settings/privacy-and-security")}
         />
         <SettingItem

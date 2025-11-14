@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -14,32 +14,101 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 import COLORS from '../../constants/theme';
+import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
 import { router } from 'expo-router';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function PersonalInfo() {
 
-  /*const token = await AsyncStorage.getItem("token");
+    const [profilePic, setProfilePic] = useState(null);
 
-  //Change the host address w.r.t. your backend device address
-  try {
-    const response = await fetch(`http://192.168.1.251:4000/api/auth/profile`,{
-      method: "GET"
-    });
-  } catch (error) {
+    const [firstName, setFirstName] = useState('Sign in to view/edit your Info');
+    const [lastName, setLastName] = useState('Sign in to view/edit your Info');
+    const [email, setEmail] = useState('Sign in to view/edit your Info');
+    const [phone, setPhone] = useState('Sign in to view/edit your Info');
+    const [addressLine1, setAddressLine1] = useState('Sign in to view/edit your Info');
+    //const [addressLine2, setAddressLine2] = useState('Sign in to view/edit your Info');
+    const [city, setCity] = useState('Sign in to view/edit your Info');
+    const [state, setState] = useState('Sign in to view/edit your Info');
+    const [zipCode, setZipCode] = useState('Sign in to view/edit your Info');
+    const [editing, setEditing] = useState(false);
 
-  }*/
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const token = await AsyncStorage.getItem("token");
 
-  const [name, setName] = useState('Evans Ahenkorah');
-  const [email, setEmail] = useState('example@gmail.com');
-  const [phone, setPhone] = useState('123-456-7890');
-  const [editing, setEditing] = useState(false);
+                const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/profile`,{
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
 
-  const handleSave = () => {
-    setEditing(false);
-    Alert.alert('Profile Updated', 'Your changes have been saved.');
+                const data = await response.json();
+                console.log("Fetched profile:", data);
+
+                setFirstName(data.user.firstName || "".trim());
+                setLastName(data.user.lastName || "".trim());
+                setEmail(data.user.email || "");
+                setPhone(data.user.phone || "");
+                setAddressLine1(data.user.addressLine1 || "");
+                //setAddressLine2(data.user.addressLine2 || "");
+                setCity(data.user.city || "");
+                setState(data.user.state || "");
+                setZipCode(data.user.zipCode || "");
+
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+                Alert.alert("Error", "Failed to load profile information");
+            }
+        }
+        fetchProfile();
+    }, []);
+
+  const handleSave = async () => {
+      try {
+          const token = await AsyncStorage.getItem("token");
+          const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/update-profile`,{
+              method: "PATCH",
+              headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                  firstName,
+                  lastName,
+                  email,
+                  phone,
+                  addressLine1,
+                  //addressLine2,
+                  city,
+                  state,
+                  zipCode,
+              }),
+          });
+          if (!response.ok) {
+              throw new Error(`Failed to update: ${response.status}`);
+          }
+
+          const result = await response.json();
+          console.log("Profile updated:", result);
+
+          setEditing(false);
+          Alert.alert('Profile Updated', 'Your changes have been saved.');
+      }
+      catch (error) {
+          console.error("Error updating profile:", error);
+          Alert.alert("Error", "Failed to update profile");
+      }
   };
 
   return (
@@ -64,10 +133,11 @@ export default function PersonalInfo() {
 
 
             <View style={styles.profileImageWrapper}>
-              <Image
-                  source={{uri: 'https://i.pravatar.cc/150?img=12'}}
-                  style={styles.pic}
-              />
+                {profilePic ? (
+                    <Image source={{ uri: profilePic }} style={styles.pic} />
+                ) : (
+                    <Ionicons name="person-circle-outline" size={60} color="blue" style={styles.picHolder} />
+                )}
               <TouchableOpacity style={styles.editIconOverlay}>
                 <Ionicons name="camera" size={16} color="#fff"/>
               </TouchableOpacity>
@@ -77,13 +147,21 @@ export default function PersonalInfo() {
             <View style={styles.card}>
               <Text style={styles.sectionTitle}>Profile Details</Text>
 
-              <Text style={styles.label}>Name</Text>
+              <Text style={styles.label}>First Name</Text>
               <TextInput
                   style={styles.inputField}
-                  value={name}
-                  onChangeText={setName}
+                  value={firstName}
+                  onChangeText={setFirstName}
                   editable={editing}
               />
+
+                <Text style={styles.label}>Last Name</Text>
+                <TextInput
+                    style={styles.inputField}
+                    value={lastName}
+                    onChangeText={setLastName}
+                    editable={editing}
+                />
 
               <Text style={styles.label}>Email</Text>
               <TextInput
@@ -102,6 +180,48 @@ export default function PersonalInfo() {
                   editable={editing}
                   keyboardType="phone-pad"
               />
+
+                <Text style={styles.label}>Address Line 1</Text>
+                <TextInput
+                    style={styles.inputField}
+                    value={addressLine1}
+                    onChangeText={setAddressLine1}
+                    editable={editing}
+                />
+
+                {/*
+                <Text style={styles.label}>Address Line 2</Text>
+                <TextInput
+                    style={styles.inputField}
+                    value={addressLine2}
+                    onChangeText={setAddressLine2}
+                    editable={editing}
+                />
+                */}
+
+                <Text style={styles.label}>City</Text>
+                <TextInput
+                    style={styles.inputField}
+                    value={city}
+                    onChangeText={setCity}
+                    editable={editing}
+                />
+
+                <Text style={styles.label}>State</Text>
+                <TextInput
+                    style={styles.inputField}
+                    value={state}
+                    onChangeText={setState}
+                    editable={editing}
+                />
+
+                <Text style={styles.label}>Zip Code</Text>
+                <TextInput
+                    style={styles.inputField}
+                    value={zipCode}
+                    onChangeText={setZipCode}
+                    editable={editing}
+                />
 
               <TouchableOpacity
                   style={styles.editButton}

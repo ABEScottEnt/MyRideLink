@@ -10,6 +10,7 @@ import {
   getUserProfileController,
   resetPasswordController,
   updatePasswordController,
+    updateUserProfileController
 } from "./controllers.js";
 
 import {
@@ -40,5 +41,6 @@ router.post("/update-password", updatePasswordValidator, validate, updatePasswor
 router.post("/refresh-token", refreshTokenValidator, validate, ...maybeProtect(refreshTokenController));
 router.post("/logout", ...maybeProtect(logoutController));
 router.get("/profile", ...maybeProtect(getUserProfileController));
+router.patch("/update-profile", updateUserProfileController)
 
 export default router;

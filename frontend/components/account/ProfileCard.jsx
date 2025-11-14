@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Alert, Image, StyleSheet} from "react-nat
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import COLORS from "../../constants/theme";
+import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
 
 export default function ProfileCard() {
     const [profile, setProfile] = useState(null);
@@ -11,9 +12,8 @@ export default function ProfileCard() {
         const fetchProfile = async () => {
             const token = await AsyncStorage.getItem("token");
 
-            //Change the host address w.r.t. your backend device address
             try {
-                const response = await fetch("http://100.110.167.198:4000/api/auth/profile", {
+                const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/profile`, {
                     method: "GET",
                     headers: { Authorization: `Bearer ${token}` },
                 });
