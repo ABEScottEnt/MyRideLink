@@ -16,6 +16,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import COLORS, { GRADIENT } from '../../constants/theme';
+import { useEffect } from 'react';
+import * as Linking from 'expo-linking';
 
 // simple email validator // Temporarily keeping this for reference
 //const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
@@ -32,6 +34,9 @@ export default function UpdatePassword() {
   const [disableButton, setDisableButton] = useState(false);
 
   const handleReset = async() => {
+    const initialUrl = await Linking.getInitialURL();
+    alert(initialUrl);
+
     setError('');
     if (password != confirmPassword) {
         setError('Passwords do not match');
