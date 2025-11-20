@@ -35,7 +35,21 @@ export default function UpdatePassword() {
 
   const handleReset = async() => {
     const initialUrl = await Linking.getInitialURL();
-    alert(initialUrl);
+    //console.log(initialUrl); // Note: URL is simply the IP when running on the emulator. No further route to page is shown.
+
+    var accessToken
+
+    const accessTokenStart = "#access_token=";
+    const accessTokenEnd = "&expires_at"
+    const isContained = initialUrl.includes(accessTokenStart);
+    if (isContained) {
+      const urlArray = initialUrl.split(accessTokenStart);
+      accessToken = urlArray[1].split(accessTokenEnd);
+    }
+
+    
+
+    //alert(initialUrl);
 
     setError('');
     if (password != confirmPassword) {
