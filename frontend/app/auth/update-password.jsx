@@ -37,7 +37,7 @@ export default function UpdatePassword() {
     const initialUrl = await Linking.getInitialURL();
     //console.log(initialUrl); // Note: URL is simply the IP when running on the emulator. No further route to page is shown.
 
-    var accessToken
+    var accessToken = null;
 
     const accessTokenStart = "#access_token=";
     const accessTokenEnd = "&expires_at"
@@ -47,9 +47,7 @@ export default function UpdatePassword() {
       accessToken = urlArray[1].split(accessTokenEnd);
     }
 
-    
-
-    //alert(initialUrl);
+    //alert(accessToken);
 
     setError('');
     if (password != confirmPassword) {
@@ -62,7 +60,7 @@ export default function UpdatePassword() {
     }
    setDisableButton(true);
     try {
-      const payload = {password};
+      const payload = {password, accessToken}; // Accesstoken seems to become null after being sent to the backend no matter what
       //Change the host address w.r.t. your backend device address
       const response = await fetch(`http://100.110.167.198:4000/api/auth/update-password`, {
         method: "POST",

@@ -149,8 +149,12 @@ export const resetPasswordService = async (email) => {
 };
 
 // 8. Update user password
-export const updatePasswordService = async (password) => { // NOTE TO SELF: ADD FEEDBACK FOR VALIDATION
-  // CURRENTLY IF THE PASSWORD ISN'T VALID (<6 Characters), NONE OF THIS FUNCTION GETS CALLED
+export const updatePasswordService = async (password, token) => { 
+  
+  if (token) {
+    console.log(token);
+  }
+
   const { data, error } = await supabase.auth.updateUser({ password: password })
   if (error) throw new AppError("Password Reset Failed: " + error.message, 400); // Weirdly enough an error is not thrown if not logged in
   // Fortunately, the database remains unchanged in this scenario.
