@@ -150,36 +150,23 @@ export const resetPasswordService = async (email) => {
 
 // 8. Update user password
 export const updatePasswordService = async (password, accessToken, refreshToken) => { 
-  
+  /*
   if (accessToken && refreshToken) {
-    console.log("access token: " + accessToken);
-    console.log("refresh token: " + refreshToken);
-    //console.log(await supabase.auth.getClaims(accessToken));
-    //console.log(await supabase.auth.getClaims(refreshToken));
-    /*
-    const { data, error } = await supabase.auth.setSession({ // Error here
+    //console.log("access token: " + accessToken);
+    //console.log("refresh token: " + refreshToken);
+    
+    const { data, error } = await supabase.auth.setSession({ // Doesn't work
       accessToken,
       refreshToken
     });
-    */
-    const { data, error } = await supabase.auth.refreshSession({ refreshToken }); // Doesn't work either
-    const { session, user } = data
-    console.log(data);
-    console.log(error);
     
     //if (error) throw new Error("Password Update Failed: " + error.message, 400);
     //console.log({data, error});
     //console.log(await supabase.auth.getUser());
   }
-
+  */ 
   const { data, error } = await supabase.auth.updateUser({ password: password })
-  if (error) throw new AppError("Password Reset Failed: " + error.message, 400); // Weirdly enough an error is not thrown if not logged in
-  // Fortunately, the database remains unchanged in this scenario.
-  // console.log(await supabase.auth.getUser()) // Prints the logged in user for debugging purposes
-  // Prints user and null error if logged in.
-  // Prints profile fetch error if error. This can happen if a user logged in, then logged out.
-  // Doesn't run if a person wasn't logged in after the back end starts.
-  // Doesn't run if the old password matches the new password
+  if (error) throw new AppError("Password Reset Failed: " + error.message, 400);
 };
 
 // 9. Update user profile

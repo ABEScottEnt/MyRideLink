@@ -19,12 +19,10 @@ import COLORS, { GRADIENT } from '../../constants/theme';
 import { useEffect } from 'react';
 import * as Linking from 'expo-linking';
 
-// simple email validator // Temporarily keeping this for reference
-//const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
 const validatePassword = (password) => { 
   if (password.length >= 6) return true
   else return false 
-}// TODO: Make simple password validator
+}
 
 export default function UpdatePassword() {
   const router = useRouter();
@@ -34,10 +32,9 @@ export default function UpdatePassword() {
   const [disableButton, setDisableButton] = useState(false);
 
   const handleReset = async() => {
-    const initialUrl = await Linking.getInitialURL();
-    //console.log(initialUrl); // Note: URL is simply the IP when running on the emulator. No further route to page is shown.
+    const initialUrl = await Linking.getInitialURL(); // Gets the full URL. Doesn't seem to work with the emulator.
 
-    var accessToken = null;
+    var accessToken = null; // Create variables for tokens
     var refreshToken = null;
 
     const accessTokenStart = "#access_token=";
@@ -45,15 +42,14 @@ export default function UpdatePassword() {
 
     const refreshTokenStart = "&refresh_token="
     const refreshTokenEnd = "&token_type="
-    const isContained = initialUrl.includes(accessTokenStart);
+
+    const isContained = initialUrl.includes(accessTokenStart); // If URL has tokens in them, parse them from the url.
     if (isContained) {
       const urlArray = initialUrl.split(accessTokenStart);
       accessToken = urlArray[1].split(accessTokenEnd)[0];
       const urlArray2 = initialUrl.split(refreshTokenStart);
       refreshToken = urlArray2[1].split(refreshTokenEnd)[0];
     }
-
-    //alert(accessToken);
 
     setError('');
     if (password != confirmPassword) {
@@ -66,9 +62,7 @@ export default function UpdatePassword() {
     }
    setDisableButton(true);
     try {
-      //alert(accessToken);
-      const payload = {password, accessToken, refreshToken}; // Accesstoken seems to become null after being sent to the backend no matter what
-      //alert(JSON.stringify(payload));
+      const payload = {password, accessToken, refreshToken}; 
       //Change the host address w.r.t. your backend device address
       const response = await fetch(`http://100.110.167.198:4000/api/auth/update-password`, {
         method: "POST",
