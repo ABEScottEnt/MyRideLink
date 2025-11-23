@@ -149,10 +149,27 @@ export const resetPasswordService = async (email) => {
 };
 
 // 8. Update user password
-export const updatePasswordService = async (password, token) => { 
+export const updatePasswordService = async (password, accessToken, refreshToken) => { 
   
-  if (token) {
-    console.log(token);
+  if (accessToken && refreshToken) {
+    console.log("access token: " + accessToken);
+    console.log("refresh token: " + refreshToken);
+    //console.log(await supabase.auth.getClaims(accessToken));
+    //console.log(await supabase.auth.getClaims(refreshToken));
+    /*
+    const { data, error } = await supabase.auth.setSession({ // Error here
+      accessToken,
+      refreshToken
+    });
+    */
+    const { data, error } = await supabase.auth.refreshSession({ refreshToken }); // Doesn't work either
+    const { session, user } = data
+    console.log(data);
+    console.log(error);
+    
+    //if (error) throw new Error("Password Update Failed: " + error.message, 400);
+    //console.log({data, error});
+    //console.log(await supabase.auth.getUser());
   }
 
   const { data, error } = await supabase.auth.updateUser({ password: password })

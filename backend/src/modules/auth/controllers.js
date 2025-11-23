@@ -130,10 +130,10 @@ export const resetPasswordController = async (req, res) => {
 
 export const updatePasswordController = async (req, res) => {
   try {
-    const { password, token } = req.body;
-    console.log(password);
-    console.log(token);
-    const { test } = await updatePasswordService(password, token);
+    const { password, accessToken, refreshToken } = req.body;
+    //console.log(password);
+    //console.log(accessToken);
+    const { test } = await updatePasswordService(password, accessToken, refreshToken);
   } catch (err) {
     return res.status(400).json({ success: false, message: err.message });
   }
