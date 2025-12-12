@@ -11,6 +11,7 @@ import {
 import React, {useState} from "react";
 import COLORS from "../../constants/theme";
 import {router, useLocalSearchParams} from "expo-router";
+import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
 
 export default function OtpInput() {
 
@@ -19,7 +20,7 @@ export default function OtpInput() {
 
     const optVerifier = async ({otp}) => {
         try{
-            const response = await fetch(`http://localhost:4000/api/auth/verify-otp`, {
+            const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/verify-otp`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({email, otp, fullName, password}),

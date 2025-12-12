@@ -1,6 +1,6 @@
 //config/hostAddressConfig.js
 const HOSTADDRESSCONFIG = {
-    hostAddress: '100.110.167.198',
+    hostAddress: '192.168.1.164',
     port: '4000',
 };
 

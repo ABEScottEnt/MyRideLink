@@ -16,7 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import COLORS, { GRADIENT } from '../../constants/theme';
-import { useEffect } from 'react';
+import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
 import * as Linking from 'expo-linking';
 
 const validatePassword = (password) => { 
@@ -64,7 +64,7 @@ export default function UpdatePassword() {
     try {
       const payload = {password, accessToken, refreshToken}; 
       //Change the host address w.r.t. your backend device address
-      const response = await fetch(`http://100.110.167.198:4000/api/auth/update-password`, {
+      const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/update-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

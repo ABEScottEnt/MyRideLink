@@ -16,6 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import COLORS, { GRADIENT } from '../../constants/theme';
+import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
 
 // simple email validator
 const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
@@ -39,7 +40,7 @@ export default function ForgotPassword() {
     try {
       const payload = {email};
       //Change the host address w.r.t. your backend device address
-      const response = await fetch(`http://100.110.167.198:4000/api/auth/reset-password`, {
+      const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

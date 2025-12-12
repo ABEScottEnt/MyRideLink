@@ -107,10 +107,12 @@ export default function LocationSearch({
 
   const handleBlur = () => {
     // Small delay to allow onPress of a suggestion to register
+    /*
     setTimeout(() => {
       setActiveField(null);
       setSuggestions([]);
     }, 150);
+    */
   };
 
   return (
