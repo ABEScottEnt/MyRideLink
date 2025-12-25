@@ -16,7 +16,7 @@ app/
 │   ├── faq.tsx               # Common questions
 │   └── contact.tsx           # Submit a support request
 ├─── activity/
-│   └── [id].tsx   
+│   └── [id].tsx
 └── payments/
     ├── methods.tsx           # Add/edit cards
     └─── history.tsx           # Past ride/rental payments

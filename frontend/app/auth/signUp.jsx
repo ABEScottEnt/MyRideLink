@@ -1,5 +1,3 @@
-// This page will swap between login and signup based on the user state(if they click login or signup)
-//export default () => null;
 import { useState } from 'react';
 import {
     View,
@@ -15,7 +13,9 @@ import COLORS from '../../constants/theme';
 import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {Svg, Path } from "react-native-svg";
+import GoogleAuth from "./googleAuth";
+import AppleAuth from "./appleAuth";
 
 export default function AuthScreen() {
     const router = useRouter();
@@ -80,8 +80,8 @@ export default function AuthScreen() {
                      });
                      ********************************/
                     Alert.alert(data.message);
-                    console.log("New User created successfully"+ firstName);
-                    //router.push("/auth")
+                    console.log(`Hi ${firstName}, Your account has been created successfully. Please try log in again.`);
+                    router.push("/auth/login")
             }
             else {
                 console.log(data.message);
@@ -110,22 +110,18 @@ export default function AuthScreen() {
                 <Text style={styles.tagline}>Your journey, simplified</Text>
 
                 <View style={styles.card}>
-                    <View style={styles.tabRow}>
-                        <TouchableOpacity
-                            style={[styles.tab, styles.tabActive]}
-                            onPress={() => null}
-                        >
-                            <Text style={styles.tabTextActive}>
-                                Sign Up
-                            </Text>
-                        </TouchableOpacity>
+                    <View style={styles.tab}>
+                        <Text style={styles.tabTextActive}>
+                            Create Account
+                        </Text>
                     </View>
 
-                    <View>
-                        <TouchableOpacity onPress={() => router.push('auth/login')}>
-                            <Text style={styles.link}>Already have an account? LogIn</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity onPress={() => router.push('auth/login')}>
+                        <Text style={styles.link}>Already have an account? LogIn</Text>
+                    </TouchableOpacity>
+
+                    <GoogleAuth/>
+                    <AppleAuth/>
 
                     <View style={styles.form}>
                         <>
@@ -287,7 +283,6 @@ export default function AuthScreen() {
                                 />
                             </View>
                         </>
-
                         <TouchableOpacity
                             style={styles.submitButton}
                             onPress={() => handleSubmit({firstName, lastName, email, password, phone, addressLine1, /*{addressLine2}{,}*/ city, state, zipCode})}
@@ -298,7 +293,6 @@ export default function AuthScreen() {
                                 Create Account
                             </Text>
                         </TouchableOpacity>
-
                     </View>
                 </View>
             </ScrollView>
@@ -334,32 +328,34 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     tabRow: {
-        flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: '#DDD',
-        borderRadius: 8,
-        overflow: 'hidden',
-        marginBottom: 20,
+        //flexDirection: 'row',
+        //borderWidth: 1,
+        //borderColor: '#DDD',
+        //borderRadius: 8,
+        //overflow: 'hidden',
+        //marginBottom: 20,
     },
     tab: {
-        flex: 1,
-        paddingVertical: 12,
+        //flex: 1,
+        //paddingVertical: 12,
         alignItems: 'center',
         backgroundColor: COLORS.background,
     },
     tabActive: {
-        backgroundColor: COLORS.white,
+        //backgroundColor: COLORS.white,
     },
     tabTextActive: {
-        fontSize: 16,
-        fontWeight: '600',
+        fontSize: 32,
+        fontWeight: '800',
         color: COLORS.muted,
     },
     tabTextInactive: {
-        fontSize: 16,
-        color: COLORS.secondary,
+        //fontSize: 16,
+        //color: COLORS.secondary,
     },
-    form: { marginTop: 0 },
+    form: {
+        marginTop: 12
+    },
     inputWrapper: {
         position: 'relative',
         marginBottom: 16,
@@ -382,6 +378,7 @@ const styles = StyleSheet.create({
     },
     submitButton: {
         marginTop: 12,
+        marginBottom: 12,
         backgroundColor: COLORS.gradientEnd,
         borderRadius: 12,
         paddingVertical: 14,
@@ -398,4 +395,5 @@ const styles = StyleSheet.create({
         color: COLORS.gradientEnd,
         textAlign: 'center',
     },
+
 });

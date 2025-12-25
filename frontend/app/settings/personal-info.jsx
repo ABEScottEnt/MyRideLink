@@ -56,6 +56,7 @@ export default function PersonalInfo() {
                 const data = await response.json();
                 console.log("Fetched profile:", data);
 
+                setProfilePic(data.user.profile_pic_url);
                 setFirstName(data.user.firstName || "".trim());
                 setLastName(data.user.lastName || "".trim());
                 setEmail(data.user.email || "");
@@ -111,7 +112,69 @@ export default function PersonalInfo() {
       }
   };
 
-  return (
+    const uploadProfilePic = async (uri) => {
+        const token = await AsyncStorage.getItem("token");
+
+        const formData = new FormData();
+        formData.append("image", {
+            uri,
+            name: "avatar.jpg",
+            type: "image/jpeg",
+        });
+
+        const response = await fetch(
+            `http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/upload-profile-pic`,
+            {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            }
+        );
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message);
+
+        setProfilePic(data.url);
+        Alert.alert("Success", "Profile picture updated");
+    };
+
+    const requestPermissions = async () => {
+        const camera = await ImagePicker.requestCameraPermissionsAsync();
+        const media = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (!camera.granted || !media.granted) {
+            Alert.alert("Permission required", "Camera and gallery permissions are needed.");
+            return false;
+        }
+        return true;
+    };
+
+    const pickImage = async (fromCamera = false) => {
+        const ok = await requestPermissions();
+        if (!ok) return;
+
+        const result = fromCamera
+            ? await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                quality: 0.7,
+            })
+            : await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                quality: 0.7,
+            });
+
+        if (!result.canceled) {
+            const localUri = result.assets[0].uri;
+            setProfilePic(localUri);
+            const uploadedUrl = await uploadProfilePic(localUri);
+            setProfilePic(uploadedUrl);
+        }
+    };
+
+
+    return (
       <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{flex: 1}}
@@ -134,11 +197,27 @@ export default function PersonalInfo() {
 
             <View style={styles.profileImageWrapper}>
                 {profilePic ? (
-                    <Image source={{ uri: profilePic }} style={styles.pic} />
+                    <Image
+                        source={{ uri: profilePic}}
+                        style={styles.pic}
+                    />
                 ) : (
                     <Ionicons name="person-circle-outline" size={60} color="blue" style={styles.picHolder} />
                 )}
-              <TouchableOpacity style={styles.editIconOverlay}>
+                <TouchableOpacity
+                    style={styles.editIconOverlay}
+                    onPress={() =>
+                        Alert.alert(
+                            "Update Profile Picture",
+                            "Choose an option",
+                            [
+                                { text: "Camera", onPress: () => pickImage(true) },
+                                { text: "Gallery", onPress: () => pickImage(false) },
+                                { text: "Cancel", style: "cancel" }
+                            ]
+                        )
+                    }
+                >
                 <Ionicons name="camera" size={16} color="#fff"/>
               </TouchableOpacity>
             </View>

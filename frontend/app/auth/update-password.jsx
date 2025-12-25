@@ -1,60 +1,71 @@
 // File: app/auth/forgot-password.jsx
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  SafeAreaView,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Image,
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    SafeAreaView,
+    ScrollView,
+    KeyboardAvoidingView,
+    Platform,
+    StyleSheet,
+    Image, Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import COLORS, { GRADIENT } from '../../constants/theme';
-
-// simple email validator // Temporarily keeping this for reference
-//const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
-const validatePassword = (password) => { 
-  if (password.length >= 6) return true
-  else return false 
-}// TODO: Make simple password validator
+import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function UpdatePassword() {
+
+    const validatePassword = (password) => {
+        return password.length >= 6;
+    }
   const router = useRouter();
   const [error, setError] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [disableButton, setDisableButton] = useState(false);
 
-  const handleReset = async() => {
-    setError('');
-    if (password != confirmPassword) {
-        setError('Passwords do not match');
-        return;
-    }
-    if (!validatePassword(password)) {
-      setError('Please enter a valid password (6 or more characters)');
-      return;
-    }
+    useEffect(() => {
+
+        if (!validatePassword(password)) {
+            setError('Please enter a valid password (6 or more characters)');
+        }
+
+        if (password && confirmPassword && password !== confirmPassword) {
+            setError('Passwords do not match');
+        }
+
+    }, [password, confirmPassword]);
+
+  const handleReset = async(password) => {
+      const email = await AsyncStorage.getItem("email");
    setDisableButton(true);
     try {
-      const payload = {password};
-      //Change the host address w.r.t. your backend device address
-      const response = await fetch(`http://100.110.167.198:4000/api/auth/update-password`, {
+      const payload = {email, password};
+      const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/update-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      setError("PASSWORD CHANGED SUCCESSFULLY");
-      //const data = await response.json();
-    } catch (error) {
-        console.log("API call error:", error);
-        setError(error);
+        const data = await response.json();
+
+        if(response.status === 200) {
+            await AsyncStorage.removeItem("email");
+            Alert.alert('Password Updated', 'Your password has been updated successfully.', [
+                { text: 'OK', onPress: () => router.replace('/auth/login') }
+            ]);
+        }
+        else{
+                Alert.alert('Error', data.message || 'Logout failed.');
+            }
+    }
+    catch (error) {
+        console.log("Error:", error);
       }
     setDisableButton(false);
   };
@@ -123,7 +134,7 @@ export default function UpdatePassword() {
             >
               <TouchableOpacity
                 style={styles.button}
-                onPress={handleReset}
+                onPress={handleReset(password, confirmPassword)}
                 disabled={disableButton}
                 activeOpacity={0.85}
               >

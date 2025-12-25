@@ -1,5 +1,3 @@
-// This page will swap between login and signup based on the user state(if they click login or signup)
-//export default () => null;
 import { useState } from 'react';
 import {
     View,
@@ -16,6 +14,9 @@ import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {Path, Svg} from "react-native-svg";
+import GoogleAuth from "./googleAuth";
+import AppleAuth from "./appleAuth";
 
 export default function AuthScreen() {
     const router = useRouter();
@@ -78,15 +79,10 @@ export default function AuthScreen() {
                 <Text style={styles.tagline}>Your journey, simplified</Text>
 
                 <View style={styles.card}>
-                    <View style={styles.tabRow}>
-                        <TouchableOpacity
-                            style={[styles.tab,styles.tabActive]}
-                            onPress={() => null}
-                        >
-                            <Text style={styles.tabTextActive}>
-                                Login
-                            </Text>
-                        </TouchableOpacity>
+                    <View style={styles.tab}>
+                        <Text style={styles.tabTextActive}>
+                            Login
+                        </Text>
                     </View>
 
                     <View style={styles.form}>
@@ -139,6 +135,9 @@ export default function AuthScreen() {
                             </Text>
                         </TouchableOpacity>
 
+                        <GoogleAuth/>
+                        <AppleAuth/>
+
 
                         <TouchableOpacity>
                             <Text style={styles.link}>Forgot password?</Text>
@@ -182,32 +181,34 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     tabRow: {
-        flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: '#DDD',
-        borderRadius: 8,
-        overflow: 'hidden',
-        marginBottom: 20,
+        //flexDirection: 'row',
+        //borderWidth: 1,
+        //borderColor: '#DDD',
+        //borderRadius: 8,
+        //overflow: 'hidden',
+        //marginBottom: 20,
     },
     tab: {
-        flex: 1,
-        paddingVertical: 12,
+        //flex: 1,
+        //paddingVertical: 12,
         alignItems: 'center',
         backgroundColor: COLORS.background,
     },
     tabActive: {
-        backgroundColor: COLORS.white,
+        //backgroundColor: COLORS.white,
     },
     tabTextActive: {
-        fontSize: 16,
-        fontWeight: '600',
+        fontSize: 32,
+        fontWeight: '800',
         color: COLORS.muted,
     },
     tabTextInactive: {
-        fontSize: 16,
-        color: COLORS.secondary,
+        //fontSize: 16,
+        //color: COLORS.secondary,
     },
-    form: { marginTop: 0 },
+    form: {
+        marginTop: 12
+    },
     inputWrapper: {
         position: 'relative',
         marginBottom: 16,

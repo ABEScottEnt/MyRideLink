@@ -1,3 +1,38 @@
+# Current Updates(Dec 2025) (Update must be made as Project progress)
+
+## Backend focused Full Stack:
+
+### a) MARTA Transit:
+
+i) When users enter From and To address(via Autofill), a backend architecture has to be designed such that it processes and gets an optimal MARTA path between distances.
+
+ii) The path between user's location to nearest source station, source station to destination station and destination station to user's destination should be displayed on the map.
+
+iii) Users should see multiple possible recommended paths and their respective maps.
+
+iv) Based on research till now by our previous interns, several open sources such as Open Trip Planner, Open Street Mapper, GTFS etc are available to design the above feature.
+
+
+v) MARTA Transit data can be seen using API key from Discord. [Ask Supervisor]
+
+vi) Refer MARTA developers portal online for more details and documentation.
+
+### b) Deployment:
+
+i) Project's plan is to host and deploy the app in Azure.
+
+ii) Supabase is being used temporarily.
+
+### Research Notes: [Available Here](https://docs.google.com/document/d/1dKz2En-ebvLaBORZc8KwJuqokAtNAFSsXIorI-usEBk/edit?usp=sharing)
+[Add Notes as you progress]
+
+## Final Goal:
+
+i) Along with MARTA, transits from other major cities can be integrated in the App.
+
+ii) Further, it can be extended to Uber & Lyft, Car Rentals.
+
+
 # Ride-Sharing Backend
 
 A simple, scalable backend for a ride-sharing web and mobile application.

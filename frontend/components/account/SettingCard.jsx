@@ -38,7 +38,6 @@ export default function SettingCard() {
 
         const token = await AsyncStorage.getItem("token");
 
-        //Change the host address w.r.t. your backend device address
         try{
             const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/logout`,{
                 method: "POST",

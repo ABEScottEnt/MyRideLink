@@ -5,19 +5,19 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
-    "scheme": "MyRideLink",
+    "scheme": "myridelink",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.MyRideLink.frontend"
+      "bundleIdentifier": "com.abescottent.myridelink"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.MyRideLink.frontend"
+      "package": "com.abescottent.myridelink"
     },
     "web": {
       "bundler": "metro",

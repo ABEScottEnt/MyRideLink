@@ -1,55 +1,70 @@
 // File: app/auth/forgot-password.jsx
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  SafeAreaView,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Image,
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    SafeAreaView,
+    ScrollView,
+    KeyboardAvoidingView,
+    Platform,
+    StyleSheet,
+    Image, Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import COLORS, { GRADIENT } from '../../constants/theme';
-
-// simple email validator
-const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
+import HOSTADDRESSCONFIG from "../../config/hostAddressConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ForgotPassword() {
+
+    // simple email validator
+    const validateEmail = (email) => /^\S+@\S+\.\S+$/.test(email);
+
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
   const [disableButton, setDisableButton] = useState(false);
 
-  const handleReset = async() => {
+    useEffect(() => {
+        if (!validateEmail(email)) {
+            setError('Please enter a valid email');
+        }
+    }, [email]);
+
+  const handleReset = async(email) => {
     setError('');
-    if (!validateEmail(email)) {
-      setError('Please enter a valid email');
-      return;
-    }
+
     setDisableButton(true);
     // TODO: trigger password reset email
     // navigate to verification or confirmation screen
     try {
       const payload = {email};
       //Change the host address w.r.t. your backend device address
-      const response = await fetch(`http://100.110.167.198:4000/api/auth/reset-password`, {
+      const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/auth/reset-password-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      setError("Password reset request sent. Please check your email.") // Try and find a different way to present this message.
-      //router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
-    } catch (error) {
-        console.log("API call error:", error);
-        setError(error);
-      }
+        const data = await response.json();
+
+        if(response.status === 200) {
+            await AsyncStorage.setItem("email", email);
+            Alert.alert('Reset Password Email Sent', 'An email with the Reset Password Link has been sent successfully.', [
+                { text: 'OK', onPress: () => {} }
+            ]);
+        }
+        else{
+            Alert.alert('Error', data.message || 'Email sent failed.');
+        }
+    }
+    catch (error) {
+        console.log("Error:", error);
+    }
     setDisableButton(false);
   };
 
@@ -108,7 +123,7 @@ export default function ForgotPassword() {
             >
               <TouchableOpacity
                 style={styles.button}
-                onPress={handleReset}
+                onPress={handleReset(email)}
                 disabled={disableButton}
                 activeOpacity={0.85}
               >
