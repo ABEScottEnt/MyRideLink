@@ -10,7 +10,7 @@ import {
   getUserProfileController,
   resetPasswordController,
   updatePasswordController,
-    updateUserProfileController
+  updateUserProfileController
 } from "./controllers.js";
 
 import {

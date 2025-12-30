@@ -10,9 +10,9 @@ import SectionTitle from "@/components/shared/SectionTitle";
 import LocationSearch from "@/components/shared/LocationSearch";
 import TransitMap from "@/components/transit/TransitMap";
 import TransitComparisonList from "@/components/transit/TransitComparisonList";
-
 import { testTransitData } from "@/data/testTransits";
 import COLORS from "@/constants/theme";
+import HOSTADDRESSCONFIG from "../../../config/hostAddressConfig";
 
 export default function Transit() {
   const [from, setFrom] = useState("");
@@ -20,7 +20,20 @@ export default function Transit() {
   const [fromPlace, setFromPlace] = useState(null);
   const [toPlace, setToPlace] = useState(null);
   
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    try {
+      //const payload = "test";
+      //Change the host address w.r.t. your backend device address
+      const response = await fetch(`http://${HOSTADDRESSCONFIG.hostAddress}:${HOSTADDRESSCONFIG.port}/api/transit/findRoutes`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        //body: JSON.stringify(payload),
+      });
+      
+    } catch (error) {
+        console.log("ERROR: " + error);
+      }
+
     const coords = [
       fromPlace
         ? `From(${fromPlace.lat?.toFixed?.(5)}, ${fromPlace.lon?.toFixed?.(5)})`

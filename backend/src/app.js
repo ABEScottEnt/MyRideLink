@@ -8,6 +8,7 @@ import notFound from "./middleware/notFound.js";
 import { PORT, NODE_ENV } from "./config/env.js";
 
 import authRoutes from "./modules/auth/routes.js";
+import transitRoutes from "./modules/transit/routes.js";
 // import rideRoutes from "./modules/rides/routes.js";
 // import paymentRoutes from "./modules/payments/routes.js";
 // import healthRoutes from "./modules/health/routes.js";
@@ -23,6 +24,7 @@ app.use(loggingMiddleware);
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/transit", transitRoutes);
 // app.use("/api/rides", rideRoutes);
 // app.use("/api/payments", paymentRoutes);
 // app.use("/api/health", healthRoutes);

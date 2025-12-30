@@ -1,6 +1,6 @@
 import {
   //sendOTPService,
-    //verifyOTPService,
+  //verifyOTPService,
   signupService,
   loginService,
   refreshTokenService,
@@ -8,7 +8,7 @@ import {
   getUserProfileService,
   resetPasswordService,
   updatePasswordService,
-    updateUserProfileService,
+  updateUserProfileService,
 } from "./services.js";
 
 // Signup
